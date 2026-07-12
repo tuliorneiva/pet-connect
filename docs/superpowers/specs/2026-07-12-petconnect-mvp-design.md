@@ -36,6 +36,7 @@ adoção responsável. Sistema duplo:
 - Super-admin global da plataforma.
 - Conta/perfil para o público adotante.
 - Fluxos separados e completos por modalidade de apoio.
+- Convite/gestão de novos membros (admins) dentro de uma ONG.
 
 ## 3. Papéis e controle de acesso (RBAC)
 
@@ -48,7 +49,8 @@ anônimos (sem login). O controle de acesso se dá em duas dimensões:
 
 **Entrada de uma ONG no sistema:** o admin se auto-registra numa tela "Criar conta
 da ONG" (nome da ONG + dados de login). Esse primeiro usuário vira admin daquela
-ONG. (Convidar outros admins da mesma ONG é possível mas opcional no MVP.)
+ONG. No MVP, cada ONG tem esse único admin auto-registrado; convidar/gerenciar
+outros membros da mesma ONG fica como extensão futura.
 
 ## 4. Arquitetura
 
