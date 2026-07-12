@@ -28,5 +28,17 @@ services:
     volumes:
       - ./apps/api:/app
 
+  web:
+    build: ./apps/web
+    environment:
+      VITE_API_BASE: http://localhost:8000
+    ports:
+      - "5173:5173"
+    depends_on:
+      - api
+    volumes:
+      - ./apps/web:/app
+      - /app/node_modules
+
 volumes:
   pgdata:
