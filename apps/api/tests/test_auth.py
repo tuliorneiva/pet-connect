@@ -1,3 +1,10 @@
+from datetime import datetime, timedelta, timezone
+
+import jwt
+
+from app.core.config import settings
+
+
 def _register_payload(**over):
     base = {
         "org_name": "Abrigo Feliz",
@@ -75,4 +82,15 @@ def test_two_orgs_get_distinct_org_ids(client):
 
 def test_me_without_token_is_401(client):
     resp = client.get("/api/auth/me")
+    assert resp.status_code == 401
+
+
+def test_me_with_non_numeric_sub_is_401(client):
+    expire = datetime.now(timezone.utc) + timedelta(minutes=5)
+    token = jwt.encode(
+        {"sub": "not-a-number", "org_id": 1, "exp": expire},
+        settings.secret_key,
+        algorithm=settings.jwt_algorithm,
+    )
+    resp = client.get("/api/auth/me", headers={"Authorization": f"Bearer {token}"})
     assert resp.status_code == 401

@@ -28,7 +28,10 @@ def get_current_user(
     if user_id is None:
         raise credentials_exc
 
-    user = db.get(User, int(user_id))
+    try:
+        user = db.get(User, int(user_id))
+    except ValueError:
+        raise credentials_exc
     if user is None:
         raise credentials_exc
     return user

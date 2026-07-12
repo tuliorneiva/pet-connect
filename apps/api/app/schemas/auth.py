@@ -1,4 +1,4 @@
-from pydantic import BaseModel, ConfigDict, EmailStr
+from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
 
 class RegisterRequest(BaseModel):
@@ -6,7 +6,7 @@ class RegisterRequest(BaseModel):
     city: str | None = None
     name: str
     email: EmailStr
-    password: str
+    password: str = Field(..., max_length=72)
 
 
 class LoginRequest(BaseModel):
