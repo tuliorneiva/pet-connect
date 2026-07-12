@@ -22,3 +22,22 @@ def test_register_duplicate_email_rejected(client):
     client.post("/api/auth/register", json=_register_payload())
     resp = client.post("/api/auth/register", json=_register_payload(org_name="Outro"))
     assert resp.status_code == 400
+
+
+def test_login_success(client):
+    client.post("/api/auth/register", json=_register_payload())
+    resp = client.post(
+        "/api/auth/login",
+        json={"email": "ana@abrigo.org", "password": "s3cret!"},
+    )
+    assert resp.status_code == 200
+    assert resp.json()["access_token"]
+
+
+def test_login_wrong_password_rejected(client):
+    client.post("/api/auth/register", json=_register_payload())
+    resp = client.post(
+        "/api/auth/login",
+        json={"email": "ana@abrigo.org", "password": "nope"},
+    )
+    assert resp.status_code == 401
