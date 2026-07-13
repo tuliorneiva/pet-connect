@@ -198,3 +198,15 @@ Cada fase entrega algo utilizável.
 6. **Vitrine pública + formulário de interesse.**
 7. **Solicitações (admin)** + polimento/UX/acessibilidade.
 8. **Testes, README, seed de demonstração.**
+
+## 11. Direção de design (Fase 3+)
+
+- **Somente light mode** (sem dark mode). Tom **sóbrio e profissional**, institucional.
+- **Paleta (teal/azul moderno):**
+  - Primário: `#0E7490` (teal-700); hover: `#0C607A`
+  - Texto principal: `#0F172A` (slate-900); texto secundário: `#5B7280`
+  - Borda: `#E2E8F0`; fundo app: `#F8FAFC`; superfícies/cards: `#FFFFFF`
+  - Sucesso: `#15803D`; erro: `#DC2626`; alerta/atenção: `#B45309` (âmbar)
+- **Tipografia:** sans-serif de sistema, limpa; hierarquia clara; espaçamento generoso.
+- **Componentes** com cantos levemente arredondados, sombras sutis, foco visível (acessibilidade — público leigo).
+- Implementado como **CSS tokens/variáveis** reutilizados por todas as telas (vitrine pública, auth, admin).
