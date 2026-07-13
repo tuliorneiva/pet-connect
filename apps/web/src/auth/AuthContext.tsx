@@ -31,7 +31,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   async function afterToken(token: string) {
     setAuthToken(token);
-    setUser(await authApi.me());
+    try {
+      setUser(await authApi.me());
+    } catch (err) {
+      setAuthToken(null);
+      throw err;
+    }
   }
 
   async function login(body: LoginBody) {
