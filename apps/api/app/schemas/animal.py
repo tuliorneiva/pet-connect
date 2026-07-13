@@ -1,0 +1,54 @@
+from datetime import datetime
+
+from pydantic import BaseModel, ConfigDict
+
+
+class AnimalBase(BaseModel):
+    name: str
+    species: str
+    breed: str | None = None
+    sex: str | None = None
+    size: str | None = None
+    birth_estimate: str | None = None
+    description: str | None = None
+    photo_url: str | None = None
+    status: str = "disponível"
+
+
+class AnimalCreate(AnimalBase):
+    pass
+
+
+class AnimalUpdate(BaseModel):
+    name: str | None = None
+    species: str | None = None
+    breed: str | None = None
+    sex: str | None = None
+    size: str | None = None
+    birth_estimate: str | None = None
+    description: str | None = None
+    photo_url: str | None = None
+    status: str | None = None
+
+
+class AnimalResponse(AnimalBase):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    org_id: int
+    created_at: datetime
+
+
+class PublicAnimalResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    name: str
+    species: str
+    breed: str | None
+    sex: str | None
+    size: str | None
+    birth_estimate: str | None
+    description: str | None
+    photo_url: str | None
+    org_id: int
