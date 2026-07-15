@@ -12,10 +12,12 @@ import { AnimalsListPage } from "./pages/admin/AnimalsListPage";
 import { AnimalFormPage } from "./pages/admin/AnimalFormPage";
 import { AnimalDetailPage } from "./pages/admin/AnimalDetailPage";
 import { RequestsPage } from "./pages/admin/RequestsPage";
+import { LandingPage } from "./pages/marketing/LandingPage";
 
 export default function App() {
   return (
     <Routes>
+      <Route path="/lp" element={<LandingPage />} />
       <Route element={<PublicLayout />}>
         <Route path="/" element={<HomePage />} />
         <Route path="/animais/:id" element={<AnimalPublicPage />} />
