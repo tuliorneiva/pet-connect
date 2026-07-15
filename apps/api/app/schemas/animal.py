@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import AliasPath, BaseModel, ConfigDict, Field
 
 
 class AnimalBase(BaseModel):
@@ -52,3 +52,6 @@ class PublicAnimalResponse(BaseModel):
     description: str | None
     photo_url: str | None
     org_id: int
+    org_name: str = Field(validation_alias=AliasPath("organization", "name"))
+    org_city: str | None = Field(default=None, validation_alias=AliasPath("organization", "city"))
+    org_slug: str = Field(validation_alias=AliasPath("organization", "slug"))
