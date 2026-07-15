@@ -10,7 +10,7 @@ import { Field } from "../../components/ui/Field";
 import { Select } from "../../components/ui/Select";
 import { Alert } from "../../components/ui/Alert";
 import { Modal } from "../../components/ui/Modal";
-import styles from "./public.module.css";
+import { Button as ShadButton } from "@/components/shadcn/button";
 
 const TYPE_OPTIONS = Object.entries(SUPPORT_TYPE_LABELS).map(([value, label]) => ({ value, label }));
 
@@ -22,33 +22,38 @@ export function AnimalPublicPage() {
 
   return (
     <div>
-      <Link to="/" className={styles.backLink}>← Voltar à vitrine</Link>
-      {loading && <p className={styles.empty}>Carregando…</p>}
-      {error && <p className={styles.empty}>Animal não encontrado.</p>}
+      <Link to="/" className="text-sm text-muted-foreground hover:text-primary">← Voltar à vitrine</Link>
+      {loading && <p className="mt-6 text-muted-foreground">Carregando…</p>}
+      {error && <p className="mt-6 text-muted-foreground">Animal não encontrado.</p>}
       {data && (
-        <div className={styles.detail}>
-          {data.photo_url ? (
-            <img className={styles.detailPhoto} src={data.photo_url} alt={data.name} />
-          ) : (
-            <div className={styles.noPhoto} style={{ borderRadius: "var(--radius-md)" }}>🐾</div>
-          )}
+        <div className="mt-4 grid gap-8 md:grid-cols-2">
+          <div className="overflow-hidden rounded-xl border border-border bg-card">
+            {data.photo_url ? (
+              <img className="aspect-square w-full object-cover" src={data.photo_url} alt={data.name} />
+            ) : (
+              <div className="grid aspect-square place-items-center text-7xl">🐾</div>
+            )}
+          </div>
           <div>
-            <h1 className={styles.detailName}>{data.name}</h1>
-            <p className={styles.cardMeta}>
+            <h1 className="text-3xl font-bold tracking-tight">{data.name}</h1>
+            <p className="mt-2 text-muted-foreground">
               {data.species}
               {data.breed ? ` · ${data.breed}` : ""}
               {data.sex ? ` · ${data.sex}` : ""}
               {data.size ? ` · porte ${data.size}` : ""}
               {data.birth_estimate ? ` · ${data.birth_estimate}` : ""}
             </p>
-            {data.description && <p style={{ marginTop: "var(--space-4)" }}>{data.description}</p>}
-            <div style={{ marginTop: "var(--space-6)" }}>
-              <Button onClick={() => setOpen(true)}>Tenho interesse</Button>
+            <p className="mt-3 text-sm text-muted-foreground">
+              Resgatado por <Link to={`/ongs/${data.org_slug}`} className="font-semibold text-primary">{data.org_name}</Link>
+              {data.org_city ? ` · ${data.org_city}` : ""}
+            </p>
+            {data.description && <p className="mt-6 leading-relaxed">{data.description}</p>}
+            <div className="mt-8">
+              <ShadButton onClick={() => setOpen(true)}>Tenho interesse</ShadButton>
             </div>
           </div>
         </div>
       )}
-
       {data && (
         <InterestModal open={open} onClose={() => setOpen(false)} animalId={animalId} animalName={data.name} />
       )}
