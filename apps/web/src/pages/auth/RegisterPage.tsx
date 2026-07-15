@@ -2,11 +2,10 @@ import { useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthContext";
-import { Card } from "../../components/ui/Card";
-import { Field } from "../../components/ui/Field";
-import { Button } from "../../components/ui/Button";
-import { Alert } from "../../components/ui/Alert";
-import styles from "./authForm.module.css";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/shadcn/card";
+import { Input } from "@/components/shadcn/input";
+import { Label } from "@/components/shadcn/label";
+import { Button } from "@/components/shadcn/button";
 
 export function RegisterPage() {
   const { register } = useAuth();
@@ -34,25 +33,45 @@ export function RegisterPage() {
   }
 
   return (
-    <div className={styles.wrap}>
+    <div className="mx-auto max-w-md py-8">
       <Card>
-        <h1 className={styles.title}>Cadastrar ONG</h1>
-        <form onSubmit={onSubmit}>
-          {error && <Alert variant="error">{error}</Alert>}
-          <Field label="Nome da ONG" value={form.org_name} onChange={update("org_name")} required />
-          <Field label="Cidade" value={form.city} onChange={update("city")} />
-          <Field label="Seu nome" value={form.name} onChange={update("name")} required />
-          <Field label="E-mail" type="email" value={form.email} onChange={update("email")} required />
-          <Field label="Senha" type="password" value={form.password} onChange={update("password")} required maxLength={72} />
-          <div className={styles.actions}>
-            <Button type="submit" className={styles.full} disabled={submitting}>
+        <CardHeader>
+          <CardTitle className="text-2xl">Cadastrar ONG</CardTitle>
+          <p className="text-sm text-muted-foreground">Crie o acesso da sua organização.</p>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={onSubmit} className="flex flex-col gap-4">
+            {error && (
+              <p role="alert" className="rounded-md border border-destructive/30 bg-red-50 px-3 py-2 text-sm text-destructive">{error}</p>
+            )}
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="org_name">Nome da ONG</Label>
+              <Input id="org_name" value={form.org_name} onChange={update("org_name")} required />
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="city">Cidade</Label>
+              <Input id="city" value={form.city} onChange={update("city")} />
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="name">Seu nome</Label>
+              <Input id="name" value={form.name} onChange={update("name")} required />
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="email">E-mail</Label>
+              <Input id="email" type="email" value={form.email} onChange={update("email")} required />
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="password">Senha</Label>
+              <Input id="password" type="password" value={form.password} onChange={update("password")} required maxLength={72} />
+            </div>
+            <Button type="submit" disabled={submitting} className="w-full">
               {submitting ? "Cadastrando…" : "Cadastrar"}
             </Button>
-          </div>
-        </form>
-        <p className={styles.switch}>
-          Já tem conta? <Link to="/login">Entrar</Link>
-        </p>
+          </form>
+          <p className="mt-4 text-sm text-muted-foreground">
+            Já tem conta? <Link to="/login" className="font-semibold text-primary">Entrar</Link>
+          </p>
+        </CardContent>
       </Card>
     </div>
   );
