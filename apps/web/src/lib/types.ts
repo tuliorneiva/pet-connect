@@ -26,6 +26,27 @@ export type PublicAnimal = {
   description: string | null;
   photo_url: string | null;
   org_id: number;
+  org_name: string;
+  org_city: string | null;
+  org_slug: string;
+};
+
+export type PublicOrganization = {
+  id: number;
+  name: string;
+  slug: string;
+  city: string | null;
+  description: string | null;
+  email: string | null;
+  phone: string | null;
+  website: string | null;
+  address: string | null;
+  founded_year: number | null;
+  verified: boolean;
+  logo_url: string | null;
+  created_at: string;
+  available_count: number;
+  adopted_count: number;
 };
 
 export type AnimalInput = {

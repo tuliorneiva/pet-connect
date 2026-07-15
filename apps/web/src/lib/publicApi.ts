@@ -1,11 +1,12 @@
 import { apiFetch } from "./api";
-import type { PublicAnimal, SupportRequest, SupportRequestInput } from "./types";
+import type { PublicAnimal, PublicOrganization, SupportRequest, SupportRequestInput } from "./types";
 
 export type VitrineFilters = {
   species?: string;
   size?: string;
   sex?: string;
   city?: string;
+  org?: string;
 };
 
 function toQuery(filters: VitrineFilters): string {
@@ -21,6 +22,8 @@ export const publicApi = {
   listAnimals: (filters: VitrineFilters = {}) =>
     apiFetch<PublicAnimal[]>(`/api/public/animals${toQuery(filters)}`),
   getAnimal: (id: number) => apiFetch<PublicAnimal>(`/api/public/animals/${id}`),
+  getOrganization: (slug: string) =>
+    apiFetch<PublicOrganization>(`/api/public/organizations/${slug}`),
   createSupportRequest: (data: SupportRequestInput) =>
     apiFetch<SupportRequest>("/api/public/support-requests", {
       method: "POST",
