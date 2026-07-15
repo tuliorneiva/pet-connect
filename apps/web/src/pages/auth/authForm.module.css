@@ -1,5 +1,0 @@
-.wrap { max-width: 420px; margin: var(--space-8) auto; }
-.title { font-size: var(--text-xl); }
-.switch { margin-top: var(--space-4); font-size: var(--text-sm); color: var(--color-text-secondary); }
-.actions { margin-top: var(--space-2); }
-.full { width: 100%; }

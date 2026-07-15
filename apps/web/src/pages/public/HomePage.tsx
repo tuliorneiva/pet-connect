@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { publicApi } from "../../lib/publicApi";
 import type { VitrineFilters } from "../../lib/publicApi";
 import { useAsync } from "../../lib/useAsync";
@@ -23,7 +24,7 @@ export function HomePage() {
   return (
     <div>
       <div className="mb-8">
-        <p className="text-sm text-muted-foreground"><a href="/" className="hover:text-primary">Início</a> › Animais para adoção</p>
+        <p className="text-sm text-muted-foreground"><Link to="/" className="hover:text-primary">Início</Link> › Animais para adoção</p>
         <h1 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">Adote um amigo</h1>
         <p className="mt-3 max-w-prose text-lg text-muted-foreground">
           Conheça os animais que estão à espera de um novo lar. Use os filtros para encontrar quem combina com você.

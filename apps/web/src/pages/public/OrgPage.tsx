@@ -61,7 +61,9 @@ export function OrgPage() {
           <div className="mb-8 grid grid-cols-3 gap-4">
             <Card className="p-5 text-center"><div className="text-2xl font-bold text-primary">{org.available_count}</div><div className="text-sm text-muted-foreground">disponíveis</div></Card>
             <Card className="p-5 text-center"><div className="text-2xl font-bold text-primary">{org.adopted_count}</div><div className="text-sm text-muted-foreground">adoções</div></Card>
-            <Card className="p-5 text-center"><div className="text-2xl font-bold text-primary">{org.founded_year ?? since}</div><div className="text-sm text-muted-foreground">fundação</div></Card>
+            {org.founded_year && (
+              <Card className="p-5 text-center"><div className="text-2xl font-bold text-primary">{org.founded_year}</div><div className="text-sm text-muted-foreground">fundação</div></Card>
+            )}
           </div>
 
           <div className="mb-5 flex items-baseline justify-between">
