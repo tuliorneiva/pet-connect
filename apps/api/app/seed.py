@@ -24,7 +24,22 @@ def seed() -> None:
             print("Demo data already present — skipping.")
             return
 
-        org = Organization(name="Abrigo Amigo Fiel", slug="abrigo-amigo-fiel", city="João Pessoa")
+        org = Organization(
+            name="Abrigo Amigo Fiel",
+            slug="abrigo-amigo-fiel",
+            city="João Pessoa",
+            description=(
+                "O Abrigo Amigo Fiel resgata, cuida e encaminha para adoção cães e gatos "
+                "em situação de abandono em João Pessoa e região. Todos os animais passam por "
+                "avaliação veterinária, vacinação e castração antes de irem para um novo lar."
+            ),
+            email="contato@amigofiel.org",
+            phone="(83) 99999-0000",
+            website="amigofiel.org",
+            address="Rua das Acácias, 240 — Bancários, João Pessoa/PB",
+            founded_year=2019,
+            verified=True,
+        )
         db.add(org)
         db.flush()
 
