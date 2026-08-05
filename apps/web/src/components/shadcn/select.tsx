@@ -1,18 +1,68 @@
 import * as React from "react";
+import * as SelectPrimitive from "@radix-ui/react-select";
 import { cn } from "@/lib/utils";
 
-export const Select = React.forwardRef<HTMLSelectElement, React.SelectHTMLAttributes<HTMLSelectElement>>(
-  ({ className, children, ...props }, ref) => (
-    <select
+export const Select = SelectPrimitive.Root;
+export const SelectValue = SelectPrimitive.Value;
+
+export const SelectTrigger = React.forwardRef<
+  React.ElementRef<typeof SelectPrimitive.Trigger>,
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
+>(({ className, children, ...props }, ref) => (
+  <SelectPrimitive.Trigger
+    ref={ref}
+    className={cn(
+      "flex h-11 w-full items-center justify-between rounded-md border border-input",
+      "bg-card px-3 text-sm text-foreground",
+      "focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/25",
+      "disabled:cursor-not-allowed disabled:opacity-50",
+      className,
+    )}
+    {...props}
+  >
+    {children}
+    <SelectPrimitive.Icon aria-hidden className="ml-2 text-muted-foreground">▾</SelectPrimitive.Icon>
+  </SelectPrimitive.Trigger>
+));
+SelectTrigger.displayName = "SelectTrigger";
+
+export const SelectContent = React.forwardRef<
+  React.ElementRef<typeof SelectPrimitive.Content>,
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content>
+>(({ className, children, ...props }, ref) => (
+  <SelectPrimitive.Portal>
+    <SelectPrimitive.Content
       ref={ref}
+      position="popper"
+      sideOffset={4}
       className={cn(
-        "flex h-11 w-full appearance-none rounded-md border border-input bg-card bg-[url('data:image/svg+xml;utf8,<svg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%2216%22%20height=%2216%22%20viewBox=%220%200%2024%2024%22%20fill=%22none%22%20stroke=%22%235B7280%22%20stroke-width=%222%22><polyline%20points=%226%209%2012%2015%2018%209%22/></svg>')] bg-[right_0.75rem_center] bg-no-repeat px-3 pr-9 text-sm text-foreground focus-visible:outline-none focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/25 disabled:opacity-50",
+        "z-50 min-w-[8rem] overflow-hidden rounded-md border border-border",
+        "bg-popover text-popover-foreground shadow-md",
         className,
       )}
       {...props}
     >
-      {children}
-    </select>
-  ),
-);
-Select.displayName = "Select";
+      <SelectPrimitive.Viewport className="p-1">{children}</SelectPrimitive.Viewport>
+    </SelectPrimitive.Content>
+  </SelectPrimitive.Portal>
+));
+SelectContent.displayName = "SelectContent";
+
+export const SelectItem = React.forwardRef<
+  React.ElementRef<typeof SelectPrimitive.Item>,
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item>
+>(({ className, children, ...props }, ref) => (
+  <SelectPrimitive.Item
+    ref={ref}
+    className={cn(
+      "relative flex cursor-default select-none items-center rounded-sm",
+      "py-2 pl-3 pr-8 text-sm outline-none",
+      "focus:bg-accent focus:text-accent-foreground data-[disabled]:opacity-50",
+      className,
+    )}
+    {...props}
+  >
+    <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
+  </SelectPrimitive.Item>
+));
+SelectItem.displayName = "SelectItem";
