@@ -44,6 +44,14 @@ export const DialogTitle = React.forwardRef<
 ));
 DialogTitle.displayName = "DialogTitle";
 
+export const DialogDescription = React.forwardRef<
+  React.ElementRef<typeof DialogPrimitive.Description>,
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description>
+>(({ className, ...props }, ref) => (
+  <DialogPrimitive.Description ref={ref} className={cn("mt-1 text-sm text-muted-foreground", className)} {...props} />
+));
+DialogDescription.displayName = "DialogDescription";
+
 export function DialogFooter({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return <div className={cn("flex justify-center px-6 pb-6 pt-2", className)} {...props} />;
 }

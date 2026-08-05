@@ -5,10 +5,9 @@ import { publicApi } from "../../lib/publicApi";
 import { useAsync } from "../../lib/useAsync";
 import type { SupportType } from "../../lib/types";
 import { SUPPORT_TYPE_LABELS } from "../../lib/labels";
-import { Button as ShadButton } from "@/components/shadcn/button";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/shadcn/dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/shadcn/select";
 import { Button } from "@/components/shadcn/button";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/shadcn/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/shadcn/select";
 import { Input } from "@/components/shadcn/input";
 import { Label } from "@/components/shadcn/label";
 
@@ -49,7 +48,7 @@ export function AnimalPublicPage() {
             </p>
             {data.description && <p className="mt-6 leading-relaxed">{data.description}</p>}
             <div className="mt-8">
-              <ShadButton onClick={() => setOpen(true)}>Tenho interesse</ShadButton>
+              <Button onClick={() => setOpen(true)}>Tenho interesse</Button>
             </div>
           </div>
         </div>
@@ -97,11 +96,16 @@ export function InterestModal({ open, onClose, animalId, animalName }: {
   return (
     <Dialog open={open} onOpenChange={(o) => { if (!o) onClose(); }}>
       <DialogContent>
-        <DialogHeader><DialogTitle>Interesse em {animalName}</DialogTitle></DialogHeader>
+        <DialogHeader>
+          <DialogTitle>Interesse em {animalName}</DialogTitle>
+          <DialogDescription>
+            {done ? "Sua solicitação foi registrada." : "Envie seus dados e a ONG entra em contato."}
+          </DialogDescription>
+        </DialogHeader>
         {done ? (
           <>
             <div className="px-6 py-6 text-sm">
-              Solicitação enviada. O abrigo entra em contato pelo e-mail informado.
+              Solicitação enviada. A ONG entra em contato pelo e-mail informado.
             </div>
             <DialogFooter data-testid="interest-footer">
               <Button onClick={onClose}>Fechar</Button>
@@ -111,7 +115,10 @@ export function InterestModal({ open, onClose, animalId, animalName }: {
           <form onSubmit={submit}>
             <div className="flex flex-col gap-4 px-6 py-5">
               {error && (
-                <p className="rounded-md border border-destructive/30 bg-destructive/5 px-3 py-2 text-sm text-destructive">
+                <p
+                  role="alert"
+                  className="rounded-md border border-destructive/30 bg-destructive/5 px-3 py-2 text-sm text-destructive"
+                >
                   {error}
                 </p>
               )}
