@@ -10,6 +10,9 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/shadcn/select";
 import { Input } from "@/components/shadcn/input";
 import { Label } from "@/components/shadcn/label";
+import { AnimalGallery } from "@/components/public/AnimalGallery";
+import { HealthBadges } from "@/components/public/HealthBadges";
+import { RelatedAnimals } from "@/components/public/RelatedAnimals";
 
 const TYPE_OPTIONS = Object.entries(SUPPORT_TYPE_LABELS).map(([value, label]) => ({ value, label }));
 
@@ -19,43 +22,76 @@ export function AnimalPublicPage() {
   const { data, loading, error } = useAsync(() => publicApi.getAnimal(animalId), [animalId]);
   const [open, setOpen] = useState(false);
 
+  if (loading) return <p className="py-16 text-center text-muted-foreground">Carregando…</p>;
+  if (error || !data) {
+    return (
+      <div className="py-16 text-center">
+        <p className="text-muted-foreground">Este animal não está mais disponível.</p>
+        <Button asChild variant="secondary" className="mt-4">
+          <Link to="/animais">Ver a vitrine</Link>
+        </Button>
+      </div>
+    );
+  }
+
+  const traits = [data.species, data.breed, data.sex, data.size && `porte ${data.size}`, data.birth_estimate]
+    .filter(Boolean) as string[];
+
   return (
     <div>
-      <Link to="/animais" className="text-sm text-muted-foreground hover:text-primary">← Voltar à vitrine</Link>
-      {loading && <p className="mt-6 text-muted-foreground">Carregando…</p>}
-      {error && <p className="mt-6 text-muted-foreground">Animal não encontrado.</p>}
-      {data && (
-        <div className="mt-4 grid gap-8 md:grid-cols-2">
-          <div className="overflow-hidden rounded-xl border border-border bg-card">
-            {data.photo_url ? (
-              <img className="aspect-square w-full object-cover" src={data.photo_url} alt={data.name} />
-            ) : (
-              <div className="grid aspect-square place-items-center text-7xl">🐾</div>
-            )}
-          </div>
+      <p className="mb-4 text-sm text-muted-foreground">
+        <Link to="/animais" className="hover:text-primary">Animais</Link> › {data.name}
+      </p>
+
+      <div className="grid items-start gap-7 md:grid-cols-[1.15fr_.85fr]">
+        <AnimalGallery photos={data.photo_url ? [data.photo_url] : []} name={data.name} />
+
+        <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5 shadow-sm md:sticky md:top-24">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">{data.name}</h1>
-            <p className="mt-2 text-muted-foreground">
-              {data.species}
-              {data.breed ? ` · ${data.breed}` : ""}
-              {data.sex ? ` · ${data.sex}` : ""}
-              {data.size ? ` · porte ${data.size}` : ""}
-              {data.birth_estimate ? ` · ${data.birth_estimate}` : ""}
-            </p>
-            <p className="mt-3 text-sm text-muted-foreground">
-              Resgatado por <Link to={`/ongs/${data.org_slug}`} className="font-semibold text-primary">{data.org_name}</Link>
-              {data.org_city ? ` · ${data.org_city}` : ""}
-            </p>
-            {data.description && <p className="mt-6 leading-relaxed">{data.description}</p>}
-            <div className="mt-8">
-              <Button onClick={() => setOpen(true)}>Tenho interesse</Button>
+            <div className="mt-2.5 flex flex-wrap gap-1.5">
+              {traits.map((t) => (
+                <span
+                  key={t}
+                  className="rounded-full border border-border bg-background px-2.5 py-0.5 text-xs text-muted-foreground"
+                >
+                  {t}
+                </span>
+              ))}
             </div>
           </div>
+
+          <HealthBadges upToDate={data.vaccines_up_to_date} underTreatment={data.under_treatment} />
+
+          <div className="flex items-center gap-3 rounded-md border border-border bg-background p-3">
+            <span className="grid h-9 w-9 flex-none place-items-center rounded-lg bg-gradient-to-br from-primary to-[#14b8a6] text-white">
+              🏠
+            </span>
+            <span className="text-sm">
+              <Link to={`/ongs/${data.org_slug}`} className="font-semibold">{data.org_name}</Link>
+              {data.org_city && <span className="block text-xs text-muted-foreground">{data.org_city}</span>}
+            </span>
+          </div>
+
+          <div className="h-px bg-border" />
+
+          <Button size="lg" className="w-full" onClick={() => setOpen(true)}>Tenho interesse</Button>
+          <p className="text-center text-xs text-muted-foreground">
+            Sem compromisso — o abrigo entra em contato
+          </p>
+        </div>
+      </div>
+
+      {data.description && (
+        <div className="mt-7 rounded-xl border border-border bg-card p-5">
+          <h2 className="mb-2 text-base font-semibold">Sobre {data.name}</h2>
+          <p className="max-w-[70ch] text-sm leading-relaxed text-muted-foreground">{data.description}</p>
         </div>
       )}
-      {data && (
-        <InterestModal open={open} onClose={() => setOpen(false)} animalId={animalId} animalName={data.name} />
-      )}
+
+      <RelatedAnimals orgSlug={data.org_slug} orgName={data.org_name} excludeId={data.id} />
+
+      <InterestModal open={open} onClose={() => setOpen(false)} animalId={animalId} animalName={data.name} />
     </div>
   );
 }
