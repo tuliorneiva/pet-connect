@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict
@@ -6,7 +8,7 @@ from pydantic import BaseModel, ConfigDict
 class PublicOrganizationResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
-    id: int
+    id: UUID
     name: str
     slug: str
     city: str | None

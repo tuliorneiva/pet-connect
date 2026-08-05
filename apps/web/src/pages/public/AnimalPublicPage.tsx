@@ -16,13 +16,13 @@ const TYPE_OPTIONS = Object.entries(SUPPORT_TYPE_LABELS).map(([value, label]) =>
 
 export function AnimalPublicPage() {
   const { id } = useParams();
-  const animalId = Number(id);
+  const animalId = id ?? "";
   const { data, loading, error } = useAsync(() => publicApi.getAnimal(animalId), [animalId]);
   const [open, setOpen] = useState(false);
 
   return (
     <div>
-      <Link to="/" className="text-sm text-muted-foreground hover:text-primary">← Voltar à vitrine</Link>
+      <Link to="/animais" className="text-sm text-muted-foreground hover:text-primary">← Voltar à vitrine</Link>
       {loading && <p className="mt-6 text-muted-foreground">Carregando…</p>}
       {error && <p className="mt-6 text-muted-foreground">Animal não encontrado.</p>}
       {data && (
@@ -61,7 +61,7 @@ export function AnimalPublicPage() {
   );
 }
 
-function InterestModal({ open, onClose, animalId, animalName }: { open: boolean; onClose: () => void; animalId: number; animalName: string }) {
+function InterestModal({ open, onClose, animalId, animalName }: { open: boolean; onClose: () => void; animalId: string; animalName: string }) {
   const [type, setType] = useState<SupportType>("adoção");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");

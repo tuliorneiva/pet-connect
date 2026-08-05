@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { adminApi } from "../../lib/adminApi";
 import { useAsync } from "../../lib/useAsync";
-import { animalStatusTone } from "../../lib/labels";
+import { animalStatusLabel, animalStatusTone } from "../../lib/labels";
 import { Button } from "../../components/ui/Button";
 import { Badge } from "../../components/ui/Badge";
 import { Alert } from "../../components/ui/Alert";
@@ -11,7 +11,7 @@ export function AnimalsListPage() {
   const navigate = useNavigate();
   const { data, loading, error, reload } = useAsync(() => adminApi.listAnimals(), []);
 
-  async function handleDelete(id: number, name: string) {
+  async function handleDelete(id: string, name: string) {
     if (!confirm(`Remover ${name}? Esta ação não pode ser desfeita.`)) return;
     await adminApi.deleteAnimal(id);
     reload();
@@ -40,7 +40,7 @@ export function AnimalsListPage() {
                 <td><Link to={`/admin/animais/${a.id}`}>{a.name}</Link></td>
                 <td>{a.species}</td>
                 <td>{a.size ?? "—"}</td>
-                <td><Badge tone={animalStatusTone(a.status)}>{a.status}</Badge></td>
+                <td><Badge tone={animalStatusTone(a.status)}>{animalStatusLabel(a.status)}</Badge></td>
                 <td>
                   <div className={styles.rowActions}>
                     <Button variant="secondary" onClick={() => navigate(`/admin/animais/${a.id}/editar`)}>Editar</Button>

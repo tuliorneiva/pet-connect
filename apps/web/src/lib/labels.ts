@@ -38,6 +38,10 @@ export const SUPPORT_STATUS_OPTIONS: { value: SupportStatus; label: string }[] =
   { value: "concluída", label: "Concluída" },
 ];
 
+export function animalStatusLabel(status: AnimalStatus): string {
+  return ANIMAL_STATUS_OPTIONS.find((o) => o.value === status)?.label ?? status;
+}
+
 export function animalStatusTone(status: AnimalStatus): "success" | "info" | "neutral" {
   if (status === "disponível") return "success";
   if (status === "em_processo") return "info";

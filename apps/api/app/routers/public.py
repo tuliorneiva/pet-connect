@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
@@ -38,7 +40,7 @@ def list_public_animals(
 
 
 @router.get("/animals/{animal_id}", response_model=PublicAnimalResponse)
-def get_public_animal(animal_id: int, db: Session = Depends(get_db)) -> Animal:
+def get_public_animal(animal_id: UUID, db: Session = Depends(get_db)) -> Animal:
     animal = db.get(Animal, animal_id)
     if animal is None or animal.status != "disponível":
         raise HTTPException(status_code=404, detail="Animal não encontrado")
@@ -55,6 +57,8 @@ def create_support_request(
         raise HTTPException(status_code=404, detail="Animal não encontrado")
     request = SupportRequest(
         org_id=animal.org_id,
+        # Desnormalizado para a solicitação continuar legível se o animal for removido.
+        animal_name=animal.name,
         **payload.model_dump(),
     )
     db.add(request)

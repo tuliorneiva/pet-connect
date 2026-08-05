@@ -29,7 +29,7 @@ export async function apiFetch<T>(path: string, init: RequestInit = {}): Promise
   return resp.json() as Promise<T>;
 }
 
-export type AuthUser = { id: number; name: string; email: string; org_id: number };
+export type AuthUser = { id: string; name: string; email: string; org_id: string };
 export type TokenResponse = { access_token: string; token_type: string };
 
 export type RegisterBody = {

@@ -92,6 +92,7 @@ def seed() -> None:
         db.add(
             SupportRequest(
                 animal_id=frajola.id,
+                animal_name=frajola.name,
                 org_id=org.id,
                 type="adoção",
                 requester_name="João Silva",

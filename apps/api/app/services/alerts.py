@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from datetime import date, timedelta
 
 from sqlalchemy import select
@@ -10,7 +12,7 @@ from app.schemas.health import AlertItem
 UPCOMING_WINDOW_DAYS = 7
 
 
-def compute_alerts(db: Session, org_id: int, today: date | None = None) -> list[AlertItem]:
+def compute_alerts(db: Session, org_id: UUID, today: date | None = None) -> list[AlertItem]:
     """Vaccines due/overdue and medications with an overdue next dose, for one ONG."""
     today = today or date.today()
     horizon = today + timedelta(days=UPCOMING_WINDOW_DAYS)

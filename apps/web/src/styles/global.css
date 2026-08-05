@@ -10,8 +10,14 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-a { color: var(--color-primary); text-decoration: none; }
-a:hover { text-decoration: underline; }
+/* Em @layer base para que os utilitários do Tailwind (text-primary-foreground,
+   no-underline…) vençam. CSS sem layer tem prioridade sobre CSS em layer
+   independente de especificidade — fora do layer estas regras pintavam o texto
+   de links dentro de botões com a cor primária, sumindo no fundo primário. */
+@layer base {
+  a { color: var(--color-primary); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+}
 
 h1, h2, h3 { color: var(--color-text); line-height: 1.25; margin: 0 0 var(--space-4); }
 

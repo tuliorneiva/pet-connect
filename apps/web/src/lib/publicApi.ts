@@ -21,7 +21,7 @@ function toQuery(filters: VitrineFilters): string {
 export const publicApi = {
   listAnimals: (filters: VitrineFilters = {}) =>
     apiFetch<PublicAnimal[]>(`/api/public/animals${toQuery(filters)}`),
-  getAnimal: (id: number) => apiFetch<PublicAnimal>(`/api/public/animals/${id}`),
+  getAnimal: (id: string) => apiFetch<PublicAnimal>(`/api/public/animals/${id}`),
   getOrganization: (slug: string) =>
     apiFetch<PublicOrganization>(`/api/public/organizations/${slug}`),
   createSupportRequest: (data: SupportRequestInput) =>

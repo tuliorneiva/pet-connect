@@ -85,7 +85,7 @@ export function OrgPage() {
           <Card className="border-0 bg-gradient-to-br from-primary to-[#155E75] p-6 text-white">
             <h3 className="text-xs font-semibold uppercase tracking-wide text-[#cffafe]">Quer ajudar?</h3>
             <p className="mt-3 text-sm text-cyan-50">Adote, doe ou seja voluntário. Todo apoio faz diferença.</p>
-            <Button asChild variant="secondary" className="mt-4 w-full"><Link to="/">Ver animais</Link></Button>
+            <Button asChild variant="secondary" className="mt-4 w-full"><Link to="/animais">Ver animais</Link></Button>
           </Card>
           <Card className="p-6">
             <h3 className="mb-4 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Contato</h3>

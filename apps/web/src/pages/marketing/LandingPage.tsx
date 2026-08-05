@@ -19,7 +19,7 @@ function Nav() {
         </nav>
         <div className="ml-auto flex items-center gap-3">
           <Button asChild variant="outline" size="sm"><Link to="/login">Entrar</Link></Button>
-          <Button asChild size="sm"><Link to="/">Ver animais</Link></Button>
+          <Button asChild size="sm"><Link to="/animais">Ver animais</Link></Button>
         </div>
       </div>
     </header>
@@ -42,7 +42,7 @@ function Highlights() {
           {featured.map((a) => <AnimalCard key={a.id} animal={a} />)}
         </div>
         <div className="mt-11 text-center">
-          <Button asChild size="lg"><Link to="/">Ver todos os animais →</Link></Button>
+          <Button asChild size="lg"><Link to="/animais">Ver todos os animais →</Link></Button>
         </div>
       </div>
     </section>
@@ -81,7 +81,7 @@ export function LandingPage() {
               Reunimos animais de ONGs e abrigos parceiros em um só lugar. Filtre, conheça a história de cada um e fale direto com quem cuida.
             </p>
             <div className="mt-8 flex flex-wrap gap-3.5">
-              <Button asChild size="lg"><Link to="/">Ver animais para adoção →</Link></Button>
+              <Button asChild size="lg"><Link to="/animais">Ver animais para adoção →</Link></Button>
               <Button asChild size="lg" variant="outline"><a href="#como">Como funciona</a></Button>
             </div>
             <div className="mt-11 flex gap-9">
@@ -159,7 +159,7 @@ export function LandingPage() {
         <div className="mx-auto max-w-6xl px-6">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Tem espaço no sofá e no coração?</h2>
           <p className="mx-auto mt-4 max-w-xl text-lg text-muted-foreground">Milhares de animais esperam por um lar. O próximo pode estar a um clique de você.</p>
-          <div className="mt-8"><Button asChild size="lg"><Link to="/">Encontrar meu amigo →</Link></Button></div>
+          <div className="mt-8"><Button asChild size="lg"><Link to="/animais">Encontrar meu amigo →</Link></Button></div>
         </div>
       </section>
 

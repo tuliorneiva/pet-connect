@@ -1,8 +1,8 @@
 export type AnimalStatus = "disponível" | "em_processo" | "adotado" | "indisponível";
 
 export type Animal = {
-  id: number;
-  org_id: number;
+  id: string;
+  org_id: string;
   name: string;
   species: string;
   breed: string | null;
@@ -16,7 +16,7 @@ export type Animal = {
 };
 
 export type PublicAnimal = {
-  id: number;
+  id: string;
   name: string;
   species: string;
   breed: string | null;
@@ -25,14 +25,14 @@ export type PublicAnimal = {
   birth_estimate: string | null;
   description: string | null;
   photo_url: string | null;
-  org_id: number;
+  org_id: string;
   org_name: string;
   org_city: string | null;
   org_slug: string;
 };
 
 export type PublicOrganization = {
-  id: number;
+  id: string;
   name: string;
   slug: string;
   city: string | null;
@@ -65,9 +65,9 @@ export type SupportType = "adoção" | "lar_temporário" | "apadrinhamento";
 export type SupportStatus = "nova" | "em_análise" | "aprovada" | "recusada" | "concluída";
 
 export type SupportRequest = {
-  id: number;
-  animal_id: number;
-  org_id: number;
+  id: string;
+  animal_id: string;
+  org_id: string;
   type: SupportType;
   requester_name: string;
   requester_email: string;
@@ -78,7 +78,7 @@ export type SupportRequest = {
 };
 
 export type SupportRequestInput = {
-  animal_id: number;
+  animal_id: string;
   type: SupportType;
   requester_name: string;
   requester_email: string;
@@ -87,8 +87,8 @@ export type SupportRequestInput = {
 };
 
 export type Vaccination = {
-  id: number;
-  animal_id: number;
+  id: string;
+  animal_id: string;
   vaccine_name: string;
   applied_at: string | null;
   due_at: string | null;
@@ -96,8 +96,8 @@ export type Vaccination = {
 };
 
 export type Medication = {
-  id: number;
-  animal_id: number;
+  id: string;
+  animal_id: string;
   name: string;
   dosage: string | null;
   start_at: string | null;
@@ -108,8 +108,8 @@ export type Medication = {
 };
 
 export type MedicalRecord = {
-  id: number;
-  animal_id: number;
+  id: string;
+  animal_id: string;
   title: string;
   description: string | null;
   recorded_at: string | null;
@@ -117,7 +117,7 @@ export type MedicalRecord = {
 };
 
 export type AlertItem = {
-  animal_id: number;
+  animal_id: string;
   animal_name: string;
   kind: string;
   description: string;

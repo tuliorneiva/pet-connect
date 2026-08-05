@@ -38,7 +38,7 @@ export function AnimalFormPage() {
 
   useEffect(() => {
     if (id) {
-      adminApi.getAnimal(Number(id)).then((a) =>
+      adminApi.getAnimal(id!).then((a) =>
         setForm({
           name: a.name,
           species: a.species,
@@ -64,7 +64,7 @@ export function AnimalFormPage() {
     setSubmitting(true);
     try {
       if (editing) {
-        await adminApi.updateAnimal(Number(id), form);
+        await adminApi.updateAnimal(id!, form);
       } else {
         await adminApi.createAnimal(form);
       }

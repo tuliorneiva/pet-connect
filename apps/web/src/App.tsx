@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { PublicLayout } from "./layouts/PublicLayout";
 import { AdminLayout } from "./layouts/AdminLayout";
 import { ProtectedRoute } from "./auth/ProtectedRoute";
@@ -18,8 +18,9 @@ export default function App() {
   return (
     <Routes>
       <Route path="/lp" element={<LandingPage />} />
+      <Route path="/" element={<Navigate to="/lp" replace />} />
       <Route element={<PublicLayout />}>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/animais" element={<HomePage />} />
         <Route path="/animais/:id" element={<AnimalPublicPage />} />
         <Route path="/ongs/:slug" element={<OrgPage />} />
         <Route path="/login" element={<LoginPage />} />

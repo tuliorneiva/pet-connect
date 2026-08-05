@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from datetime import datetime
 
 from pydantic import AliasPath, BaseModel, ConfigDict, Field
@@ -34,15 +36,15 @@ class AnimalUpdate(BaseModel):
 class AnimalResponse(AnimalBase):
     model_config = ConfigDict(from_attributes=True)
 
-    id: int
-    org_id: int
+    id: UUID
+    org_id: UUID
     created_at: datetime
 
 
 class PublicAnimalResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
-    id: int
+    id: UUID
     name: str
     species: str
     breed: str | None
@@ -51,7 +53,7 @@ class PublicAnimalResponse(BaseModel):
     birth_estimate: str | None
     description: str | None
     photo_url: str | None
-    org_id: int
+    org_id: UUID
     org_name: str = Field(validation_alias=AliasPath("organization", "name"))
     org_city: str | None = Field(default=None, validation_alias=AliasPath("organization", "city"))
     org_slug: str = Field(validation_alias=AliasPath("organization", "slug"))
