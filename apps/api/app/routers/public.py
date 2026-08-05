@@ -9,6 +9,7 @@ from app.models import Animal, Organization, SupportRequest
 from app.schemas.animal import PublicAnimalResponse
 from app.schemas.organization import PublicOrganizationResponse
 from app.schemas.support_request import SupportRequestCreate, SupportRequestResponse
+from app.services.health_status import compute_health_status
 
 router = APIRouter(prefix="/api/public", tags=["public"])
 
@@ -40,11 +41,17 @@ def list_public_animals(
 
 
 @router.get("/animals/{animal_id}", response_model=PublicAnimalResponse)
-def get_public_animal(animal_id: UUID, db: Session = Depends(get_db)) -> Animal:
+def get_public_animal(animal_id: UUID, db: Session = Depends(get_db)) -> PublicAnimalResponse:
     animal = db.get(Animal, animal_id)
     if animal is None or animal.status != "disponível":
         raise HTTPException(status_code=404, detail="Animal não encontrado")
-    return animal
+    status = compute_health_status(db, animal.id)
+    return PublicAnimalResponse.model_validate(
+        animal, from_attributes=True
+    ).model_copy(update={
+        "vaccines_up_to_date": status.vaccines_up_to_date,
+        "under_treatment": status.under_treatment,
+    })
 
 
 @router.post("/support-requests", response_model=SupportRequestResponse, status_code=201)

@@ -48,3 +48,15 @@ def test_public_animals_filter_by_org(client):
     names = {x["name"] for x in result}
     assert names == {"Aa", "Rex"}
     assert all(x["org_slug"] == slug_a for x in result)
+
+
+def test_detalhe_publico_traz_os_sinais_de_saude(client):
+    token = _register(client)
+    client.post("/api/admin/animals", headers=_auth(token), json={"name": "Mel", "species": "cão"})
+
+    resp = client.get("/api/public/animals")
+    animals = resp.json()
+    assert animals, "seed precisa de ao menos um animal disponível"
+    detail = client.get(f"/api/public/animals/{animals[0]['id']}").json()
+    assert "vaccines_up_to_date" in detail
+    assert "under_treatment" in detail

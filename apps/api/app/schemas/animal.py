@@ -57,3 +57,5 @@ class PublicAnimalResponse(BaseModel):
     org_name: str = Field(validation_alias=AliasPath("organization", "name"))
     org_city: str | None = Field(default=None, validation_alias=AliasPath("organization", "city"))
     org_slug: str = Field(validation_alias=AliasPath("organization", "slug"))
+    vaccines_up_to_date: bool | None = None
+    under_treatment: bool = False
