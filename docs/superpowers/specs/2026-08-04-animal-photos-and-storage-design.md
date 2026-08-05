@@ -88,7 +88,7 @@ A migration converte antes de dropar: cada `animal.photo_url` não nulo vira uma
 `animal_photo` com `is_external = true` e `sort_order = 0`. Nenhuma foto existente se
 perde, e o `downgrade` reverte copiando a capa de volta para a coluna.
 
-Máximo de 6 fotos por animal, validado na API.
+Máximo de 4 fotos por animal (capa + 3), validado na API.
 
 ## API
 
@@ -101,7 +101,7 @@ Todos sob autenticação da ONG dona do animal, seguindo o `_get_owned_animal` j
 | `PATCH` | `/api/admin/animals/{id}/photos/{photo_id}/cover` | move a foto para `sort_order` 0 |
 
 Validação no upload: `image/jpeg`, `image/png`, `image/webp`, até 5 MB. Fora disso, 422
-com mensagem em português. Sétima foto: 422.
+com mensagem em português. Quinta foto: 422.
 
 O response público de animal ganha `photos: string[]` (URLs, em ordem) e mantém
 `photo_url` como a primeira delas — `null` quando não há foto.
@@ -122,14 +122,18 @@ O campo "URL da foto" no formulário do animal vira um uploader:
 - Ações por foto: remover, definir como capa
 - Erro de validação exibido inline, sem perder o resto do formulário
 
-Como o upload exige o animal já criado, no formulário de **novo** animal o uploader fica
-desabilitado com a nota "salve o animal para adicionar fotos" — evita ter que segurar
-arquivos em memória antes do `POST`.
+No formulário de **novo** animal o uploader funciona igual, mas os arquivos ficam retidos
+no estado do componente: o `POST /animals` cria o animal e, com o id na mão, os uploads
+disparam em seguida. Do ponto de vista de quem usa, o cadastro é uma operação só.
+
+Se algum upload falhar depois do animal criado, o animal **não** é desfeito — a tela vai
+para o detalhe dele com um alerta dizendo quais fotos não subiram e um botão para tentar
+de novo. Reverter a criação por causa de uma foto seria pior.
 
 ## Página pública
 
 Componente `AnimalGallery`: foto grande com miniaturas abaixo, clique troca a principal,
-setas quando passa de 3. Com uma foto só, renderiza a imagem sem controles. Sem nenhuma,
+setas quando há mais de uma. Com uma foto só, renderiza a imagem sem controles. Sem nenhuma,
 o placeholder 🐾 atual.
 
 Navegação por teclado (setas) e `alt` descritivo em cada imagem.
@@ -149,7 +153,7 @@ o mesmo caminho serve para migrar qualquer `photo_url` legado.
 
 - Upload aceita jpeg/png/webp e cria o registro com `sort_order` correto
 - Upload rejeita content-type inválido e arquivo acima de 5 MB
-- Upload rejeita a sétima foto
+- Upload rejeita a quinta foto
 - Nome de arquivo malicioso (`../../etc/passwd`) não escapa do prefixo `animals/`
 - ONG não consegue subir nem remover foto de animal de outra ONG (404)
 - Remover animal remove as fotos em cascata
@@ -162,12 +166,14 @@ O storage é dublado nos testes — nenhum teste toca a rede.
 
 - Galeria troca a imagem principal ao clicar na miniatura
 - Uploader exibe erro de validação vindo da API
-- Uploader desabilitado no formulário de criação
+- Uploader recusa a quinta foto antes mesmo de chamar a API
+- Criar animal com fotos retidas dispara os uploads após o `POST /animals`
+- Falha de upload na criação não desfaz o animal e mostra o alerta de retentativa
 
 ## Riscos
 
 **Chaves do Supabase no `.env`.** O `.env` já é gitignorado e existe guard para
 `SECRET_KEY` em produção. Vale estender o guard para as chaves de storage.
 
-**Free tier.** 1 GB com 6 fotos por animal comporta centenas de animais. Se estourar, o
+**Free tier.** 1 GB com 4 fotos por animal comporta centenas de animais. Se estourar, o
 sintoma é erro no upload, não perda de dado.
