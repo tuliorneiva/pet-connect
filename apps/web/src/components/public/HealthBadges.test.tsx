@@ -20,3 +20,9 @@ test("mostra tratamento em curso", () => {
   render(<HealthBadges upToDate={null} underTreatment />);
   expect(screen.getByText("Em tratamento")).toBeInTheDocument();
 });
+
+test("mostra os dois selos quando vacinação está em dia e há tratamento em curso", () => {
+  render(<HealthBadges upToDate underTreatment />);
+  expect(screen.getByText("Vacinação em dia")).toBeInTheDocument();
+  expect(screen.getByText("Em tratamento")).toBeInTheDocument();
+});
