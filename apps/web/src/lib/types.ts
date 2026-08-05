@@ -29,6 +29,8 @@ export type PublicAnimal = {
   org_name: string;
   org_city: string | null;
   org_slug: string;
+  vaccines_up_to_date: boolean | null;
+  under_treatment: boolean;
 };
 
 export type PublicOrganization = {
