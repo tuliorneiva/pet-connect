@@ -1,0 +1,210 @@
+<title>PetConnect — Abrigo Patinhas Felizes</title>
+<style>
+  :root {
+    --primary: #0E7490; --primary-hover: #0C607A; --primary-tint: #F0FDFA; --primary-tint-2: #ECFEFF;
+    --on-primary: #FFFFFF; --ink: #0F172A; --muted: #5B7280; --border: #E2E8F0;
+    --bg: #F8FAFC; --surface: #FFFFFF; --success: #15803D;
+    --radius-sm: 8px; --radius-md: 12px; --radius-lg: 18px;
+    --shadow-sm: 0 1px 2px rgba(15,23,42,.06), 0 1px 3px rgba(15,23,42,.08);
+    --shadow-md: 0 8px 24px rgba(15,23,42,.08);
+    --font: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --maxw: 1140px;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--font); color: var(--ink); background: var(--bg); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  h1, h2, h3 { margin: 0; letter-spacing: -0.02em; line-height: 1.15; text-wrap: balance; }
+  p { margin: 0; }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: var(--radius-sm); font-size: 0.95rem; font-weight: 600; cursor: pointer; border: 1px solid transparent; transition: background .15s, border-color .15s; white-space: nowrap; }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-primary:hover { background: var(--primary-hover); }
+  .btn-ghost { background: #fff; color: var(--ink); border-color: var(--border); }
+  .btn-ghost:hover { border-color: #cbd5e1; }
+  .btn-white { background: #fff; color: var(--primary); }
+  .btn-white:hover { background: #f1f5f9; }
+  .btn-sm { height: 38px; padding: 0 14px; font-size: 0.875rem; }
+  .btn-lg { height: 50px; padding: 0 24px; font-size: 1rem; }
+
+  header.nav { position: sticky; top: 0; z-index: 40; background: rgba(255,255,255,.85); backdrop-filter: saturate(180%) blur(10px); border-bottom: 1px solid var(--border); }
+  .nav-inner { display: flex; align-items: center; gap: 32px; height: 68px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.12rem; letter-spacing: -0.02em; }
+  .brand .logo { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; background: linear-gradient(140deg, var(--primary), #0891B2); color: #fff; font-size: 18px; box-shadow: 0 4px 12px rgba(14,116,144,.35); }
+  .brand b { color: var(--primary); }
+  .nav-links { display: flex; gap: 28px; }
+  .nav-links a { color: var(--muted); font-weight: 500; font-size: 0.94rem; }
+  .nav-links a.active, .nav-links a:hover { color: var(--ink); }
+  .nav-actions { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+
+  /* Cover + org header */
+  .cover { height: 200px; background: linear-gradient(135deg, var(--primary), #155E75 70%, #0C4A5E); position: relative; }
+  .cover::after { content: ""; position: absolute; inset: 0; background: radial-gradient(600px 300px at 85% -30%, rgba(103,232,249,.4), transparent 60%); }
+  .crumbs { font-size: 0.85rem; color: var(--muted); padding: 16px 0 0; }
+  .crumbs a:hover { color: var(--primary); }
+
+  .org-head { display: flex; gap: 24px; align-items: flex-end; margin-top: -68px; position: relative; z-index: 2; }
+  .org-avatar { width: 128px; height: 128px; border-radius: 24px; background: linear-gradient(140deg, #22D3EE, var(--primary)); border: 5px solid var(--surface); box-shadow: var(--shadow-md); display: grid; place-items: center; font-size: 58px; flex: none; }
+  .org-title { flex: 1; padding-bottom: 6px; }
+  .org-title .name-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .org-title h1 { font-size: clamp(1.6rem, 3vw, 2.2rem); }
+  .verified { display: inline-flex; align-items: center; gap: 6px; font-size: 0.8rem; font-weight: 600; color: var(--primary); background: var(--primary-tint); border: 1px solid #cffafe; padding: 4px 10px; border-radius: 999px; }
+  .org-title .meta { display: flex; gap: 18px; flex-wrap: wrap; color: var(--muted); font-size: 0.94rem; margin-top: 10px; }
+  .org-title .meta span { display: inline-flex; align-items: center; gap: 6px; }
+  .org-actions { display: flex; gap: 12px; padding-bottom: 8px; flex: none; }
+
+  /* Layout */
+  .layout { display: grid; grid-template-columns: 1fr 320px; gap: 40px; padding: 44px 0 72px; align-items: start; }
+
+  .section-title { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 20px; }
+  .section-title h2 { font-size: 1.5rem; }
+  .section-title .count { color: var(--muted); font-size: 0.92rem; }
+  .about { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 26px; margin-bottom: 34px; }
+  .about h2 { font-size: 1.25rem; margin-bottom: 12px; }
+  .about p { color: #334155; }
+  .about p + p { margin-top: 12px; }
+
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 34px; }
+  .stat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px; text-align: center; }
+  .stat .n { font-size: 1.8rem; font-weight: 700; color: var(--primary); letter-spacing: -0.02em; }
+  .stat .l { font-size: 0.85rem; color: var(--muted); margin-top: 2px; }
+
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .acard { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-sm); transition: transform .16s, box-shadow .16s, border-color .16s; }
+  .acard:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: #cbd5e1; }
+  .acard .pic { aspect-ratio: 1/1; display: grid; place-items: center; font-size: 56px; position: relative; }
+  .acard .heart { position: absolute; top: 12px; right: 12px; width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,.92); display: grid; place-items: center; font-size: 14px; box-shadow: var(--shadow-sm); }
+  .acard .body { padding: 14px; }
+  .acard .nm { font-weight: 700; font-size: 1.05rem; }
+  .badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 9px; }
+  .badge { font-size: 0.74rem; font-weight: 600; color: var(--primary); background: var(--primary-tint); border: 1px solid #cffafe; padding: 3px 8px; border-radius: 999px; }
+  .badge.n { color: var(--muted); background: #f1f5f9; border-color: var(--border); }
+
+  /* Sidebar */
+  .side { position: sticky; top: 88px; display: grid; gap: 20px; }
+  .panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 22px; box-shadow: var(--shadow-sm); }
+  .panel h3 { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); margin-bottom: 16px; }
+  .contact-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-top: 1px solid var(--border); }
+  .contact-row:first-of-type { border-top: none; padding-top: 0; }
+  .contact-row .ic { width: 36px; height: 36px; border-radius: 10px; background: var(--primary-tint-2); display: grid; place-items: center; font-size: 16px; flex: none; }
+  .contact-row .txt { font-size: 0.9rem; }
+  .contact-row .txt .k { color: var(--muted); font-size: 0.76rem; }
+  .contact-row .txt .v { font-weight: 600; }
+  .panel.cta { background: linear-gradient(135deg, var(--primary), #155E75); color: #fff; border: none; }
+  .panel.cta h3 { color: #cffafe; }
+  .panel.cta p { color: #e0f7fb; font-size: 0.92rem; margin-bottom: 16px; }
+  .panel.cta .btn { width: 100%; }
+  .panel.cta .btn + .btn { margin-top: 10px; }
+
+  footer.ft { background: var(--ink); color: #94a3b8; padding: 30px 0; font-size: 0.88rem; }
+  .ft-inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+  .ft .brand { color: #fff; font-size: 1rem; }
+  .ft .brand b { color: #67E8F9; }
+
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    .side { position: static; }
+    .grid { grid-template-columns: 1fr 1fr; }
+    .org-head { flex-direction: column; align-items: flex-start; gap: 16px; }
+    .org-actions { padding-bottom: 0; }
+    .nav-links { display: none; }
+  }
+  @media (max-width: 560px) { .grid, .stats { grid-template-columns: 1fr; } }
+</style>
+
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a href="#" class="brand"><span class="logo">🐾</span> Pet<b>Connect</b></a>
+    <nav class="nav-links">
+      <a href="#">Animais</a>
+      <a href="#" class="active">ONGs</a>
+      <a href="#">Como funciona</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="#" class="btn btn-ghost btn-sm">Entrar</a>
+      <a href="#" class="btn btn-primary btn-sm">Cadastrar ONG</a>
+    </div>
+  </div>
+</header>
+
+<div class="cover"></div>
+<div class="wrap">
+  <div class="org-head">
+    <div class="org-avatar">🏠</div>
+    <div class="org-title">
+      <div class="name-row">
+        <h1>Abrigo Patinhas Felizes</h1>
+        <span class="verified">✓ ONG verificada</span>
+      </div>
+      <div class="meta">
+        <span>📍 São Paulo, SP</span>
+        <span>🗓️ Parceira desde 2021</span>
+        <span>🐾 18 animais para adoção</span>
+      </div>
+    </div>
+    <div class="org-actions">
+      <a href="#" class="btn btn-ghost btn-lg">Compartilhar</a>
+      <a href="#" class="btn btn-primary btn-lg">Falar com a ONG</a>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="layout">
+    <div class="main">
+      <div class="about">
+        <h2>Sobre a ONG</h2>
+        <p>O Abrigo Patinhas Felizes é uma organização sem fins lucrativos que resgata, cuida e encaminha para adoção cães e gatos em situação de abandono na região metropolitana de São Paulo. Todos os animais passam por avaliação veterinária, vacinação e castração antes de serem disponibilizados.</p>
+        <p>Nosso trabalho é mantido por voluntários e doações. Cada adoção responsável abre espaço para resgatarmos um novo animal.</p>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><div class="n">18</div><div class="l">disponíveis para adoção</div></div>
+        <div class="stat"><div class="n">312</div><div class="l">adoções realizadas</div></div>
+        <div class="stat"><div class="n">2021</div><div class="l">ano de fundação</div></div>
+      </div>
+
+      <div class="section-title">
+        <h2>Animais para adoção</h2>
+        <span class="count">18 animais</span>
+      </div>
+      <div class="grid">
+        <a class="acard" href="#"><div class="pic" style="background:radial-gradient(120% 120% at 70% 20%,#FDE68A,#FBBF24 60%,#D97706)">🐕<span class="heart">🤍</span></div><div class="body"><div class="nm">Thor</div><div class="badges"><span class="badge">Cachorro</span><span class="badge n">Macho</span><span class="badge n">Médio</span></div></div></a>
+        <a class="acard" href="#"><div class="pic" style="background:radial-gradient(120% 120% at 70% 20%,#DDD6FE,#A78BFA 60%,#7C3AED)">🐈<span class="heart">🤍</span></div><div class="body"><div class="nm">Bidu</div><div class="badges"><span class="badge">Gato</span><span class="badge n">Macho</span><span class="badge n">Médio</span></div></div></a>
+        <a class="acard" href="#"><div class="pic" style="background:radial-gradient(120% 120% at 70% 20%,#FED7AA,#FB923C 60%,#EA580C)">🐕<span class="heart">🤍</span></div><div class="body"><div class="nm">Bob</div><div class="badges"><span class="badge">Cachorro</span><span class="badge n">Macho</span><span class="badge n">Grande</span></div></div></a>
+        <a class="acard" href="#"><div class="pic" style="background:radial-gradient(120% 120% at 70% 20%,#A7F3D0,#34D399 60%,#059669)">🐱<span class="heart">🤍</span></div><div class="body"><div class="nm">Amora</div><div class="badges"><span class="badge">Gato</span><span class="badge n">Fêmea</span><span class="badge n">Pequeno</span></div></div></a>
+        <a class="acard" href="#"><div class="pic" style="background:radial-gradient(120% 120% at 70% 20%,#FBCFE8,#F472B6 60%,#DB2777)">🐩<span class="heart">🤍</span></div><div class="body"><div class="nm">Lola</div><div class="badges"><span class="badge">Cachorro</span><span class="badge n">Fêmea</span><span class="badge n">Pequeno</span></div></div></a>
+        <a class="acard" href="#"><div class="pic" style="background:radial-gradient(120% 120% at 70% 20%,#99F6E4,#2DD4BF 60%,#0D9488)">🐈<span class="heart">🤍</span></div><div class="body"><div class="nm">Simba</div><div class="badges"><span class="badge">Gato</span><span class="badge n">Macho</span><span class="badge n">Médio</span></div></div></a>
+      </div>
+      <div style="text-align:center;margin-top:30px"><a href="#" class="btn btn-ghost btn-lg">Ver todos os 18 animais</a></div>
+    </div>
+
+    <aside class="side">
+      <div class="panel cta">
+        <h3>Quer ajudar?</h3>
+        <p>Adote, doe ou seja voluntário. Todo apoio faz diferença na vida de um animal.</p>
+        <a href="#" class="btn btn-white">💛 Fazer uma doação</a>
+        <a href="#" class="btn btn-ghost" style="color:#fff;border-color:rgba(255,255,255,.4);background:transparent">Ser voluntário</a>
+      </div>
+      <div class="panel">
+        <h3>Contato</h3>
+        <div class="contact-row"><span class="ic">📞</span><div class="txt"><div class="k">Telefone</div><div class="v">(11) 98765-4321</div></div></div>
+        <div class="contact-row"><span class="ic">✉️</span><div class="txt"><div class="k">E-mail</div><div class="v">contato@patinhasfelizes.org</div></div></div>
+        <div class="contact-row"><span class="ic">🌐</span><div class="txt"><div class="k">Site</div><div class="v">patinhasfelizes.org</div></div></div>
+        <div class="contact-row"><span class="ic">📍</span><div class="txt"><div class="k">Endereço</div><div class="v">Rua das Acácias, 240 — Vila Mariana, SP</div></div></div>
+      </div>
+      <div class="panel">
+        <h3>Horário de visita</h3>
+        <div class="contact-row" style="border:none;padding-top:0"><span class="ic">🕘</span><div class="txt"><div class="k">Seg a Sex</div><div class="v">9h às 17h</div></div></div>
+        <div class="contact-row"><span class="ic">🕘</span><div class="txt"><div class="k">Sábado</div><div class="v">9h às 13h</div></div></div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<footer class="ft">
+  <div class="wrap ft-inner">
+    <div class="brand">🐾 Pet<b>Connect</b></div>
+    <span>© 2026 PetConnect · Adoção responsável</span>
+  </div>
+</footer>

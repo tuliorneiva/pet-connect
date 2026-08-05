@@ -16,12 +16,12 @@ const jsonBody = (data: unknown): RequestInit => ({ body: JSON.stringify(data) }
 export const adminApi = {
   // Animals
   listAnimals: () => apiFetch<Animal[]>("/api/admin/animals"),
-  getAnimal: (id: number) => apiFetch<Animal>(`/api/admin/animals/${id}`),
+  getAnimal: (id: string) => apiFetch<Animal>(`/api/admin/animals/${id}`),
   createAnimal: (data: AnimalInput) =>
     apiFetch<Animal>("/api/admin/animals", { method: "POST", ...jsonBody(data) }),
-  updateAnimal: (id: number, data: Partial<AnimalInput>) =>
+  updateAnimal: (id: string, data: Partial<AnimalInput>) =>
     apiFetch<Animal>(`/api/admin/animals/${id}`, { method: "PATCH", ...jsonBody(data) }),
-  deleteAnimal: (id: number) =>
+  deleteAnimal: (id: string) =>
     apiFetch<void>(`/api/admin/animals/${id}`, { method: "DELETE" }),
 
   // Dashboard
@@ -30,42 +30,42 @@ export const adminApi = {
 
   // Support requests
   listRequests: () => apiFetch<SupportRequest[]>("/api/admin/support-requests"),
-  updateRequest: (id: number, status: SupportStatus) =>
+  updateRequest: (id: string, status: SupportStatus) =>
     apiFetch<SupportRequest>(`/api/admin/support-requests/${id}`, {
       method: "PATCH",
       ...jsonBody({ status }),
     }),
 
   // Vaccinations
-  listVaccinations: (animalId: number) =>
+  listVaccinations: (animalId: string) =>
     apiFetch<Vaccination[]>(`/api/admin/animals/${animalId}/vaccinations`),
-  createVaccination: (animalId: number, data: Partial<Vaccination>) =>
+  createVaccination: (animalId: string, data: Partial<Vaccination>) =>
     apiFetch<Vaccination>(`/api/admin/animals/${animalId}/vaccinations`, {
       method: "POST",
       ...jsonBody(data),
     }),
-  deleteVaccination: (animalId: number, id: number) =>
+  deleteVaccination: (animalId: string, id: string) =>
     apiFetch<void>(`/api/admin/animals/${animalId}/vaccinations/${id}`, { method: "DELETE" }),
 
   // Medications
-  listMedications: (animalId: number) =>
+  listMedications: (animalId: string) =>
     apiFetch<Medication[]>(`/api/admin/animals/${animalId}/medications`),
-  createMedication: (animalId: number, data: Partial<Medication>) =>
+  createMedication: (animalId: string, data: Partial<Medication>) =>
     apiFetch<Medication>(`/api/admin/animals/${animalId}/medications`, {
       method: "POST",
       ...jsonBody(data),
     }),
-  deleteMedication: (animalId: number, id: number) =>
+  deleteMedication: (animalId: string, id: string) =>
     apiFetch<void>(`/api/admin/animals/${animalId}/medications/${id}`, { method: "DELETE" }),
 
   // Medical records
-  listRecords: (animalId: number) =>
+  listRecords: (animalId: string) =>
     apiFetch<MedicalRecord[]>(`/api/admin/animals/${animalId}/medical-records`),
-  createRecord: (animalId: number, data: Partial<MedicalRecord>) =>
+  createRecord: (animalId: string, data: Partial<MedicalRecord>) =>
     apiFetch<MedicalRecord>(`/api/admin/animals/${animalId}/medical-records`, {
       method: "POST",
       ...jsonBody(data),
     }),
-  deleteRecord: (animalId: number, id: number) =>
+  deleteRecord: (animalId: string, id: string) =>
     apiFetch<void>(`/api/admin/animals/${animalId}/medical-records/${id}`, { method: "DELETE" }),
 };

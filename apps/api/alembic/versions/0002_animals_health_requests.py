@@ -16,8 +16,8 @@ depends_on = None
 def upgrade() -> None:
     op.create_table(
         "animal",
-        sa.Column("id", sa.Integer(), primary_key=True),
-        sa.Column("org_id", sa.Integer(), sa.ForeignKey("organization.id"), nullable=False),
+        sa.Column("id", sa.Uuid(), primary_key=True),
+        sa.Column("org_id", sa.Uuid(), sa.ForeignKey("organization.id"), nullable=False),
         sa.Column("name", sa.String(length=120), nullable=False),
         sa.Column("species", sa.String(length=20), nullable=False),
         sa.Column("breed", sa.String(length=120), nullable=True),
@@ -30,10 +30,16 @@ def upgrade() -> None:
         sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False),
     )
 
+    # Registros de saúde morrem junto com o animal.
     op.create_table(
         "vaccination",
-        sa.Column("id", sa.Integer(), primary_key=True),
-        sa.Column("animal_id", sa.Integer(), sa.ForeignKey("animal.id"), nullable=False),
+        sa.Column("id", sa.Uuid(), primary_key=True),
+        sa.Column(
+            "animal_id",
+            sa.Uuid(),
+            sa.ForeignKey("animal.id", ondelete="CASCADE"),
+            nullable=False,
+        ),
         sa.Column("vaccine_name", sa.String(length=120), nullable=False),
         sa.Column("applied_at", sa.Date(), nullable=True),
         sa.Column("due_at", sa.Date(), nullable=True),
@@ -42,8 +48,13 @@ def upgrade() -> None:
 
     op.create_table(
         "medication",
-        sa.Column("id", sa.Integer(), primary_key=True),
-        sa.Column("animal_id", sa.Integer(), sa.ForeignKey("animal.id"), nullable=False),
+        sa.Column("id", sa.Uuid(), primary_key=True),
+        sa.Column(
+            "animal_id",
+            sa.Uuid(),
+            sa.ForeignKey("animal.id", ondelete="CASCADE"),
+            nullable=False,
+        ),
         sa.Column("name", sa.String(length=120), nullable=False),
         sa.Column("dosage", sa.String(length=120), nullable=True),
         sa.Column("start_at", sa.Date(), nullable=True),
@@ -55,19 +66,31 @@ def upgrade() -> None:
 
     op.create_table(
         "medical_record",
-        sa.Column("id", sa.Integer(), primary_key=True),
-        sa.Column("animal_id", sa.Integer(), sa.ForeignKey("animal.id"), nullable=False),
+        sa.Column("id", sa.Uuid(), primary_key=True),
+        sa.Column(
+            "animal_id",
+            sa.Uuid(),
+            sa.ForeignKey("animal.id", ondelete="CASCADE"),
+            nullable=False,
+        ),
         sa.Column("title", sa.String(length=160), nullable=False),
         sa.Column("description", sa.Text(), nullable=True),
         sa.Column("recorded_at", sa.Date(), nullable=True),
-        sa.Column("created_by", sa.Integer(), sa.ForeignKey("user.id"), nullable=True),
+        sa.Column("created_by", sa.Uuid(), sa.ForeignKey("user.id"), nullable=True),
     )
 
+    # Solicitações sobrevivem à remoção do animal (histórico de pessoas reais).
     op.create_table(
         "support_request",
-        sa.Column("id", sa.Integer(), primary_key=True),
-        sa.Column("animal_id", sa.Integer(), sa.ForeignKey("animal.id"), nullable=False),
-        sa.Column("org_id", sa.Integer(), sa.ForeignKey("organization.id"), nullable=False),
+        sa.Column("id", sa.Uuid(), primary_key=True),
+        sa.Column(
+            "animal_id",
+            sa.Uuid(),
+            sa.ForeignKey("animal.id", ondelete="SET NULL"),
+            nullable=True,
+        ),
+        sa.Column("animal_name", sa.String(length=120), nullable=True),
+        sa.Column("org_id", sa.Uuid(), sa.ForeignKey("organization.id"), nullable=False),
         sa.Column("type", sa.String(length=20), nullable=False),
         sa.Column("requester_name", sa.String(length=160), nullable=False),
         sa.Column("requester_email", sa.String(length=255), nullable=False),

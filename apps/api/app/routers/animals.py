@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -10,7 +12,7 @@ from app.schemas.animal import AnimalCreate, AnimalResponse, AnimalUpdate
 router = APIRouter(prefix="/api/admin/animals", tags=["admin:animals"])
 
 
-def _get_owned_animal(animal_id: int, org_id: int, db: Session) -> Animal:
+def _get_owned_animal(animal_id: UUID, org_id: UUID, db: Session) -> Animal:
     animal = db.get(Animal, animal_id)
     if animal is None or animal.org_id != org_id:
         raise HTTPException(status_code=404, detail="Animal não encontrado")
@@ -46,7 +48,7 @@ def create_animal(
 
 @router.get("/{animal_id}", response_model=AnimalResponse)
 def get_animal(
-    animal_id: int,
+    animal_id: UUID,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ) -> Animal:
@@ -55,7 +57,7 @@ def get_animal(
 
 @router.patch("/{animal_id}", response_model=AnimalResponse)
 def update_animal(
-    animal_id: int,
+    animal_id: UUID,
     payload: AnimalUpdate,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
@@ -70,7 +72,7 @@ def update_animal(
 
 @router.delete("/{animal_id}", status_code=204)
 def delete_animal(
-    animal_id: int,
+    animal_id: UUID,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ) -> None:

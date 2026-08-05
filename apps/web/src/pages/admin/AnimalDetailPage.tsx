@@ -7,14 +7,14 @@ import { Card } from "../../components/ui/Card";
 import { Field } from "../../components/ui/Field";
 import { Button } from "../../components/ui/Button";
 import { Badge } from "../../components/ui/Badge";
-import { animalStatusTone } from "../../lib/labels";
+import { animalStatusLabel, animalStatusTone } from "../../lib/labels";
 import styles from "./admin.module.css";
 
 type Tab = "vacinas" | "medicacoes" | "prontuario";
 
 export function AnimalDetailPage() {
   const { id } = useParams();
-  const animalId = Number(id);
+  const animalId = id ?? "";
   const [tab, setTab] = useState<Tab>("vacinas");
   const animal = useAsync(() => adminApi.getAnimal(animalId), [animalId]);
 
@@ -25,7 +25,7 @@ export function AnimalDetailPage() {
         <>
           <div className={styles.header}>
             <h1 className={styles.title}>{animal.data.name}</h1>
-            <Badge tone={animalStatusTone(animal.data.status)}>{animal.data.status}</Badge>
+            <Badge tone={animalStatusTone(animal.data.status)}>{animalStatusLabel(animal.data.status)}</Badge>
           </div>
           <Card style={{ marginBottom: "var(--space-6)" }}>
             <p className={styles.muted}>
@@ -53,7 +53,7 @@ export function AnimalDetailPage() {
   );
 }
 
-function VaccinationsTab({ animalId }: { animalId: number }) {
+function VaccinationsTab({ animalId }: { animalId: string }) {
   const { data, reload } = useAsync(() => adminApi.listVaccinations(animalId), [animalId]);
   const [name, setName] = useState("");
   const [dueAt, setDueAt] = useState("");
@@ -70,7 +70,7 @@ function VaccinationsTab({ animalId }: { animalId: number }) {
     reload();
   }
 
-  async function remove(vid: number) {
+  async function remove(vid: string) {
     await adminApi.deleteVaccination(animalId, vid);
     reload();
   }
@@ -105,7 +105,7 @@ function VaccinationsTab({ animalId }: { animalId: number }) {
   );
 }
 
-function MedicationsTab({ animalId }: { animalId: number }) {
+function MedicationsTab({ animalId }: { animalId: string }) {
   const { data, reload } = useAsync(() => adminApi.listMedications(animalId), [animalId]);
   const [name, setName] = useState("");
   const [dosage, setDosage] = useState("");
@@ -122,7 +122,7 @@ function MedicationsTab({ animalId }: { animalId: number }) {
     reload();
   }
 
-  async function remove(mid: number) {
+  async function remove(mid: string) {
     await adminApi.deleteMedication(animalId, mid);
     reload();
   }
@@ -158,7 +158,7 @@ function MedicationsTab({ animalId }: { animalId: number }) {
   );
 }
 
-function RecordsTab({ animalId }: { animalId: number }) {
+function RecordsTab({ animalId }: { animalId: string }) {
   const { data, reload } = useAsync(() => adminApi.listRecords(animalId), [animalId]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -175,7 +175,7 @@ function RecordsTab({ animalId }: { animalId: number }) {
     reload();
   }
 
-  async function remove(rid: number) {
+  async function remove(rid: string) {
     await adminApi.deleteRecord(animalId, rid);
     reload();
   }

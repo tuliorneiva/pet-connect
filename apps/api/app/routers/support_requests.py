@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -26,7 +28,7 @@ def list_support_requests(
 
 @router.patch("/{request_id}", response_model=SupportRequestResponse)
 def update_support_request(
-    request_id: int,
+    request_id: UUID,
     payload: SupportRequestUpdate,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),

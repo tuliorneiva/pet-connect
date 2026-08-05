@@ -1,3 +1,5 @@
+import uuid
+
 from datetime import datetime, timedelta, timezone
 
 import jwt
@@ -65,7 +67,8 @@ def test_me_returns_current_user_and_org(client):
     assert resp.status_code == 200
     body = resp.json()
     assert body["email"] == "ana@abrigo.org"
-    assert body["org_id"] == 1
+    # IDs são UUID — não sequenciais, então só dá para exigir que seja um UUID válido.
+    assert uuid.UUID(body["org_id"])
 
 
 def test_two_orgs_get_distinct_org_ids(client):

@@ -9,7 +9,7 @@ import styles from "./admin.module.css";
 export function RequestsPage() {
   const { data, loading, error, reload } = useAsync(() => adminApi.listRequests(), []);
 
-  async function changeStatus(id: number, status: SupportStatus) {
+  async function changeStatus(id: string, status: SupportStatus) {
     await adminApi.updateRequest(id, status);
     reload();
   }

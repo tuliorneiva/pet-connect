@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
 
@@ -22,7 +24,7 @@ class TokenResponse(BaseModel):
 class UserResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
-    id: int
+    id: UUID
     name: str
     email: EmailStr
-    org_id: int
+    org_id: UUID

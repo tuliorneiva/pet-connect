@@ -1,3 +1,5 @@
+from uuid import UUID
+
 import jwt
 from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
@@ -29,7 +31,7 @@ def get_current_user(
         raise credentials_exc
 
     try:
-        user = db.get(User, int(user_id))
+        user = db.get(User, UUID(user_id))
     except ValueError:
         raise credentials_exc
     if user is None:

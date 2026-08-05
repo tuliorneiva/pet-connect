@@ -79,3 +79,16 @@ def test_public_support_request_flow(client):
     updated = client.patch(f"/api/admin/support-requests/{req_id}", headers=_auth(token), json={"status": "em_análise"})
     assert updated.status_code == 200
     assert updated.json()["status"] == "em_análise"
+
+
+def test_public_animal_includes_org_fields(client):
+    token = _register(client, org_name="Abrigo Alfa")
+    a = client.post("/api/admin/animals", headers=_auth(token), json={"name": "Rex", "species": "cão"}).json()
+
+    detail = client.get(f"/api/public/animals/{a['id']}").json()
+    assert detail["org_name"] == "Abrigo Alfa"
+    assert detail["org_city"] == "João Pessoa"
+    assert detail["org_slug"]  # non-empty slug
+
+    listing = client.get("/api/public/animals").json()
+    assert listing[0]["org_name"] == "Abrigo Alfa"

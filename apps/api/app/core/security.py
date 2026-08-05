@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from datetime import datetime, timedelta, timezone
 
 import jwt
@@ -16,11 +18,12 @@ def verify_password(plain: str, hashed: str) -> bool:
     return pwd_context.verify(plain, hashed)
 
 
-def create_access_token(subject: str, org_id: int) -> str:
+def create_access_token(subject: str, org_id: UUID) -> str:
     expire = datetime.now(timezone.utc) + timedelta(
         minutes=settings.access_token_expire_minutes
     )
-    payload = {"sub": subject, "org_id": org_id, "exp": expire}
+    # UUID não é serializável em JSON — o claim vai como string.
+    payload = {"sub": subject, "org_id": str(org_id), "exp": expire}
     return jwt.encode(payload, settings.secret_key, algorithm=settings.jwt_algorithm)
 
 

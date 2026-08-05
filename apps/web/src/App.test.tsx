@@ -3,13 +3,24 @@ import { MemoryRouter } from "react-router-dom";
 import { AuthProvider } from "./auth/AuthContext";
 import App from "./App";
 
-test("renders the public home at /", () => {
+function renderAt(path: string) {
   render(
-    <MemoryRouter initialEntries={["/"]}>
+    <MemoryRouter initialEntries={[path]}>
       <AuthProvider>
         <App />
       </AuthProvider>
     </MemoryRouter>,
   );
+}
+
+test("redirects / to the landing page", () => {
+  renderAt("/");
+  expect(
+    screen.getByRole("heading", { name: /novo melhor amigo/i }),
+  ).toBeInTheDocument();
+});
+
+test("renders the public animal showcase at /animais", () => {
+  renderAt("/animais");
   expect(screen.getByRole("heading", { name: /adote um amigo/i })).toBeInTheDocument();
 });

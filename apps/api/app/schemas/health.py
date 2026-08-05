@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from datetime import date
 
 from pydantic import BaseModel, ConfigDict
@@ -21,8 +23,8 @@ class VaccinationUpdate(BaseModel):
 class VaccinationResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
-    id: int
-    animal_id: int
+    id: UUID
+    animal_id: UUID
     vaccine_name: str
     applied_at: date | None
     due_at: date | None
@@ -53,8 +55,8 @@ class MedicationUpdate(BaseModel):
 class MedicationResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
-    id: int
-    animal_id: int
+    id: UUID
+    animal_id: UUID
     name: str
     dosage: str | None
     start_at: date | None
@@ -74,17 +76,17 @@ class MedicalRecordCreate(BaseModel):
 class MedicalRecordResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
-    id: int
-    animal_id: int
+    id: UUID
+    animal_id: UUID
     title: str
     description: str | None
     recorded_at: date | None
-    created_by: int | None
+    created_by: UUID | None
 
 
 # --- Alerts ---
 class AlertItem(BaseModel):
-    animal_id: int
+    animal_id: UUID
     animal_name: str
     kind: str  # vacina / medicação
     description: str

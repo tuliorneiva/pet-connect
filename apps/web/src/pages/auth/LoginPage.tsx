@@ -2,11 +2,10 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/AuthContext";
-import { Card } from "../../components/ui/Card";
-import { Field } from "../../components/ui/Field";
-import { Button } from "../../components/ui/Button";
-import { Alert } from "../../components/ui/Alert";
-import styles from "./authForm.module.css";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/shadcn/card";
+import { Input } from "@/components/shadcn/input";
+import { Label } from "@/components/shadcn/label";
+import { Button } from "@/components/shadcn/button";
 
 export function LoginPage() {
   const { login } = useAuth();
@@ -31,22 +30,33 @@ export function LoginPage() {
   }
 
   return (
-    <div className={styles.wrap}>
+    <div className="mx-auto max-w-md py-8">
       <Card>
-        <h1 className={styles.title}>Entrar</h1>
-        <form onSubmit={onSubmit}>
-          {error && <Alert variant="error">{error}</Alert>}
-          <Field label="E-mail" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-          <Field label="Senha" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-          <div className={styles.actions}>
-            <Button type="submit" className={styles.full} disabled={submitting}>
+        <CardHeader>
+          <CardTitle className="text-2xl">Entrar</CardTitle>
+          <p className="text-sm text-muted-foreground">Acesse o painel da sua ONG.</p>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={onSubmit} className="flex flex-col gap-4">
+            {error && (
+              <p role="alert" className="rounded-md border border-destructive/30 bg-red-50 px-3 py-2 text-sm text-destructive">{error}</p>
+            )}
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="email">E-mail</Label>
+              <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="password">Senha</Label>
+              <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+            </div>
+            <Button type="submit" disabled={submitting} className="w-full">
               {submitting ? "Entrando…" : "Entrar"}
             </Button>
-          </div>
-        </form>
-        <p className={styles.switch}>
-          Ainda não tem conta? <Link to="/registrar">Cadastre sua ONG</Link>
-        </p>
+          </form>
+          <p className="mt-4 text-sm text-muted-foreground">
+            Ainda não tem conta? <Link to="/registrar" className="font-semibold text-primary">Cadastre sua ONG</Link>
+          </p>
+        </CardContent>
       </Card>
     </div>
   );

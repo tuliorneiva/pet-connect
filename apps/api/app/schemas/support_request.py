@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from datetime import datetime
 from typing import Literal
 
@@ -8,7 +10,7 @@ SupportStatus = Literal["nova", "em_análise", "aprovada", "recusada", "concluí
 
 
 class SupportRequestCreate(BaseModel):
-    animal_id: int
+    animal_id: UUID
     type: SupportType
     requester_name: str
     requester_email: EmailStr
@@ -23,9 +25,10 @@ class SupportRequestUpdate(BaseModel):
 class SupportRequestResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
-    id: int
-    animal_id: int
-    org_id: int
+    id: UUID
+    animal_id: UUID | None
+    animal_name: str | None
+    org_id: UUID
     type: str
     requester_name: str
     requester_email: EmailStr

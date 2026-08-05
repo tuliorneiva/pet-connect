@@ -1,0 +1,170 @@
+<title>PetConnect — Animais para adoção</title>
+<style>
+  :root {
+    --primary: #0E7490; --primary-hover: #0C607A; --primary-tint: #F0FDFA; --primary-tint-2: #ECFEFF;
+    --on-primary: #FFFFFF; --ink: #0F172A; --muted: #5B7280; --border: #E2E8F0;
+    --bg: #F8FAFC; --surface: #FFFFFF; --success: #15803D;
+    --radius-sm: 8px; --radius-md: 12px; --radius-lg: 18px;
+    --shadow-sm: 0 1px 2px rgba(15,23,42,.06), 0 1px 3px rgba(15,23,42,.08);
+    --shadow-md: 0 8px 24px rgba(15,23,42,.08);
+    --font: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --maxw: 1140px;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--font); color: var(--ink); background: var(--bg); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  h1, h2, h3 { margin: 0; letter-spacing: -0.02em; line-height: 1.15; text-wrap: balance; }
+  p { margin: 0; }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: var(--radius-sm); font-size: 0.95rem; font-weight: 600; cursor: pointer; border: 1px solid transparent; transition: background .15s, border-color .15s; white-space: nowrap; }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-primary:hover { background: var(--primary-hover); }
+  .btn-ghost { background: #fff; color: var(--ink); border-color: var(--border); }
+  .btn-ghost:hover { border-color: #cbd5e1; }
+  .btn-sm { height: 38px; padding: 0 14px; font-size: 0.875rem; }
+
+  header.nav { position: sticky; top: 0; z-index: 40; background: rgba(255,255,255,.85); backdrop-filter: saturate(180%) blur(10px); border-bottom: 1px solid var(--border); }
+  .nav-inner { display: flex; align-items: center; gap: 32px; height: 68px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.12rem; letter-spacing: -0.02em; }
+  .brand .logo { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; background: linear-gradient(140deg, var(--primary), #0891B2); color: #fff; font-size: 18px; box-shadow: 0 4px 12px rgba(14,116,144,.35); }
+  .brand b { color: var(--primary); }
+  .nav-links { display: flex; gap: 28px; }
+  .nav-links a { color: var(--muted); font-weight: 500; font-size: 0.94rem; }
+  .nav-links a.active, .nav-links a:hover { color: var(--ink); }
+  .nav-actions { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+
+  /* Page header */
+  .page-head { background: linear-gradient(180deg, var(--primary-tint-2), transparent); border-bottom: 1px solid var(--border); }
+  .page-head .inner { padding: 48px 0 40px; }
+  .crumbs { font-size: 0.85rem; color: var(--muted); margin-bottom: 14px; }
+  .crumbs a:hover { color: var(--primary); }
+  .page-head h1 { font-size: clamp(1.9rem, 3.4vw, 2.6rem); }
+  .page-head p { color: var(--muted); font-size: 1.08rem; margin-top: 12px; max-width: 52ch; }
+
+  /* Filters */
+  .filters { display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-end; margin-top: 30px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 18px; box-shadow: var(--shadow-sm); }
+  .field { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 140px; }
+  .field label { font-size: 0.78rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+  .control { height: 42px; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0 12px; font-size: 0.95rem; color: var(--ink); background: #fff; font-family: inherit; width: 100%; }
+  select.control { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235B7280' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 34px; }
+  .control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(14,116,144,.15); }
+  .filters .apply { flex: none; }
+
+  /* Results */
+  .results { padding: 34px 0 72px; }
+  .results-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; flex-wrap: wrap; gap: 12px; }
+  .results-bar .count { font-weight: 600; }
+  .results-bar .count b { color: var(--primary); }
+  .sort { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--muted); }
+  .sort select { height: 38px; }
+
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
+  .acard { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-sm); transition: transform .16s, box-shadow .16s, border-color .16s; }
+  .acard:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: #cbd5e1; }
+  .acard .pic { aspect-ratio: 1/1; display: grid; place-items: center; font-size: 62px; position: relative; }
+  .acard .status { position: absolute; top: 12px; left: 12px; font-size: 0.72rem; font-weight: 700; color: #fff; background: var(--success); padding: 4px 9px; border-radius: 999px; letter-spacing: 0.02em; }
+  .acard .heart { position: absolute; top: 12px; right: 12px; width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,.92); display: grid; place-items: center; font-size: 15px; box-shadow: var(--shadow-sm); cursor: pointer; }
+  .acard .body { padding: 16px; }
+  .acard .nm-row { display: flex; align-items: center; justify-content: space-between; }
+  .acard .nm { font-weight: 700; font-size: 1.12rem; }
+  .acard .age { font-size: 0.82rem; color: var(--muted); }
+  .badges { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 12px; }
+  .badge { font-size: 0.76rem; font-weight: 600; color: var(--primary); background: var(--primary-tint); border: 1px solid #cffafe; padding: 3px 9px; border-radius: 999px; }
+  .badge.n { color: var(--muted); background: #f1f5f9; border-color: var(--border); }
+  .acard .loc { font-size: 0.85rem; color: var(--muted); display: flex; align-items: center; gap: 6px; padding-top: 12px; border-top: 1px solid var(--border); }
+
+  .pagination { display: flex; justify-content: center; gap: 8px; margin-top: 48px; }
+  .pagination a { min-width: 40px; height: 40px; display: grid; place-items: center; border: 1px solid var(--border); border-radius: var(--radius-sm); background: #fff; font-weight: 600; font-size: 0.9rem; color: var(--muted); }
+  .pagination a.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+  .pagination a:hover:not(.active) { border-color: #cbd5e1; color: var(--ink); }
+
+  footer.ft { background: var(--ink); color: #94a3b8; padding: 30px 0; font-size: 0.88rem; }
+  .ft-inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+  .ft .brand { color: #fff; font-size: 1rem; }
+  .ft .brand b { color: #67E8F9; }
+
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr 1fr; } .nav-links { display: none; } }
+  @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } .field { min-width: 100%; } }
+</style>
+
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a href="#" class="brand"><span class="logo">🐾</span> Pet<b>Connect</b></a>
+    <nav class="nav-links">
+      <a href="#" class="active">Animais</a>
+      <a href="#">ONGs</a>
+      <a href="#">Como funciona</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="#" class="btn btn-ghost btn-sm">Entrar</a>
+      <a href="#" class="btn btn-primary btn-sm">Cadastrar ONG</a>
+    </div>
+  </div>
+</header>
+
+<div class="page-head">
+  <div class="wrap inner">
+    <div class="crumbs"><a href="#">Início</a> › Animais para adoção</div>
+    <h1>Adote um amigo</h1>
+    <p>Conheça os animais que estão à espera de um novo lar. Use os filtros para encontrar quem combina com você.</p>
+    <div class="filters">
+      <div class="field">
+        <label>Espécie</label>
+        <select class="control"><option>Todas</option><option>Cachorro</option><option>Gato</option></select>
+      </div>
+      <div class="field">
+        <label>Porte</label>
+        <select class="control"><option>Todos</option><option>Pequeno</option><option>Médio</option><option>Grande</option></select>
+      </div>
+      <div class="field">
+        <label>Sexo</label>
+        <select class="control"><option>Todos</option><option>Macho</option><option>Fêmea</option></select>
+      </div>
+      <div class="field">
+        <label>Cidade</label>
+        <input class="control" placeholder="Qualquer cidade" value="" />
+      </div>
+      <button class="btn btn-primary apply">Filtrar</button>
+    </div>
+  </div>
+</div>
+
+<div class="results">
+  <div class="wrap">
+    <div class="results-bar">
+      <div class="count"><b>28</b> animais disponíveis</div>
+      <div class="sort">
+        Ordenar por
+        <select class="control"><option>Mais recentes</option><option>Nome (A–Z)</option><option>Cidade</option></select>
+      </div>
+    </div>
+
+    <div class="grid">
+      <a class="acard" href="#"><div class="pic" style="background:radial-gradient(120% 120% at 70% 20%,#FDE68A,#FBBF24 60%,#D97706)">🐕<span class="status">Disponível</span><span class="heart">🤍</span></div><div class="body"><div class="nm-row"><div class="nm">Thor</div><div class="age">2 anos</div></div><div class="badges"><span class="badge">Cachorro</span><span class="badge n">Macho</span><span class="badge n">Médio</span></div><div class="loc">📍 São Paulo, SP · Patinhas Felizes</div></div></a>
+      <a class="acard" href="#"><div class="pic" style="background:radial-gradient(120% 120% at 70% 20%,#A7F3D0,#34D399 60%,#059669)">🐱<span class="status">Disponível</span><span class="heart">🤍</span></div><div class="body"><div class="nm-row"><div class="nm">Mel</div><div class="age">1 ano</div></div><div class="badges"><span class="badge">Gato</span><span class="badge n">Fêmea</span><span class="badge n">Pequeno</span></div><div class="loc">📍 Campinas, SP · Lar dos Bichos</div></div></a>
+      <a class="acard" href="#"><div class="pic" style="background:radial-gradient(120% 120% at 70% 20%,#BFDBFE,#60A5FA 60%,#2563EB)">🐕<span class="status">Disponível</span><span class="heart">🤍</span></div><div class="body"><div class="nm-row"><div class="nm">Nina</div><div class="age">3 anos</div></div><div class="badges"><span class="badge">Cachorro</span><span class="badge n">Fêmea</span><span class="badge n">Grande</span></div><div class="loc">📍 Santo André, SP · Amigo Fiel</div></div></a>
+      <a class="acard" href="#"><div class="pic" style="background:radial-gradient(120% 120% at 70% 20%,#DDD6FE,#A78BFA 60%,#7C3AED)">🐈<span class="status">Disponível</span><span class="heart">🤍</span></div><div class="body"><div class="nm-row"><div class="nm">Bidu</div><div class="age">4 anos</div></div><div class="badges"><span class="badge">Gato</span><span class="badge n">Macho</span><span class="badge n">Médio</span></div><div class="loc">📍 São Paulo, SP · Patinhas Felizes</div></div></a>
+      <a class="acard" href="#"><div class="pic" style="background:radial-gradient(120% 120% at 70% 20%,#FBCFE8,#F472B6 60%,#DB2777)">🐩<span class="status">Disponível</span><span class="heart">🤍</span></div><div class="body"><div class="nm-row"><div class="nm">Lola</div><div class="age">6 meses</div></div><div class="badges"><span class="badge">Cachorro</span><span class="badge n">Fêmea</span><span class="badge n">Pequeno</span></div><div class="loc">📍 Guarulhos, SP · Amigo Fiel</div></div></a>
+      <a class="acard" href="#"><div class="pic" style="background:radial-gradient(120% 120% at 70% 20%,#99F6E4,#2DD4BF 60%,#0D9488)">🐈<span class="status">Disponível</span><span class="heart">🤍</span></div><div class="body"><div class="nm-row"><div class="nm">Simba</div><div class="age">2 anos</div></div><div class="badges"><span class="badge">Gato</span><span class="badge n">Macho</span><span class="badge n">Médio</span></div><div class="loc">📍 Campinas, SP · Lar dos Bichos</div></div></a>
+      <a class="acard" href="#"><div class="pic" style="background:radial-gradient(120% 120% at 70% 20%,#FED7AA,#FB923C 60%,#EA580C)">🐕<span class="status">Disponível</span><span class="heart">🤍</span></div><div class="body"><div class="nm-row"><div class="nm">Bob</div><div class="age">5 anos</div></div><div class="badges"><span class="badge">Cachorro</span><span class="badge n">Macho</span><span class="badge n">Grande</span></div><div class="loc">📍 Osasco, SP · Patinhas Felizes</div></div></a>
+      <a class="acard" href="#"><div class="pic" style="background:radial-gradient(120% 120% at 70% 20%,#C7D2FE,#818CF8 60%,#4F46E5)">🐱<span class="status">Disponível</span><span class="heart">🤍</span></div><div class="body"><div class="nm-row"><div class="nm">Frida</div><div class="age">1 ano</div></div><div class="badges"><span class="badge">Gato</span><span class="badge n">Fêmea</span><span class="badge n">Pequeno</span></div><div class="loc">📍 São Paulo, SP · Lar dos Bichos</div></div></a>
+    </div>
+
+    <div class="pagination">
+      <a href="#">‹</a>
+      <a href="#" class="active">1</a>
+      <a href="#">2</a>
+      <a href="#">3</a>
+      <a href="#">4</a>
+      <a href="#">›</a>
+    </div>
+  </div>
+</div>
+
+<footer class="ft">
+  <div class="wrap ft-inner">
+    <div class="brand">🐾 Pet<b>Connect</b></div>
+    <span>© 2026 PetConnect · Adoção responsável</span>
+  </div>
+</footer>
