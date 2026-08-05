@@ -5,12 +5,12 @@ import { publicApi } from "../../lib/publicApi";
 import { useAsync } from "../../lib/useAsync";
 import type { SupportType } from "../../lib/types";
 import { SUPPORT_TYPE_LABELS } from "../../lib/labels";
-import { Button } from "../../components/ui/Button";
-import { Field } from "../../components/ui/Field";
-import { Select } from "../../components/ui/Select";
-import { Alert } from "../../components/ui/Alert";
-import { Modal } from "../../components/ui/Modal";
 import { Button as ShadButton } from "@/components/shadcn/button";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/shadcn/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/shadcn/select";
+import { Button } from "@/components/shadcn/button";
+import { Input } from "@/components/shadcn/input";
+import { Label } from "@/components/shadcn/label";
 
 const TYPE_OPTIONS = Object.entries(SUPPORT_TYPE_LABELS).map(([value, label]) => ({ value, label }));
 
@@ -61,7 +61,9 @@ export function AnimalPublicPage() {
   );
 }
 
-function InterestModal({ open, onClose, animalId, animalName }: { open: boolean; onClose: () => void; animalId: string; animalName: string }) {
+export function InterestModal({ open, onClose, animalId, animalName }: {
+  open: boolean; onClose: () => void; animalId: string; animalName: string;
+}) {
   const [type, setType] = useState<SupportType>("adoção");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -86,32 +88,73 @@ function InterestModal({ open, onClose, animalId, animalName }: { open: boolean;
       });
       setDone(true);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Erro ao enviar");
+      setError(err instanceof Error ? err.message : "Não foi possível enviar. Tente novamente.");
     } finally {
       setSubmitting(false);
     }
   }
 
   return (
-    <Modal open={open} onClose={onClose} title={`Interesse em ${animalName}`}>
-      {done ? (
-        <div>
-          <Alert variant="success">Solicitação enviada! A ONG entrará em contato.</Alert>
-          <div style={{ marginTop: "var(--space-4)" }}>
-            <Button onClick={onClose}>Fechar</Button>
-          </div>
-        </div>
-      ) : (
-        <form onSubmit={submit}>
-          {error && <Alert variant="error">{error}</Alert>}
-          <Select label="Tipo de apoio" options={TYPE_OPTIONS} value={type} onChange={(e) => setType(e.target.value as SupportType)} />
-          <Field label="Seu nome" value={name} onChange={(e) => setName(e.target.value)} required />
-          <Field label="E-mail" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-          <Field label="Telefone" value={phone} onChange={(e) => setPhone(e.target.value)} />
-          <Field label="Mensagem" value={message} onChange={(e) => setMessage(e.target.value)} />
-          <Button type="submit" disabled={submitting}>{submitting ? "Enviando…" : "Enviar solicitação"}</Button>
-        </form>
-      )}
-    </Modal>
+    <Dialog open={open} onOpenChange={(o) => { if (!o) onClose(); }}>
+      <DialogContent>
+        <DialogHeader><DialogTitle>Interesse em {animalName}</DialogTitle></DialogHeader>
+        {done ? (
+          <>
+            <div className="px-6 py-6 text-sm">
+              Solicitação enviada. O abrigo entra em contato pelo e-mail informado.
+            </div>
+            <DialogFooter data-testid="interest-footer">
+              <Button onClick={onClose}>Fechar</Button>
+            </DialogFooter>
+          </>
+        ) : (
+          <form onSubmit={submit}>
+            <div className="flex flex-col gap-4 px-6 py-5">
+              {error && (
+                <p className="rounded-md border border-destructive/30 bg-destructive/5 px-3 py-2 text-sm text-destructive">
+                  {error}
+                </p>
+              )}
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="tipo">Tipo de apoio</Label>
+                <Select value={type} onValueChange={(v) => setType(v as SupportType)}>
+                  <SelectTrigger id="tipo"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    {TYPE_OPTIONS.map((o) => (
+                      <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="nome">Seu nome</Label>
+                <Input id="nome" value={name} onChange={(e) => setName(e.target.value)} required
+                       placeholder="Como podemos te chamar" />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="email">E-mail</Label>
+                <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)}
+                       required placeholder="voce@email.com" />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="tel">Telefone</Label>
+                <Input id="tel" value={phone} onChange={(e) => setPhone(e.target.value)}
+                       placeholder="(83) 90000-0000" />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="msg">Mensagem</Label>
+                <Input id="msg" value={message} onChange={(e) => setMessage(e.target.value)}
+                       placeholder="Conte um pouco sobre você e sua casa" />
+              </div>
+            </div>
+            <DialogFooter data-testid="interest-footer">
+              <Button type="submit" size="lg" disabled={submitting}>
+                {submitting ? "Enviando…" : "Enviar solicitação"}
+              </Button>
+            </DialogFooter>
+          </form>
+        )}
+      </DialogContent>
+    </Dialog>
   );
 }
