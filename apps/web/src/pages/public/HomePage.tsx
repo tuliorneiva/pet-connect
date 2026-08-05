@@ -22,7 +22,11 @@ export function HomePage() {
   );
 
   function set(key: keyof VitrineFilters, value: string) {
-    setFilters((f) => ({ ...f, [key]: value === ALL_SENTINEL || value === "" ? undefined : value }));
+    setFilters((f) => ({ ...f, [key]: value || undefined }));
+  }
+
+  function setSelect(key: keyof VitrineFilters, value: string) {
+    set(key, value === ALL_SENTINEL ? "" : value);
   }
 
   return (
@@ -38,7 +42,7 @@ export function HomePage() {
       <div className="flex flex-wrap items-end gap-3.5 rounded-xl border border-border bg-card p-4 shadow-sm">
         <div className="flex min-w-35 flex-1 flex-col gap-1.5">
           <Label>Espécie</Label>
-          <Select value={filters.species ?? ALL_SENTINEL} onValueChange={(v) => set("species", v)}>
+          <Select value={filters.species ?? ALL_SENTINEL} onValueChange={(v) => setSelect("species", v)}>
             <SelectTrigger aria-label="Espécie"><SelectValue /></SelectTrigger>
             <SelectContent>
               <SelectItem value={ALL_SENTINEL}>Todas</SelectItem>
@@ -48,7 +52,7 @@ export function HomePage() {
         </div>
         <div className="flex min-w-35 flex-1 flex-col gap-1.5">
           <Label>Porte</Label>
-          <Select value={filters.size ?? ALL_SENTINEL} onValueChange={(v) => set("size", v)}>
+          <Select value={filters.size ?? ALL_SENTINEL} onValueChange={(v) => setSelect("size", v)}>
             <SelectTrigger aria-label="Porte"><SelectValue /></SelectTrigger>
             <SelectContent>
               <SelectItem value={ALL_SENTINEL}>Todos</SelectItem>
@@ -58,7 +62,7 @@ export function HomePage() {
         </div>
         <div className="flex min-w-35 flex-1 flex-col gap-1.5">
           <Label>Sexo</Label>
-          <Select value={filters.sex ?? ALL_SENTINEL} onValueChange={(v) => set("sex", v)}>
+          <Select value={filters.sex ?? ALL_SENTINEL} onValueChange={(v) => setSelect("sex", v)}>
             <SelectTrigger aria-label="Sexo"><SelectValue /></SelectTrigger>
             <SelectContent>
               <SelectItem value={ALL_SENTINEL}>Todos</SelectItem>
