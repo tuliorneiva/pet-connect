@@ -61,7 +61,11 @@ class Storage(Protocol):
 ```
 
 Implementação `S3Storage` configurada por `STORAGE_BUCKET`, `STORAGE_ENDPOINT`,
-`STORAGE_ACCESS_KEY`, `STORAGE_SECRET_KEY`, `STORAGE_PUBLIC_URL`.
+`STORAGE_REGION`, `STORAGE_ACCESS_KEY`, `STORAGE_SECRET_KEY`, `STORAGE_PUBLIC_URL`.
+
+O Supabase exige **path-style addressing**: no boto3,
+`Config(s3={"addressing_style": "path"})`. Sem isso o cliente tenta o formato
+`bucket.endpoint` e a conexão falha.
 
 ### Nome de arquivo
 
@@ -100,7 +104,7 @@ Todos sob autenticação da ONG dona do animal, seguindo o `_get_owned_animal` j
 | `DELETE` | `/api/admin/animals/{id}/photos/{photo_id}` | remove do storage e do banco |
 | `PATCH` | `/api/admin/animals/{id}/photos/{photo_id}/cover` | move a foto para `sort_order` 0 |
 
-Validação no upload: `image/jpeg`, `image/png`, `image/webp`, até 5 MB. Fora disso, 422
+Validação no upload: `image/jpeg`, `image/png`, `image/webp`, até 1 MB (limite do bucket). Fora disso, 422
 com mensagem em português. Quinta foto: 422.
 
 O response público de animal ganha `photos: string[]` (URLs, em ordem) e mantém
@@ -118,6 +122,10 @@ quebra a página.
 O campo "URL da foto" no formulário do animal vira um uploader:
 
 - Área de seleção de arquivo com preview antes de enviar
+- **Redimensionamento no navegador antes do envio**: lado maior reduzido para 1600px e
+  reencodado em JPEG qualidade 0.82 via `canvas`. Foto de celular sai com 2–5 MB e não
+  passaria no limite de 1 MB do bucket; assim cai para 150–400 KB e a vitrine carrega mais
+  rápido. A validação de 1 MB na API é rede de segurança, não o caminho normal.
 - Grade das fotos já enviadas, a capa marcada com um selo
 - Ações por foto: remover, definir como capa
 - Erro de validação exibido inline, sem perder o resto do formulário
@@ -152,7 +160,7 @@ o mesmo caminho serve para migrar qualquer `photo_url` legado.
 **Backend**
 
 - Upload aceita jpeg/png/webp e cria o registro com `sort_order` correto
-- Upload rejeita content-type inválido e arquivo acima de 5 MB
+- Upload rejeita content-type inválido e arquivo acima de 1 MB
 - Upload rejeita a quinta foto
 - Nome de arquivo malicioso (`../../etc/passwd`) não escapa do prefixo `animals/`
 - ONG não consegue subir nem remover foto de animal de outra ONG (404)
@@ -167,6 +175,7 @@ O storage é dublado nos testes — nenhum teste toca a rede.
 - Galeria troca a imagem principal ao clicar na miniatura
 - Uploader exibe erro de validação vindo da API
 - Uploader recusa a quinta foto antes mesmo de chamar a API
+- Imagem grande é reduzida para no máximo 1600px antes do envio
 - Criar animal com fotos retidas dispara os uploads após o `POST /animals`
 - Falha de upload na criação não desfaz o animal e mostra o alerta de retentativa
 
