@@ -28,3 +28,13 @@ test("ao abrir, o foco vai para dentro do diálogo", () => {
   const dialog = screen.getByRole("dialog");
   expect(dialog).toContainElement(document.activeElement as HTMLElement);
 });
+
+test("body ganha data-scroll-locked quando o modal abre, e não ganha quando fechado", () => {
+  const { rerender } = render(
+    <InterestModal open={false} onClose={() => {}} animalId="abc" animalName="Mel" />,
+  );
+  expect(document.body).not.toHaveAttribute("data-scroll-locked");
+
+  rerender(<InterestModal open onClose={() => {}} animalId="abc" animalName="Mel" />);
+  expect(document.body).toHaveAttribute("data-scroll-locked");
+});
