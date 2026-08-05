@@ -27,7 +27,7 @@ export function AnimalGallery({ photos, name }: { photos: string[]; name: string
         <div className="grid grid-cols-4 gap-2.5">
           {photos.map((src, i) => (
             <button
-              key={src}
+              key={i}
               type="button"
               aria-label={`Ver foto ${i + 1} de ${name}`}
               aria-current={i === active}

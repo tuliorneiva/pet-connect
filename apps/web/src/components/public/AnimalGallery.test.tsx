@@ -20,3 +20,13 @@ test("clicar numa miniatura troca a foto principal", async () => {
   await user.click(screen.getByRole("button", { name: "Ver foto 2 de Mel" }));
   expect(screen.getByTestId("gallery-main")).toHaveAttribute("src", "/b.jpg");
 });
+
+test("lida corretamente com URLs duplicadas", async () => {
+  const user = userEvent.setup();
+  render(<AnimalGallery photos={["/a.jpg", "/a.jpg", "/b.jpg"]} name="Mel" />);
+  expect(screen.getAllByRole("button")).toHaveLength(3);
+  await user.click(screen.getByRole("button", { name: "Ver foto 3 de Mel" }));
+  expect(screen.getByTestId("gallery-main")).toHaveAttribute("src", "/b.jpg");
+  await user.click(screen.getByRole("button", { name: "Ver foto 2 de Mel" }));
+  expect(screen.getByTestId("gallery-main")).toHaveAttribute("src", "/a.jpg");
+});
