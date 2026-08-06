@@ -8,9 +8,10 @@ export function AnimalGallery({ photos, name }: { photos: string[]; name: string
     return (
       <div
         data-testid="gallery-empty"
+        aria-label="Sem foto disponível"
         className="grid aspect-[4/3] place-items-center rounded-xl border border-border bg-card text-6xl"
       >
-        🐾
+        <span aria-hidden="true">🐾</span>
       </div>
     );
   }

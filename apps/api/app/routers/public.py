@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from app.db.session import get_db
 from app.models import Animal, Organization, SupportRequest
-from app.schemas.animal import PublicAnimalResponse
+from app.schemas.animal import PublicAnimalListResponse, PublicAnimalResponse
 from app.schemas.organization import PublicOrganizationResponse
 from app.schemas.support_request import SupportRequestCreate, SupportRequestResponse
 from app.services.health_status import compute_health_status
@@ -14,7 +14,7 @@ from app.services.health_status import compute_health_status
 router = APIRouter(prefix="/api/public", tags=["public"])
 
 
-@router.get("/animals", response_model=list[PublicAnimalResponse])
+@router.get("/animals", response_model=list[PublicAnimalListResponse])
 def list_public_animals(
     species: str | None = None,
     size: str | None = None,

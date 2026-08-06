@@ -60,3 +60,15 @@ def test_detalhe_publico_traz_os_sinais_de_saude(client):
     detail = client.get(f"/api/public/animals/{animals[0]['id']}").json()
     assert "vaccines_up_to_date" in detail
     assert "under_treatment" in detail
+
+
+def test_listagem_publica_nao_traz_sinais_de_saude(client):
+    # A listagem não calcula vaccines_up_to_date/under_treatment (evita N+1); só o
+    # detalhe faz isso. Publicar um default aqui mentiria sobre o estado do animal.
+    token = _register(client)
+    client.post("/api/admin/animals", headers=_auth(token), json={"name": "Mel", "species": "cão"})
+
+    animals = client.get("/api/public/animals").json()
+    assert animals, "seed precisa de ao menos um animal disponível"
+    assert "vaccines_up_to_date" not in animals[0]
+    assert "under_treatment" not in animals[0]

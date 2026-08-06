@@ -1,10 +1,7 @@
 import { Link } from "react-router-dom";
 import type { PublicAnimal } from "../lib/types";
 import { Badge } from "@/components/shadcn/badge";
-
-const SPECIES_LABEL: Record<string, string> = { cão: "Cão", gato: "Gato", outro: "Outro" };
-const SIZE_LABEL: Record<string, string> = { P: "Pequeno", M: "Médio", G: "Grande" };
-const SEX_LABEL: Record<string, string> = { macho: "Macho", "fêmea": "Fêmea" };
+import { sexLabel, sizeLabel, speciesLabel } from "@/lib/labels";
 
 export function AnimalCard({ animal }: { animal: PublicAnimal }) {
   return (
@@ -22,9 +19,9 @@ export function AnimalCard({ animal }: { animal: PublicAnimal }) {
       <div className="p-4">
         <div className="text-lg font-bold">{animal.name}</div>
         <div className="mt-2.5 flex flex-wrap gap-1.5">
-          <Badge>{SPECIES_LABEL[animal.species] ?? animal.species}</Badge>
-          {animal.sex && <Badge variant="secondary">{SEX_LABEL[animal.sex] ?? animal.sex}</Badge>}
-          {animal.size && <Badge variant="secondary">{SIZE_LABEL[animal.size] ?? animal.size}</Badge>}
+          <Badge>{speciesLabel(animal.species)}</Badge>
+          {animal.sex && <Badge variant="secondary">{sexLabel(animal.sex)}</Badge>}
+          {animal.size && <Badge variant="secondary">{sizeLabel(animal.size)}</Badge>}
         </div>
         <div className="mt-3 border-t border-border pt-3 text-sm text-muted-foreground">
           📍 {animal.org_city ? `${animal.org_city} · ` : ""}{animal.org_name}

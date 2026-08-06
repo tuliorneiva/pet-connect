@@ -4,7 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import { publicApi } from "../../lib/publicApi";
 import { useAsync } from "../../lib/useAsync";
 import type { SupportType } from "../../lib/types";
-import { SUPPORT_TYPE_LABELS } from "../../lib/labels";
+import { SUPPORT_TYPE_LABELS, sexLabel, sizeLabel, speciesLabel } from "../../lib/labels";
 import { Button } from "@/components/shadcn/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/shadcn/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/shadcn/select";
@@ -34,8 +34,13 @@ export function AnimalPublicPage() {
     );
   }
 
-  const traits = [data.species, data.breed, data.sex, data.size && `porte ${data.size}`, data.birth_estimate]
-    .filter(Boolean) as string[];
+  const traits = [
+    speciesLabel(data.species),
+    data.breed,
+    data.sex && sexLabel(data.sex),
+    data.size && `porte ${sizeLabel(data.size)}`,
+    data.birth_estimate,
+  ].filter(Boolean) as string[];
 
   return (
     <div>
@@ -50,9 +55,9 @@ export function AnimalPublicPage() {
           <div>
             <h1 className="text-3xl font-bold tracking-tight">{data.name}</h1>
             <div className="mt-2.5 flex flex-wrap gap-1.5">
-              {traits.map((t) => (
+              {traits.map((t, i) => (
                 <span
-                  key={t}
+                  key={i}
                   className="rounded-full border border-border bg-background px-2.5 py-0.5 text-xs text-muted-foreground"
                 >
                   {t}
@@ -64,8 +69,8 @@ export function AnimalPublicPage() {
           <HealthBadges upToDate={data.vaccines_up_to_date} underTreatment={data.under_treatment} />
 
           <div className="flex items-center gap-3 rounded-md border border-border bg-background p-3">
-            <span className="grid h-9 w-9 flex-none place-items-center rounded-lg bg-gradient-to-br from-primary to-[#14b8a6] text-white">
-              🏠
+            <span className="grid h-9 w-9 flex-none place-items-center rounded-lg bg-gradient-to-br from-primary to-[#0891B2] text-white">
+              <span aria-hidden="true">🏠</span>
             </span>
             <span className="text-sm">
               <Link to={`/ongs/${data.org_slug}`} className="font-semibold">{data.org_name}</Link>
@@ -91,7 +96,9 @@ export function AnimalPublicPage() {
 
       <RelatedAnimals orgSlug={data.org_slug} orgName={data.org_name} excludeId={data.id} />
 
-      <InterestModal open={open} onClose={() => setOpen(false)} animalId={animalId} animalName={data.name} />
+      {open && (
+        <InterestModal open onClose={() => setOpen(false)} animalId={animalId} animalName={data.name} />
+      )}
     </div>
   );
 }
@@ -144,7 +151,7 @@ export function InterestModal({ open, onClose, animalId, animalName }: {
               Solicitação enviada. A ONG entra em contato pelo e-mail informado.
             </div>
             <DialogFooter data-testid="interest-footer">
-              <Button onClick={onClose}>Fechar</Button>
+              <Button onClick={onClose}>Voltar ao animal</Button>
             </DialogFooter>
           </>
         ) : (

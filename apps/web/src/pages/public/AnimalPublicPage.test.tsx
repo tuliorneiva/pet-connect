@@ -1,4 +1,5 @@
 import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { vi } from "vitest";
 import * as publicApi from "@/lib/publicApi";
@@ -42,4 +43,27 @@ test("liga para o perfil da ONG", async () => {
     expect(screen.getByRole("link", { name: /abrigo amigo fiel/i }))
       .toHaveAttribute("href", "/ongs/abrigo-amigo-fiel"),
   );
+});
+
+test("enviar solicitação, fechar e abrir de novo mostra o formulário (não a tela de sucesso)", async () => {
+  const user = userEvent.setup();
+  vi.spyOn(publicApi.publicApi, "createSupportRequest").mockResolvedValue({} as never);
+  renderPage();
+
+  await user.click(await screen.findByRole("button", { name: /tenho interesse/i }));
+  const dialog = await screen.findByRole("dialog");
+  expect(dialog).toHaveAccessibleName(/interesse em mel/i);
+
+  await user.type(screen.getByLabelText("Seu nome"), "Ana");
+  await user.type(screen.getByLabelText("E-mail"), "ana@example.com");
+  await user.click(screen.getByRole("button", { name: /enviar solicitação/i }));
+
+  expect(await screen.findByText(/solicitação enviada/i)).toBeInTheDocument();
+
+  await user.click(screen.getByRole("button", { name: /voltar ao animal/i }));
+  expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+
+  await user.click(screen.getByRole("button", { name: /tenho interesse/i }));
+  expect(await screen.findByLabelText("Seu nome")).toBeInTheDocument();
+  expect(screen.queryByText(/solicitação enviada/i)).not.toBeInTheDocument();
 });
