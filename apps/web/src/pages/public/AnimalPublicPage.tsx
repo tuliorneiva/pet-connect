@@ -49,7 +49,7 @@ export function AnimalPublicPage() {
       </p>
 
       <div className="grid items-start gap-7 md:grid-cols-[1.15fr_.85fr]">
-        <AnimalGallery photos={data.photo_url ? [data.photo_url] : []} name={data.name} />
+        <AnimalGallery photos={data.photos} name={data.name} />
 
         <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5 shadow-sm md:sticky md:top-24">
           <div>

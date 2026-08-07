@@ -30,7 +30,6 @@ const EMPTY: AnimalInput = {
   size: null,
   birth_estimate: "",
   description: "",
-  photo_url: "",
   status: "disponível",
 };
 
@@ -62,7 +61,6 @@ export function AnimalFormPage() {
           size: a.size ?? null,
           birth_estimate: a.birth_estimate ?? "",
           description: a.description ?? "",
-          photo_url: a.photo_url ?? "",
           status: a.status,
         }),
       );
@@ -161,16 +159,6 @@ export function AnimalFormPage() {
                   </SelectContent>
                 </Select>
               </div>
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="foto">Foto (URL)</Label>
-              <Input
-                id="foto"
-                value={form.photo_url ?? ""}
-                onChange={(e) => set("photo_url", e.target.value)}
-                placeholder="https://…"
-              />
             </div>
 
             <div className="flex flex-col gap-1.5">

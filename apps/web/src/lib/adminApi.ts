@@ -3,6 +3,7 @@ import type {
   AlertItem,
   Animal,
   AnimalInput,
+  AnimalPhoto,
   DashboardSummary,
   MedicalRecord,
   Medication,
@@ -23,6 +24,22 @@ export const adminApi = {
     apiFetch<Animal>(`/api/admin/animals/${id}`, { method: "PATCH", ...jsonBody(data) }),
   deleteAnimal: (id: string) =>
     apiFetch<void>(`/api/admin/animals/${id}`, { method: "DELETE" }),
+
+  // Photos
+  uploadPhoto: (animalId: string, file: File) => {
+    const body = new FormData();
+    body.append("file", file);
+    return apiFetch<AnimalPhoto>(`/api/admin/animals/${animalId}/photos`, {
+      method: "POST",
+      body,
+    });
+  },
+  deletePhoto: (animalId: string, photoId: string) =>
+    apiFetch<void>(`/api/admin/animals/${animalId}/photos/${photoId}`, { method: "DELETE" }),
+  setCoverPhoto: (animalId: string, photoId: string) =>
+    apiFetch<AnimalPhoto[]>(`/api/admin/animals/${animalId}/photos/${photoId}/cover`, {
+      method: "PATCH",
+    }),
 
   // Dashboard
   alerts: () => apiFetch<AlertItem[]>("/api/admin/dashboard/alerts"),

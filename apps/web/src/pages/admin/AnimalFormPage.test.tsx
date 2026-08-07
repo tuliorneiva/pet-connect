@@ -17,6 +17,8 @@ const BASE_ANIMAL: Animal = {
   birth_estimate: null,
   description: null,
   photo_url: null,
+  photos: [],
+  photo_items: [],
   status: "disponível",
   created_at: "2026-01-01T00:00:00Z",
 };

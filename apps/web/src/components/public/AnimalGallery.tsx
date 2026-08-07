@@ -25,7 +25,19 @@ export function AnimalGallery({ photos, name }: { photos: string[]; name: string
         className="aspect-[4/3] w-full rounded-xl border border-border object-cover"
       />
       {photos.length > 1 && (
-        <div className="grid grid-cols-4 gap-2.5">
+        <div
+          className="grid grid-cols-4 gap-2.5"
+          role="group"
+          aria-label={`Fotos de ${name}`}
+          onKeyDown={(e) => {
+            // Setas percorrem as fotos sem tirar o dedo do teclado; Tab continua
+            // funcionando para quem prefere pular a fileira inteira.
+            if (e.key === "ArrowRight") setActive((i) => Math.min(i + 1, photos.length - 1));
+            else if (e.key === "ArrowLeft") setActive((i) => Math.max(i - 1, 0));
+            else return;
+            e.preventDefault();
+          }}
+        >
           {photos.map((src, i) => (
             <button
               key={i}

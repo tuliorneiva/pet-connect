@@ -1,5 +1,7 @@
 export type AnimalStatus = "disponível" | "em_processo" | "adotado" | "indisponível";
 
+export type AnimalPhoto = { id: string; url: string; sort_order: number };
+
 export type Animal = {
   id: string;
   org_id: string;
@@ -11,6 +13,10 @@ export type Animal = {
   birth_estimate: string | null;
   description: string | null;
   photo_url: string | null;
+  photos: string[];
+  // Só a ONG precisa do id de cada foto para remover ou trocar a capa; o público
+  // (PublicAnimal) só enxerga as URLs.
+  photo_items: AnimalPhoto[];
   status: AnimalStatus;
   created_at: string;
 };
@@ -25,6 +31,7 @@ export type PublicAnimal = {
   birth_estimate: string | null;
   description: string | null;
   photo_url: string | null;
+  photos: string[];
   org_id: string;
   org_name: string;
   org_city: string | null;
@@ -63,7 +70,8 @@ export type AnimalInput = {
   size?: string | null;
   birth_estimate?: string | null;
   description?: string | null;
-  photo_url?: string | null;
+  // A foto entra só por upload (adminApi.uploadPhoto); manter um campo aqui
+  // criaria uma segunda fonte da verdade para a capa.
   status?: AnimalStatus;
 };
 

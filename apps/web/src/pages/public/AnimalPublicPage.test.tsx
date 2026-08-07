@@ -8,7 +8,7 @@ import { AnimalPublicPage } from "./AnimalPublicPage";
 const MEL = {
   id: "44444444-4444-4444-8444-444444444444",
   name: "Mel", species: "cão", breed: "Labrador", sex: "fêmea", size: "M",
-  birth_estimate: "1 ano", description: "Cheia de energia.", photo_url: "/mel.jpg",
+  birth_estimate: "1 ano", description: "Cheia de energia.", photo_url: "/mel.jpg", photos: ["/mel.jpg"],
   org_id: "22222222-2222-4222-8222-222222222222", org_name: "Abrigo Amigo Fiel",
   org_city: "João Pessoa", org_slug: "abrigo-amigo-fiel",
   vaccines_up_to_date: true, under_treatment: false,
