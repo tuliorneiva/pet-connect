@@ -589,13 +589,16 @@ git commit -m "feat(api): tabela animal_photo e migração da coluna photo_url"
 ### Task 3: Responses derivam `photos` e `photo_url`
 
 **Files:**
+- Create: `apps/api/app/schemas/animal_photo.py`
 - Modify: `apps/api/app/schemas/animal.py`
 - Modify: `apps/api/app/seed.py`
 - Modify: `apps/api/tests/test_animals.py`
 - Create: `apps/api/tests/test_animal_photo_serialization.py`
 
+**Nota:** `apps/api/app/schemas/animal_photo.py` nasce nesta task (conteúdo no Step 3). A Task 4 o consome já pronto.
+
 **Interfaces:**
-- Consumes: `Animal.photos`, `AnimalPhoto.url` (Task 2); `AnimalPhotoResponse` (Task 4 — se esta task rodar antes, crie `apps/api/app/schemas/animal_photo.py` aqui, com o conteúdo dado na Task 4 Step 3, e pule aquele passo lá)
+- Consumes: `Animal.photos`, `AnimalPhoto.url` (Task 2)
 - Produces:
   - `AnimalResponse.photos: list[str]` e `AnimalResponse.photo_url: str | None` (derivado da capa)
   - `AnimalResponse.photo_items: list[AnimalPhotoResponse]` — **só no admin**
@@ -692,7 +695,25 @@ def test_public_listing_and_detail_expose_photos(client):
 Run: `docker compose exec -T api pytest tests/test_animal_photo_serialization.py tests/test_animals.py -v`
 Expected: FAIL — `AnimalResponse` ainda não tem `photos`, e `AnimalCreate` ainda aceita `photo_url`
 
-- [ ] **Step 3: Reescrever os schemas**
+- [ ] **Step 3: Criar o schema da foto e reescrever os schemas do animal**
+
+Criar `apps/api/app/schemas/animal_photo.py`:
+
+```python
+from uuid import UUID
+
+from pydantic import BaseModel, ConfigDict
+
+
+class AnimalPhotoResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    url: str
+    sort_order: int
+```
+
+Em seguida, os schemas do animal:
 
 Em `apps/api/app/schemas/animal.py`, trocar o import de `pydantic` por:
 
@@ -817,10 +838,11 @@ git commit -m "feat(api): responses derivam photos e capa da tabela animal_photo
 ### Task 4: Endpoints de upload, remoção e capa
 
 **Files:**
-- Create: `apps/api/app/schemas/animal_photo.py`
 - Create: `apps/api/app/routers/animal_photos.py`
 - Modify: `apps/api/app/main.py`
 - Create: `apps/api/tests/test_animal_photos_api.py`
+
+`apps/api/app/schemas/animal_photo.py` já existe desde a Task 3 — não recrie.
 
 **Interfaces:**
 - Consumes: `Storage`, `get_storage`, `MAX_PHOTO_BYTES`, `MAX_PHOTOS_PER_ANIMAL`, `EXTENSION_BY_CONTENT_TYPE` (Task 1); `AnimalPhoto` (Task 2)
@@ -1055,25 +1077,7 @@ def test_deleting_the_animal_removes_its_photos(client, storage):
 Run: `docker compose exec -T api pytest tests/test_animal_photos_api.py -v`
 Expected: FAIL — as rotas não existem, todos devolvem 404/405
 
-- [ ] **Step 3: Criar o schema**
-
-Criar `apps/api/app/schemas/animal_photo.py`:
-
-```python
-from uuid import UUID
-
-from pydantic import BaseModel, ConfigDict
-
-
-class AnimalPhotoResponse(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
-
-    id: UUID
-    url: str
-    sort_order: int
-```
-
-- [ ] **Step 4: Criar o router**
+- [ ] **Step 3: Criar o router**
 
 Criar `apps/api/app/routers/animal_photos.py`:
 
@@ -1209,21 +1213,21 @@ def set_cover(
     return _photos_of(animal_id, db)
 ```
 
-- [ ] **Step 5: Registrar o router**
+- [ ] **Step 4: Registrar o router**
 
 Em `apps/api/app/main.py`, importar `animal_photos` junto dos outros routers e acrescentar `app.include_router(animal_photos.router)` seguindo o formato das linhas que já estão lá. Registre **depois** de `animals.router`, para que `/api/admin/animals/{animal_id}` continue resolvendo primeiro.
 
-- [ ] **Step 6: Rodar os testes**
+- [ ] **Step 5: Rodar os testes**
 
 Run: `docker compose exec -T api pytest tests/test_animal_photos_api.py -v`
 Expected: PASS (14 testes, contando as três variações parametrizadas)
 
-- [ ] **Step 7: Rodar a suíte inteira e o linter**
+- [ ] **Step 6: Rodar a suíte inteira e o linter**
 
 Run: `docker compose exec -T api pytest -q && docker compose exec -T api ruff check .`
 Expected: tudo verde, ruff limpo
 
-- [ ] **Step 8: Commit**
+- [ ] **Step 7: Commit**
 
 ```bash
 git add apps/api/app/schemas/animal_photo.py apps/api/app/routers/animal_photos.py apps/api/app/main.py apps/api/tests/test_animal_photos_api.py
