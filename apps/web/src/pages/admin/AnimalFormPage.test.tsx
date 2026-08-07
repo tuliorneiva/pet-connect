@@ -217,6 +217,57 @@ test("editar animal existente: remover foto chama a API na hora", async () => {
   await waitFor(() => expect(deletePhotoSpy).toHaveBeenCalled());
 });
 
+test("editar animal existente: falha ao remover foto mostra alerta, não vira rejeição silenciosa", async () => {
+  const user = userEvent.setup();
+  vi.spyOn(adminApi, "getAnimal").mockResolvedValue({
+    ...BASE_ANIMAL,
+    photos: ["https://cdn/a.jpg"],
+    photo_url: "https://cdn/a.jpg",
+    photo_items: [{ id: "p1", url: "https://cdn/a.jpg", sort_order: 0 }],
+  });
+  vi.spyOn(adminApi, "deletePhoto").mockRejectedValue(new Error("Falha ao remover a foto."));
+
+  render(
+    <MemoryRouter initialEntries={[`/admin/animais/${BASE_ANIMAL.id}/editar`]}>
+      <Routes>
+        <Route path="/admin/animais/:id/editar" element={<AnimalFormPage />} />
+      </Routes>
+    </MemoryRouter>,
+  );
+
+  await user.click(await screen.findByRole("button", { name: /remover foto/i }));
+
+  expect(await screen.findByRole("alert")).toHaveTextContent("Falha ao remover a foto.");
+  // a foto continua na grade — o estado não foi otimisticamente descartado
+  expect(screen.getByRole("button", { name: /remover foto/i })).toBeInTheDocument();
+});
+
+test("editar animal existente: falha ao definir capa mostra alerta, não vira rejeição silenciosa", async () => {
+  const user = userEvent.setup();
+  vi.spyOn(adminApi, "getAnimal").mockResolvedValue({
+    ...BASE_ANIMAL,
+    photos: ["https://cdn/a.jpg", "https://cdn/b.jpg"],
+    photo_url: "https://cdn/a.jpg",
+    photo_items: [
+      { id: "p1", url: "https://cdn/a.jpg", sort_order: 0 },
+      { id: "p2", url: "https://cdn/b.jpg", sort_order: 1 },
+    ],
+  });
+  vi.spyOn(adminApi, "setCoverPhoto").mockRejectedValue(new Error("Falha ao definir a capa."));
+
+  render(
+    <MemoryRouter initialEntries={[`/admin/animais/${BASE_ANIMAL.id}/editar`]}>
+      <Routes>
+        <Route path="/admin/animais/:id/editar" element={<AnimalFormPage />} />
+      </Routes>
+    </MemoryRouter>,
+  );
+
+  await user.click(await screen.findByRole("button", { name: /definir como capa/i }));
+
+  expect(await screen.findByRole("alert")).toHaveTextContent("Falha ao definir a capa.");
+});
+
 test("erro de upload vindo da API aparece na tela, sem derrubar o formulário", async () => {
   const user = userEvent.setup();
   vi.spyOn(adminApi, "getAnimal").mockResolvedValue(BASE_ANIMAL);

@@ -103,13 +103,23 @@ export function AnimalFormPage() {
 
   async function handleRemovePhoto(photoId: string) {
     if (!animalId) return;
-    await adminApi.deletePhoto(animalId, photoId);
-    await reloadPhotos(animalId);
+    setError(null);
+    try {
+      await adminApi.deletePhoto(animalId, photoId);
+      await reloadPhotos(animalId);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Erro ao remover foto");
+    }
   }
 
   async function handleSetCover(photoId: string) {
     if (!animalId) return;
-    setPhotos(await adminApi.setCoverPhoto(animalId, photoId));
+    setError(null);
+    try {
+      setPhotos(await adminApi.setCoverPhoto(animalId, photoId));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Erro ao definir capa");
+    }
   }
 
   function handleRemovePending(index: number) {
