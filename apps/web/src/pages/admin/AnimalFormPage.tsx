@@ -55,6 +55,9 @@ export function AnimalFormPage() {
   const [pending, setPending] = useState<File[]>([]);
   const [failed, setFailed] = useState<File[]>([]);
   const [createdId, setCreatedId] = useState<string | null>(null);
+  // Redimensionar e subir uma foto leva alguns segundos; travamos o Salvar nesse
+  // intervalo para não deixar salvar o animal sem a foto que já parece anexada.
+  const [photoBusy, setPhotoBusy] = useState(false);
 
   // Depois de criar o animal na hora do Salvar, o formulário passa a editá-lo:
   // não há mais volta para o modo "novo" nesta sessão.
@@ -192,7 +195,7 @@ export function AnimalFormPage() {
           <Button type="button" variant="secondary" onClick={() => navigate("/admin/animais")}>
             Cancelar
           </Button>
-          <Button type="submit" form="animal-form" disabled={submitting}>
+          <Button type="submit" form="animal-form" disabled={submitting || photoBusy}>
             {submitting ? "Salvando…" : "Salvar"}
           </Button>
         </div>
@@ -305,6 +308,7 @@ export function AnimalFormPage() {
                   onRemovePhoto={handleRemovePhoto}
                   onRemovePending={handleRemovePending}
                   onSetCover={handleSetCover}
+                  onBusyChange={setPhotoBusy}
                   disabled={submitting}
                 />
               </div>

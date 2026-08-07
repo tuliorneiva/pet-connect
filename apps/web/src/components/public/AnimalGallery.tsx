@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { PawPrint } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function AnimalGallery({ photos, name }: { photos: string[]; name: string }) {
@@ -9,9 +10,9 @@ export function AnimalGallery({ photos, name }: { photos: string[]; name: string
       <div
         data-testid="gallery-empty"
         aria-label="Sem foto disponível"
-        className="grid aspect-[4/3] place-items-center rounded-xl border border-border bg-card text-6xl"
+        className="grid aspect-[4/3] place-items-center rounded-xl border border-border bg-card text-muted-foreground"
       >
-        <span aria-hidden="true">🐾</span>
+        <PawPrint className="h-16 w-16" aria-hidden="true" />
       </div>
     );
   }

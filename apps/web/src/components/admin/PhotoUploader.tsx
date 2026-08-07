@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { ChangeEvent } from "react";
+import { Loader2, Plus, Star, X } from "lucide-react";
 import { resizeImage } from "@/lib/resizeImage";
 import { cn } from "@/lib/utils";
 
@@ -13,11 +14,14 @@ const ACCEPTED = ["image/jpeg", "image/png", "image/webp"];
 export type PhotoUploaderProps = {
   photos: UploaderPhoto[];
   pending: File[];
-  onPick: (files: File[]) => void;
+  onPick: (files: File[]) => Promise<void> | void;
   onRemovePhoto: (photoId: string) => void;
   onRemovePending: (index: number) => void;
   onSetCover: (photoId: string) => void;
   disabled?: boolean;
+  /** Redimensionar + subir a foto leva alguns segundos; o formulário usa isto para
+   * bloquear o Salvar enquanto isso, já que salvar antes deixaria o animal sem a foto. */
+  onBusyChange?: (busy: boolean) => void;
 };
 
 export function PhotoUploader({
@@ -28,8 +32,10 @@ export function PhotoUploader({
   onRemovePending,
   onSetCover,
   disabled,
+  onBusyChange,
 }: PhotoUploaderProps) {
   const [error, setError] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   // URLs de preview dos arquivos ainda não enviados. Revogadas na limpeza para não
@@ -58,7 +64,15 @@ export function PhotoUploader({
     }
     if (cabem.length === 0) return;
 
-    onPick(await Promise.all(cabem.map((f) => resizeImage(f))));
+    setBusy(true);
+    onBusyChange?.(true);
+    try {
+      const resized = await Promise.all(cabem.map((f) => resizeImage(f)));
+      await onPick(resized);
+    } finally {
+      setBusy(false);
+      onBusyChange?.(false);
+    }
   }
 
   const slots = [
@@ -107,18 +121,20 @@ export function PhotoUploader({
               aria-label="Remover foto"
               disabled={disabled}
               onClick={slot.onRemove}
-              className="absolute right-1.5 top-1.5 grid h-5 w-5 place-items-center rounded-full bg-slate-900/60 text-xs text-white"
+              className="absolute right-1.5 top-1.5 grid h-6 w-6 place-items-center rounded-full bg-slate-900/60 text-white transition hover:bg-slate-900/80"
             >
-              <span aria-hidden="true">✕</span>
+              <X aria-hidden="true" className="h-3.5 w-3.5" />
             </button>
             {slot.onCover && (
               <button
                 type="button"
+                aria-label="Definir como capa"
+                title="Definir como capa"
                 disabled={disabled}
                 onClick={slot.onCover}
-                className="absolute inset-x-0 bottom-0 border-t border-border bg-white/95 py-0.5 text-[10.5px] font-semibold text-primary"
+                className="absolute bottom-1.5 left-1.5 grid h-6 w-6 place-items-center rounded-full bg-slate-900/60 text-white transition hover:bg-slate-900/80"
               >
-                definir como capa
+                <Star aria-hidden="true" className="h-3.5 w-3.5" />
               </button>
             )}
           </div>
@@ -127,19 +143,23 @@ export function PhotoUploader({
         {total < MAX_PHOTOS && (
           <label
             className={cn(
-              "grid aspect-square cursor-pointer place-items-center gap-0.5 rounded-md border border-dashed border-slate-300 bg-background text-center text-[11.5px] font-semibold text-muted-foreground",
-              disabled && "pointer-events-none opacity-50",
+              "grid aspect-square cursor-pointer place-items-center gap-1 rounded-md border border-dashed border-slate-300 bg-background text-center text-[11.5px] font-semibold text-muted-foreground",
+              (disabled || busy) && "pointer-events-none opacity-50",
             )}
           >
-            <span aria-hidden="true" className="text-lg">＋</span>
-            adicionar foto
+            {busy ? (
+              <Loader2 aria-hidden="true" className="h-5 w-5 animate-spin" />
+            ) : (
+              <Plus aria-hidden="true" className="h-5 w-5" />
+            )}
+            {busy ? "enviando…" : "adicionar foto"}
             <input
               ref={inputRef}
               type="file"
               aria-label="Adicionar foto"
               accept={ACCEPTED.join(",")}
               multiple
-              disabled={disabled}
+              disabled={disabled || busy}
               onChange={handleChange}
               className="sr-only"
             />
