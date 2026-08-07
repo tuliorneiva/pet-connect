@@ -1484,7 +1484,7 @@ Rodar de novo e confirmar que passam.
 
 - [ ] **Step 8: Rodar os testes e o compilador**
 
-Run: `cd apps/web && npx vitest run && npx tsc --noEmit`
+Run: `cd apps/web && npx vitest run && npx tsc --noEmit -p tsconfig.app.json`
 Expected: PASS. O `tsc` vai apontar `AnimalFormPage.tsx` e o mock `BASE_ANIMAL` em `AnimalFormPage.test.tsx`, que ainda usam `photo_url` no input — acrescente `photos: []` ao mock e **remova o campo "Foto (URL)"** do formulário (bloco das linhas 166-174 e o `photo_url: ""` de `EMPTY` e do `useEffect`). O redesenho completo do formulário é a Task 8; aqui só o necessário para compilar.
 
 - [ ] **Step 9: Commit**
@@ -1994,7 +1994,7 @@ vi.stubGlobal("URL", Object.assign(URL, {
 
 - [ ] **Step 5: Rodar a suíte inteira e o compilador**
 
-Run: `cd apps/web && npx vitest run && npx tsc --noEmit`
+Run: `cd apps/web && npx vitest run && npx tsc --noEmit -p tsconfig.app.json`
 Expected: tudo verde
 
 - [ ] **Step 6: Commit**
@@ -2352,7 +2352,7 @@ Expected: PASS (9 testes — os 2 antigos de sentinela mais os 7 novos)
 
 - [ ] **Step 6: Rodar tudo — front e back**
 
-Run: `cd apps/web && npx vitest run && npx tsc --noEmit`
+Run: `cd apps/web && npx vitest run && npx tsc --noEmit -p tsconfig.app.json`
 Run: `docker compose exec -T api pytest -q && docker compose exec -T api ruff check .`
 Expected: tudo verde nos dois lados
 
@@ -2377,7 +2377,7 @@ Depois da Task 8, com os containers de pé:
 ```bash
 docker compose exec -T api pytest -q
 docker compose exec -T api ruff check .
-cd apps/web && npx vitest run && npx tsc --noEmit
+cd apps/web && npx vitest run && npx tsc --noEmit -p tsconfig.app.json
 ```
 
 **O que exige olho humano e navegador — nenhum teste acima cobre:**
