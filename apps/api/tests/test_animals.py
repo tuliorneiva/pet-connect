@@ -92,3 +92,19 @@ def test_public_animal_includes_org_fields(client):
 
     listing = client.get("/api/public/animals").json()
     assert listing[0]["org_name"] == "Abrigo Alfa"
+
+
+def test_public_listing_and_detail_expose_photos(client):
+    token = _register(client)
+    animal = client.post(
+        "/api/admin/animals", headers=_auth(token), json={"name": "Rex", "species": "cão"}
+    ).json()
+
+    # Sem fotos, os dois lados concordam: lista vazia e capa nula.
+    assert animal["photos"] == []
+    assert animal["photo_url"] is None
+
+    listing = client.get("/api/public/animals").json()
+    assert listing[0]["photos"] == []
+    detail = client.get(f"/api/public/animals/{animal['id']}").json()
+    assert detail["photos"] == []
