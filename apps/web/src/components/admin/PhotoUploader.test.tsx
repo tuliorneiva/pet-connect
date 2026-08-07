@@ -104,9 +104,10 @@ test("recusa a quinta foto antes de chamar a API e diz por quê", async () => {
   await userEvent.upload(screen.getByLabelText("Adicionar foto"), arquivos);
 
   await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent("até 4 fotos"));
-  // a que cabia passou; a que não cabia foi barrada
+  // a que cabia passou (é mesmo "1.jpg", não só uma foto qualquer); a que não cabia foi barrada
   expect(props.onPick).toHaveBeenCalledTimes(1);
   expect(props.onPick.mock.calls[0][0]).toHaveLength(1);
+  expect(props.onPick.mock.calls[0][0][0].name).toBe("1.jpg");
 });
 
 test("recusa um arquivo que não é imagem aceita", async () => {
