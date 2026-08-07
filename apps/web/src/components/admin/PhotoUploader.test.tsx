@@ -114,7 +114,9 @@ test("recusa um arquivo que não é imagem aceita", async () => {
   const props = setup({ photos: [] });
   const pdf = new File(["x"], "doc.pdf", { type: "application/pdf" });
 
-  await userEvent.upload(screen.getByLabelText("Adicionar foto"), pdf);
+  // applyAccept: false simula o arquivo chegando por drag-and-drop ou "todos os arquivos",
+  // que é justamente o caso em que o `accept` do input não protege e a validação precisa agir.
+  await userEvent.upload(screen.getByLabelText("Adicionar foto"), pdf, { applyAccept: false });
 
   await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent("JPG, PNG ou WEBP"));
   expect(props.onPick).not.toHaveBeenCalled();

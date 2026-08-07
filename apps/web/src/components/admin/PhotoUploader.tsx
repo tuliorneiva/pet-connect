@@ -137,9 +137,7 @@ export function PhotoUploader({
               ref={inputRef}
               type="file"
               aria-label="Adicionar foto"
-              // Sem atributo `accept`: o próprio picker do SO já filtra por tipo, mas
-              // arrastar-e-soltar ou "todos os arquivos" contornam esse filtro — quem
-              // barra de verdade é a validação abaixo, com aviso visível para a ONG.
+              accept={ACCEPTED.join(",")}
               multiple
               disabled={disabled}
               onChange={handleChange}
