@@ -85,7 +85,9 @@ class S3Storage:
         self._client.delete_object(Bucket=self._bucket, Key=key)
 
     def url(self, key: str) -> str:
-        return resolve_photo_url(key, is_external=False)
+        # Usa o valor recebido no construtor, não o global: quem constrói a instância
+        # com outro bucket precisa que a URL acompanhe.
+        return f"{self._public_url.rstrip('/')}/{key}"
 
 
 def get_storage() -> Storage:

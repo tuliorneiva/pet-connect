@@ -59,3 +59,22 @@ def test_internal_key_is_prefixed_with_the_public_base_url(monkeypatch):
         resolve_photo_url("animals/abc.jpg", is_external=False)
         == "https://cdn.example/bucket/animals/abc.jpg"
     )
+
+
+def test_url_follows_the_instance_not_the_global_settings(monkeypatch):
+    from app.core import config
+    from app.services.storage import S3Storage
+
+    # Propositalmente diferente do valor global, para provar que S3Storage.url()
+    # usa o que foi passado no construtor, não o singleton `settings`.
+    monkeypatch.setattr(config.settings, "storage_public_url", "https://global.example/bucket")
+    storage = S3Storage(
+        bucket="outro",
+        endpoint="https://endpoint.example/storage/v1/s3",
+        region="sa-east-1",
+        access_key="chave",
+        secret_key="segredo",
+        public_url="https://instancia.example/outro/",
+    )
+
+    assert storage.url("animals/a.jpg") == "https://instancia.example/outro/animals/a.jpg"
