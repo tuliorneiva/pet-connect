@@ -1,4 +1,5 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import { expect, test, vi, beforeEach } from "vitest";
 import { HomePage } from "./HomePage";
@@ -18,4 +19,26 @@ test("renders animal cards from the API", async () => {
   render(<MemoryRouter><HomePage /></MemoryRouter>);
   expect(await screen.findByText("Thor")).toBeInTheDocument();
   expect(screen.getByText(/Abrigo Amigo Fiel/)).toBeInTheDocument();
+});
+
+test("filtro de Espécie: escolher uma espécie filtra, escolher 'Todas' remove o filtro sem reter a sentinela", async () => {
+  const user = userEvent.setup();
+  render(<MemoryRouter><HomePage /></MemoryRouter>);
+  await screen.findByText("Thor");
+
+  await user.click(screen.getByLabelText("Espécie"));
+  await user.click(await screen.findByRole("option", { name: "Gato" }));
+
+  await waitFor(() => {
+    expect(publicApi.listAnimals).toHaveBeenLastCalledWith({ species: "gato" });
+  });
+
+  await user.click(screen.getByLabelText("Espécie"));
+  await user.click(await screen.findByRole("option", { name: "Todas" }));
+
+  await waitFor(() => {
+    const lastCall = vi.mocked(publicApi.listAnimals).mock.calls.at(-1)?.[0];
+    expect(lastCall?.species).toBeUndefined();
+  });
+  expect(publicApi.listAnimals).toHaveBeenLastCalledWith({});
 });

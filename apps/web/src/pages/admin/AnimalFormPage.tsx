@@ -10,23 +10,38 @@ import {
   SPECIES_OPTIONS,
 } from "../../lib/labels";
 import { Card } from "../../components/ui/Card";
-import { Field } from "../../components/ui/Field";
-import { Select } from "../../components/ui/Select";
-import { Button } from "../../components/ui/Button";
 import { Alert } from "../../components/ui/Alert";
+import { Button } from "@/components/shadcn/button";
+import { Input } from "@/components/shadcn/input";
+import { Label } from "@/components/shadcn/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/shadcn/select";
 import styles from "./admin.module.css";
+
+// Radix Select não aceita value=""; Sexo e Porte são opcionais, então usamos
+// esta sentinela para representar "nenhum" e convertemos para null na borda
+// (mesmo padrão dos filtros da vitrine em HomePage.tsx).
+const NONE = "—";
 
 const EMPTY: AnimalInput = {
   name: "",
   species: "cão",
   breed: "",
-  sex: "",
-  size: "",
+  sex: null,
+  size: null,
   birth_estimate: "",
   description: "",
   photo_url: "",
   status: "disponível",
 };
+
+/** Converte a sentinela de "sem valor" para null antes de enviar à API. */
+function toPayload(f: AnimalInput): AnimalInput {
+  return {
+    ...f,
+    sex: f.sex === NONE ? null : f.sex,
+    size: f.size === NONE ? null : f.size,
+  };
+}
 
 export function AnimalFormPage() {
   const { id } = useParams();
@@ -43,8 +58,8 @@ export function AnimalFormPage() {
           name: a.name,
           species: a.species,
           breed: a.breed ?? "",
-          sex: a.sex ?? "",
-          size: a.size ?? "",
+          sex: a.sex ?? null,
+          size: a.size ?? null,
           birth_estimate: a.birth_estimate ?? "",
           description: a.description ?? "",
           photo_url: a.photo_url ?? "",
@@ -63,10 +78,11 @@ export function AnimalFormPage() {
     setError(null);
     setSubmitting(true);
     try {
+      const payload = toPayload(form);
       if (editing) {
-        await adminApi.updateAnimal(id!, form);
+        await adminApi.updateAnimal(id!, payload);
       } else {
-        await adminApi.createAnimal(form);
+        await adminApi.createAnimal(payload);
       }
       navigate("/admin/animais");
     } catch (err) {
@@ -82,18 +98,88 @@ export function AnimalFormPage() {
       <Card style={{ maxWidth: 640, marginTop: "var(--space-4)" }}>
         <form onSubmit={onSubmit}>
           {error && <Alert variant="error">{error}</Alert>}
-          <Field label="Nome" value={form.name} onChange={(e) => set("name", e.target.value)} required />
-          <div className={styles.grid2}>
-            <Select label="Espécie" options={SPECIES_OPTIONS} value={form.species} onChange={(e) => set("species", e.target.value)} />
-            <Field label="Raça" value={form.breed ?? ""} onChange={(e) => set("breed", e.target.value)} />
-            <Select label="Sexo" options={SEX_OPTIONS} placeholder="—" value={form.sex ?? ""} onChange={(e) => set("sex", e.target.value)} />
-            <Select label="Porte" options={SIZE_OPTIONS} placeholder="—" value={form.size ?? ""} onChange={(e) => set("size", e.target.value)} />
-            <Field label="Idade estimada" value={form.birth_estimate ?? ""} onChange={(e) => set("birth_estimate", e.target.value)} placeholder="ex.: 2 anos" />
-            <Select label="Situação" options={ANIMAL_STATUS_OPTIONS} value={form.status} onChange={(e) => set("status", e.target.value as AnimalInput["status"])} />
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="nome">Nome</Label>
+              <Input id="nome" value={form.name} onChange={(e) => set("name", e.target.value)} required />
+            </div>
+
+            <div className={styles.grid2}>
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="especie">Espécie</Label>
+                <Select value={form.species} onValueChange={(v) => set("species", v)}>
+                  <SelectTrigger id="especie"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    {SPECIES_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="raca">Raça</Label>
+                <Input id="raca" value={form.breed ?? ""} onChange={(e) => set("breed", e.target.value)} />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="sexo">Sexo</Label>
+                <Select value={form.sex ?? NONE} onValueChange={(v) => set("sex", v === NONE ? null : v)}>
+                  <SelectTrigger id="sexo"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={NONE}>—</SelectItem>
+                    {SEX_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="porte">Porte</Label>
+                <Select value={form.size ?? NONE} onValueChange={(v) => set("size", v === NONE ? null : v)}>
+                  <SelectTrigger id="porte"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={NONE}>—</SelectItem>
+                    {SIZE_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="idade">Idade estimada</Label>
+                <Input
+                  id="idade"
+                  value={form.birth_estimate ?? ""}
+                  onChange={(e) => set("birth_estimate", e.target.value)}
+                  placeholder="ex.: 2 anos"
+                />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="situacao">Situação</Label>
+                <Select value={form.status ?? "disponível"} onValueChange={(v) => set("status", v as AnimalInput["status"])}>
+                  <SelectTrigger id="situacao"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    {ANIMAL_STATUS_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="foto">Foto (URL)</Label>
+              <Input
+                id="foto"
+                value={form.photo_url ?? ""}
+                onChange={(e) => set("photo_url", e.target.value)}
+                placeholder="https://…"
+              />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="descricao">Descrição</Label>
+              <Input id="descricao" value={form.description ?? ""} onChange={(e) => set("description", e.target.value)} />
+            </div>
           </div>
-          <Field label="Foto (URL)" value={form.photo_url ?? ""} onChange={(e) => set("photo_url", e.target.value)} placeholder="https://…" />
-          <Field label="Descrição" value={form.description ?? ""} onChange={(e) => set("description", e.target.value)} />
-          <div className={styles.rowActions}>
+
+          <div className={`${styles.rowActions} mt-4`}>
             <Button type="submit" disabled={submitting}>{submitting ? "Salvando…" : "Salvar"}</Button>
             <Button type="button" variant="secondary" onClick={() => navigate("/admin/animais")}>Cancelar</Button>
           </div>

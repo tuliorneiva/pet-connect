@@ -31,6 +31,12 @@ export type PublicAnimal = {
   org_slug: string;
 };
 
+/** O detalhe traz os sinais de saúde derivados; a listagem não os calcula. */
+export type PublicAnimalDetail = PublicAnimal & {
+  vaccines_up_to_date: boolean | null;
+  under_treatment: boolean;
+};
+
 export type PublicOrganization = {
   id: string;
   name: string;

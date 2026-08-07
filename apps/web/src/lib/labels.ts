@@ -42,6 +42,18 @@ export function animalStatusLabel(status: AnimalStatus): string {
   return ANIMAL_STATUS_OPTIONS.find((o) => o.value === status)?.label ?? status;
 }
 
+export function speciesLabel(value: string): string {
+  return SPECIES_OPTIONS.find((o) => o.value === value)?.label ?? value;
+}
+
+export function sexLabel(value: string): string {
+  return SEX_OPTIONS.find((o) => o.value === value)?.label ?? value;
+}
+
+export function sizeLabel(value: string): string {
+  return SIZE_OPTIONS.find((o) => o.value === value)?.label ?? value;
+}
+
 export function animalStatusTone(status: AnimalStatus): "success" | "info" | "neutral" {
   if (status === "disponível") return "success";
   if (status === "em_processo") return "info";

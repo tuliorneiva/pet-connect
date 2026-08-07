@@ -41,7 +41,7 @@ class AnimalResponse(AnimalBase):
     created_at: datetime
 
 
-class PublicAnimalResponse(BaseModel):
+class PublicAnimalListResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     id: UUID
@@ -57,3 +57,10 @@ class PublicAnimalResponse(BaseModel):
     org_name: str = Field(validation_alias=AliasPath("organization", "name"))
     org_city: str | None = Field(default=None, validation_alias=AliasPath("organization", "city"))
     org_slug: str = Field(validation_alias=AliasPath("organization", "slug"))
+
+
+class PublicAnimalResponse(PublicAnimalListResponse):
+    # A listagem não calcula os sinais de saúde (custaria uma query por animal);
+    # só o detalhe os computa via compute_health_status. Ver PublicAnimalListResponse.
+    vaccines_up_to_date: bool | None = None
+    under_treatment: bool = False

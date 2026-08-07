@@ -5,10 +5,14 @@ import type { VitrineFilters } from "../../lib/publicApi";
 import { useAsync } from "../../lib/useAsync";
 import { SEX_OPTIONS, SIZE_OPTIONS, SPECIES_OPTIONS } from "../../lib/labels";
 import { AnimalCard } from "../../components/AnimalCard";
-import { Select } from "@/components/shadcn/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/shadcn/select";
 import { Input } from "@/components/shadcn/input";
 import { Label } from "@/components/shadcn/label";
 import { Skeleton } from "@/components/shadcn/skeleton";
+
+// Radix Select não aceita value="" (viraria "sem valor"); usamos esta sentinela
+// para a opção "todos/todas" e convertemos para undefined antes de filtrar.
+const ALL_SENTINEL = "todos";
 
 export function HomePage() {
   const [filters, setFilters] = useState<VitrineFilters>({});
@@ -19,6 +23,10 @@ export function HomePage() {
 
   function set(key: keyof VitrineFilters, value: string) {
     setFilters((f) => ({ ...f, [key]: value || undefined }));
+  }
+
+  function setSelect(key: keyof VitrineFilters, value: string) {
+    set(key, value === ALL_SENTINEL ? "" : value);
   }
 
   return (
@@ -33,24 +41,33 @@ export function HomePage() {
 
       <div className="flex flex-wrap items-end gap-3.5 rounded-xl border border-border bg-card p-4 shadow-sm">
         <div className="flex min-w-35 flex-1 flex-col gap-1.5">
-          <Label>Espécie</Label>
-          <Select value={filters.species ?? ""} onChange={(e) => set("species", e.target.value)}>
-            <option value="">Todas</option>
-            {SPECIES_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+          <Label htmlFor="filtro-especie">Espécie</Label>
+          <Select value={filters.species ?? ALL_SENTINEL} onValueChange={(v) => setSelect("species", v)}>
+            <SelectTrigger id="filtro-especie"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value={ALL_SENTINEL}>Todas</SelectItem>
+              {SPECIES_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
+            </SelectContent>
           </Select>
         </div>
         <div className="flex min-w-35 flex-1 flex-col gap-1.5">
-          <Label>Porte</Label>
-          <Select value={filters.size ?? ""} onChange={(e) => set("size", e.target.value)}>
-            <option value="">Todos</option>
-            {SIZE_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+          <Label htmlFor="filtro-porte">Porte</Label>
+          <Select value={filters.size ?? ALL_SENTINEL} onValueChange={(v) => setSelect("size", v)}>
+            <SelectTrigger id="filtro-porte"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value={ALL_SENTINEL}>Todos</SelectItem>
+              {SIZE_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
+            </SelectContent>
           </Select>
         </div>
         <div className="flex min-w-35 flex-1 flex-col gap-1.5">
-          <Label>Sexo</Label>
-          <Select value={filters.sex ?? ""} onChange={(e) => set("sex", e.target.value)}>
-            <option value="">Todos</option>
-            {SEX_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+          <Label htmlFor="filtro-sexo">Sexo</Label>
+          <Select value={filters.sex ?? ALL_SENTINEL} onValueChange={(v) => setSelect("sex", v)}>
+            <SelectTrigger id="filtro-sexo"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value={ALL_SENTINEL}>Todos</SelectItem>
+              {SEX_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
+            </SelectContent>
           </Select>
         </div>
         <div className="flex min-w-35 flex-1 flex-col gap-1.5">
