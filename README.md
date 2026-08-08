@@ -1,4 +1,4 @@
-# PetConnect (PetConecta)
+# PetConnecta
 
 Plataforma web para gestão de abrigos de animais e vitrine de adoção responsável.
 
@@ -38,7 +38,7 @@ DATABASE_URL=postgresql+psycopg2://petconnect:petconnect@localhost:5433/petconne
   python -m app.seed
 ```
 
-Login da ONG demo: **demo@petconnect.org** / **demo123**
+Login da ONG demo: **demo@petconnecta.org** / **demo123**
 
 ## Backend (dev local)
 

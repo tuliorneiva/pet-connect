@@ -13,7 +13,7 @@ from app.core.security import hash_password
 from app.db.session import SessionLocal
 from app.models import Animal, AnimalPhoto, Medication, Organization, SupportRequest, User, Vaccination
 
-DEMO_EMAIL = "demo@petconnect.org"
+DEMO_EMAIL = "demo@petconnecta.org"
 DEMO_PASSWORD = "demo123"
 
 

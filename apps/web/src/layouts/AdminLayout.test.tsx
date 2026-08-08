@@ -21,7 +21,7 @@ test("renders the brand and the logged-in user's name", () => {
       </Routes>
     </MemoryRouter>,
   );
-  expect(screen.getByText("PetConnect")).toBeInTheDocument();
+  expect(screen.getByText("PetConnecta")).toBeInTheDocument();
   expect(screen.getByText("Ana")).toBeInTheDocument();
   expect(screen.getByText("painel")).toBeInTheDocument();
 });

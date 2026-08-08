@@ -15,7 +15,7 @@ function Nav() {
           <span className="grid h-8 w-8 flex-none place-items-center rounded-[10px] bg-gradient-to-br from-primary to-[#0891B2] text-white">
             <PawPrint className="h-4 w-4" aria-hidden="true" />
           </span>
-          <span>Pet<span className="text-primary">Connect</span></span>
+          <span>Pet<span className="text-primary">Connecta</span></span>
         </Link>
         <nav className="ml-2 hidden gap-7 md:flex">
           <a href="#como" className="text-sm font-medium text-muted-foreground hover:text-foreground">Como funciona</a>
@@ -171,7 +171,7 @@ export function LandingPage() {
       <section id="porque" className="border-y border-border bg-card py-20">
         <div className="mx-auto max-w-6xl px-6">
           <div className="mx-auto mb-12 max-w-xl text-center">
-            <div className="text-xs font-bold uppercase tracking-wider text-primary">Por que PetConnect</div>
+            <div className="text-xs font-bold uppercase tracking-wider text-primary">Por que PetConnecta</div>
             <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">Adoção com informação e confiança</h2>
             <p className="mt-3.5 text-lg text-muted-foreground">Tudo o que você precisa para decidir com segurança — e cuidar bem depois.</p>
           </div>
@@ -214,10 +214,10 @@ export function LandingPage() {
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-6 text-sm">
           <div className="flex items-center gap-1.5 text-base font-bold text-white">
             <PawPrint className="h-4 w-4 flex-none" aria-hidden="true" />
-            <span>Pet<span className="text-[#67E8F9]">Connect</span></span>
+            <span>Pet<span className="text-[#67E8F9]">Connecta</span></span>
           </div>
           <span className="flex items-center gap-1">
-            © 2026 PetConnect · Feito com <Heart className="h-3.5 w-3.5 fill-current" aria-hidden="true" /> para os animais.
+            © 2026 PetConnecta · Feito com <Heart className="h-3.5 w-3.5 fill-current" aria-hidden="true" /> para os animais.
           </span>
         </div>
       </footer>
