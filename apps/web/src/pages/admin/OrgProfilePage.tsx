@@ -20,6 +20,9 @@ const EMPTY: OrganizationProfileInput = {
   website: "",
   address: "",
   founded_year: null,
+  whatsapp: "",
+  instagram: "",
+  facebook: "",
 };
 
 function toForm(org: OrganizationProfile): OrganizationProfileInput {
@@ -32,6 +35,9 @@ function toForm(org: OrganizationProfile): OrganizationProfileInput {
     website: org.website ?? "",
     address: org.address ?? "",
     founded_year: org.founded_year,
+    whatsapp: org.whatsapp ?? "",
+    instagram: org.instagram ?? "",
+    facebook: org.facebook ?? "",
   };
 }
 
@@ -45,6 +51,9 @@ function toPayload(f: OrganizationProfileInput): OrganizationProfileInput {
     phone: f.phone || null,
     website: f.website || null,
     address: f.address || null,
+    whatsapp: f.whatsapp || null,
+    instagram: f.instagram || null,
+    facebook: f.facebook || null,
   };
 }
 
@@ -197,6 +206,42 @@ export function OrgProfilePage() {
                   value={form.description ?? ""}
                   onChange={(e) => set("description", e.target.value)}
                   placeholder="Conte a história da sua ONG e o que faz seus animais especiais."
+                />
+              </div>
+            </div>
+
+            <div className="my-6 h-px bg-border" />
+
+            <p className="mb-1 text-sm font-bold">Redes sociais</p>
+            <p className="mb-4 text-xs text-muted-foreground">
+              Opcional. Preenchidas, aparecem como ícones na sua página pública.
+            </p>
+            <div className="grid grid-cols-3 gap-4">
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="whatsapp">WhatsApp</Label>
+                <Input
+                  id="whatsapp"
+                  value={form.whatsapp ?? ""}
+                  onChange={(e) => set("whatsapp", e.target.value)}
+                  placeholder="(83) 90000-0000"
+                />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="instagram">Instagram</Label>
+                <Input
+                  id="instagram"
+                  value={form.instagram ?? ""}
+                  onChange={(e) => set("instagram", e.target.value)}
+                  placeholder="@suaong"
+                />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="facebook">Facebook</Label>
+                <Input
+                  id="facebook"
+                  value={form.facebook ?? ""}
+                  onChange={(e) => set("facebook", e.target.value)}
+                  placeholder="suaong"
                 />
               </div>
             </div>

@@ -19,6 +19,9 @@ const BASE_ORG: OrganizationProfile = {
   founded_year: null,
   verified: false,
   logo_url: null,
+  whatsapp: null,
+  instagram: null,
+  facebook: null,
   created_at: "2026-01-01T00:00:00Z",
 };
 

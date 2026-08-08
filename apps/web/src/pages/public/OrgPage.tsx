@@ -4,6 +4,7 @@ import type { LucideIcon } from "lucide-react";
 import { publicApi } from "../../lib/publicApi";
 import { useAsync } from "../../lib/useAsync";
 import { AnimalCard } from "../../components/AnimalCard";
+import { SocialLinks } from "@/components/public/SocialLinks";
 import { Card } from "@/components/shadcn/card";
 import { Badge } from "@/components/shadcn/badge";
 import { Button } from "@/components/shadcn/button";
@@ -39,41 +40,42 @@ export function OrgPage() {
 
   return (
     <div>
-      <div className="-mx-6 -mt-10 h-40 bg-gradient-to-br from-primary to-[#155E75]" />
-      <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-end" style={{ marginTop: -56 }}>
-        <div className="grid h-28 w-28 flex-none place-items-center rounded-3xl border-4 border-card bg-gradient-to-br from-[#22D3EE] to-primary text-white shadow-md">
-          {org.logo_url ? (
-            <img src={org.logo_url} alt="" className="h-full w-full rounded-3xl object-cover" />
-          ) : (
-            <Home className="h-11 w-11" aria-hidden="true" />
-          )}
-        </div>
-        <div className="flex-1 pb-1">
-          <div className="flex flex-wrap items-center gap-3">
-            <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">{org.name}</h1>
-            {org.verified && (
-              <Badge className="gap-1">
-                <Check className="h-3 w-3" aria-hidden="true" /> ONG verificada
-              </Badge>
+      <div className="-mx-6 -mt-10 bg-gradient-to-br from-primary to-[#155E75] px-6 pb-7 pt-10">
+        <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-end">
+          <div className="grid h-24 w-24 flex-none place-items-center rounded-3xl border-4 border-white/25 bg-white/10 shadow-md sm:h-28 sm:w-28">
+            {org.logo_url ? (
+              <img src={org.logo_url} alt="" className="h-full w-full rounded-3xl object-cover" />
+            ) : (
+              <Home className="h-11 w-11 text-white" aria-hidden="true" />
             )}
           </div>
-          <div className="mt-2.5 flex flex-wrap gap-4 text-sm text-muted-foreground">
-            {org.city && (
+          <div className="flex-1 pb-1">
+            <div className="flex flex-wrap items-center gap-3">
+              <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">{org.name}</h1>
+              {org.verified && (
+                <Badge className="gap-1 border-white/30 bg-white/15 text-white">
+                  <Check className="h-3 w-3" aria-hidden="true" /> ONG verificada
+                </Badge>
+              )}
+            </div>
+            <div className="mt-2.5 flex flex-wrap gap-4 text-sm text-cyan-50">
+              {org.city && (
+                <span className="flex items-center gap-1">
+                  <MapPin className="h-3.5 w-3.5" aria-hidden="true" /> {org.city}
+                </span>
+              )}
               <span className="flex items-center gap-1">
-                <MapPin className="h-3.5 w-3.5" aria-hidden="true" /> {org.city}
+                <CalendarDays className="h-3.5 w-3.5" aria-hidden="true" /> Parceira desde {since}
               </span>
-            )}
-            <span className="flex items-center gap-1">
-              <CalendarDays className="h-3.5 w-3.5" aria-hidden="true" /> Parceira desde {since}
-            </span>
-            <span className="flex items-center gap-1">
-              <PawPrint className="h-3.5 w-3.5" aria-hidden="true" /> {org.available_count} para adoção
-            </span>
+              <span className="flex items-center gap-1">
+                <PawPrint className="h-3.5 w-3.5" aria-hidden="true" /> {org.available_count} para adoção
+              </span>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="mt-11 grid gap-10 lg:grid-cols-[1fr_320px]">
+      <div className="mt-8 grid gap-10 lg:grid-cols-[1fr_320px]">
         <div>
           {org.description && (
             <Card className="mb-8 p-6">
@@ -117,6 +119,12 @@ export function OrgPage() {
             <ContactRow icon={Mail} label="E-mail" value={org.email} />
             <ContactRow icon={Globe} label="Site" value={org.website} />
             <ContactRow icon={MapPin} label="Endereço" value={org.address} />
+            <SocialLinks
+              whatsapp={org.whatsapp}
+              instagram={org.instagram}
+              facebook={org.facebook}
+              orgName={org.name}
+            />
           </Card>
         </aside>
       </div>

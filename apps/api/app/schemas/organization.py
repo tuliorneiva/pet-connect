@@ -20,6 +20,9 @@ class OrganizationAdminResponse(BaseModel):
     founded_year: int | None
     verified: bool
     logo_url: str | None
+    whatsapp: str | None
+    instagram: str | None
+    facebook: str | None
     created_at: datetime
 
 
@@ -34,6 +37,11 @@ class OrganizationUpdate(BaseModel):
     website: str | None = None
     address: str | None = None
     founded_year: int | None = Field(default=None, ge=1900, le=date.today().year)
+    # Aceitam texto livre (número, @handle ou URL completa) — a normalização em
+    # link clicável acontece no frontend, na hora de montar o href.
+    whatsapp: str | None = Field(default=None, max_length=40)
+    instagram: str | None = Field(default=None, max_length=255)
+    facebook: str | None = Field(default=None, max_length=255)
 
 
 class PublicOrganizationResponse(BaseModel):
@@ -51,6 +59,9 @@ class PublicOrganizationResponse(BaseModel):
     founded_year: int | None
     verified: bool
     logo_url: str | None
+    whatsapp: str | None
+    instagram: str | None
+    facebook: str | None
     created_at: datetime
     available_count: int
     adopted_count: int

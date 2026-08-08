@@ -31,6 +31,24 @@ def test_public_org_returns_profile_and_counts(client):
     assert body["verified"] is False
     assert body["available_count"] == 1
     assert body["adopted_count"] == 1
+    assert body["whatsapp"] is None
+    assert body["instagram"] is None
+    assert body["facebook"] is None
+
+
+def test_public_org_returns_the_social_links_when_set(client):
+    token = _register(client)
+    slug = _slug_of(client, token)
+    client.patch(
+        "/api/admin/organization",
+        headers=_auth(token),
+        json={"whatsapp": "5583900000000", "instagram": "abrigobeta", "facebook": "abrigobeta"},
+    )
+
+    body = client.get(f"/api/public/organizations/{slug}").json()
+    assert body["whatsapp"] == "5583900000000"
+    assert body["instagram"] == "abrigobeta"
+    assert body["facebook"] == "abrigobeta"
 
 
 def test_public_org_404_for_unknown_slug(client):

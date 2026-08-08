@@ -37,6 +37,15 @@ test("o botão de interesse ocupa o painel inteiro", async () => {
   expect(cta).toHaveClass("w-full");
 });
 
+test("mostra os botões de compartilhar", async () => {
+  renderPage();
+  expect(await screen.findByRole("link", { name: /compartilhar no whatsapp/i }))
+    .toHaveAttribute("href", expect.stringContaining("wa.me/?text="));
+  expect(screen.getByRole("link", { name: /compartilhar no facebook/i }))
+    .toHaveAttribute("href", expect.stringContaining("facebook.com/sharer"));
+  expect(screen.getByRole("button", { name: /copiar link/i })).toBeInTheDocument();
+});
+
 test("liga para o perfil da ONG", async () => {
   renderPage();
   await waitFor(() =>

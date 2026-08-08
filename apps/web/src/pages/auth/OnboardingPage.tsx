@@ -57,7 +57,16 @@ export function OnboardingPage() {
   const [submitting, setSubmitting] = useState(false);
 
   const [account, setAccount] = useState({ org_name: "", city: "", name: "", email: "", password: "" });
-  const [profile, setProfile] = useState({ description: "", phone: "", email: "", website: "", founded_year: "" });
+  const [profile, setProfile] = useState({
+    description: "",
+    phone: "",
+    email: "",
+    website: "",
+    founded_year: "",
+    whatsapp: "",
+    instagram: "",
+    facebook: "",
+  });
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [orgName, setOrgName] = useState("");
   const [orgSlug, setOrgSlug] = useState("");
@@ -95,6 +104,9 @@ export function OnboardingPage() {
         email: profile.email || null,
         website: profile.website || null,
         founded_year: profile.founded_year ? Number(profile.founded_year) : null,
+        whatsapp: profile.whatsapp || null,
+        instagram: profile.instagram || null,
+        facebook: profile.facebook || null,
       });
       if (logoFile) await adminApi.uploadLogo(logoFile);
       setOrgSlug(org.slug);
@@ -232,6 +244,27 @@ export function OnboardingPage() {
                 <div className="flex flex-col gap-1.5">
                   <Label htmlFor="ano">Ano de fundação</Label>
                   <Input id="ano" type="number" value={profile.founded_year} onChange={updateProfile("founded_year")} placeholder="2019" />
+                </div>
+              </div>
+
+              <div>
+                <p className="mb-1 text-xs font-bold text-foreground">Redes sociais (opcional)</p>
+                <p className="mb-3 text-xs text-muted-foreground">
+                  Preenchidas, aparecem como ícones na sua página pública.
+                </p>
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="flex flex-col gap-1.5">
+                    <Label htmlFor="whatsapp">WhatsApp</Label>
+                    <Input id="whatsapp" value={profile.whatsapp} onChange={updateProfile("whatsapp")} placeholder="(83) 90000-0000" />
+                  </div>
+                  <div className="flex flex-col gap-1.5">
+                    <Label htmlFor="instagram">Instagram</Label>
+                    <Input id="instagram" value={profile.instagram} onChange={updateProfile("instagram")} placeholder="@suaong" />
+                  </div>
+                  <div className="flex flex-col gap-1.5">
+                    <Label htmlFor="facebook">Facebook</Label>
+                    <Input id="facebook" value={profile.facebook} onChange={updateProfile("facebook")} placeholder="suaong" />
+                  </div>
                 </div>
               </div>
             </div>
