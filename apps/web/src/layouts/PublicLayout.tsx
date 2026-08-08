@@ -8,10 +8,10 @@ export function PublicLayout() {
       <header className="sticky top-0 z-40 border-b border-border bg-card/80 backdrop-blur">
         <div className="mx-auto flex h-17 max-w-6xl items-center gap-6 px-6" style={{ height: 68 }}>
           <Link to="/lp" className="flex items-center gap-2.5 text-lg font-bold tracking-tight text-foreground no-underline hover:no-underline">
-            <span className="grid h-8 w-8 place-items-center rounded-[10px] bg-gradient-to-br from-primary to-[#0891B2] text-white">
+            <span className="grid h-8 w-8 flex-none place-items-center rounded-[10px] bg-gradient-to-br from-primary to-[#0891B2] text-white">
               <PawPrint className="h-4 w-4" aria-hidden="true" />
             </span>
-            Pet<span className="text-primary">Connect</span>
+            <span>Pet<span className="text-primary">Connect</span></span>
           </Link>
           <nav className="ml-auto flex items-center gap-3">
             <Button asChild variant="ghost" size="sm"><Link to="/animais">Animais</Link></Button>
