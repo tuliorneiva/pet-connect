@@ -107,7 +107,8 @@ export type SupportStatus = "nova" | "em_análise" | "aprovada" | "recusada" | "
 
 export type SupportRequest = {
   id: string;
-  animal_id: string;
+  animal_id: string | null;
+  animal_name: string | null;
   org_id: string;
   type: SupportType;
   requester_name: string;

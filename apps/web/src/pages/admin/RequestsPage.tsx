@@ -4,6 +4,7 @@ import { useAsync } from "../../lib/useAsync";
 import { SUPPORT_STATUS_OPTIONS, SUPPORT_TYPE_LABELS } from "../../lib/labels";
 import type { SupportStatus } from "../../lib/types";
 import { Alert } from "../../components/ui/Alert";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/shadcn/select";
 import styles from "./admin.module.css";
 
 export function RequestsPage() {
@@ -42,17 +43,24 @@ export function RequestsPage() {
                   <div>{r.requester_email}</div>
                   {r.requester_phone && <div className={styles.muted}>{r.requester_phone}</div>}
                 </td>
-                <td><Link to={`/admin/animais/${r.animal_id}`}>#{r.animal_id}</Link></td>
                 <td>
-                  <select
-                    className={styles.select}
-                    value={r.status}
-                    onChange={(e) => changeStatus(r.id, e.target.value as SupportStatus)}
-                  >
-                    {SUPPORT_STATUS_OPTIONS.map((o) => (
-                      <option key={o.value} value={o.value}>{o.label}</option>
-                    ))}
-                  </select>
+                  {r.animal_id ? (
+                    <Link to={`/admin/animais/${r.animal_id}`}>{r.animal_name ?? "Animal"}</Link>
+                  ) : (
+                    <span className={styles.muted}>{r.animal_name ?? "Animal removido"}</span>
+                  )}
+                </td>
+                <td>
+                  <Select value={r.status} onValueChange={(v) => changeStatus(r.id, v as SupportStatus)}>
+                    <SelectTrigger aria-label="Situação" className="h-9 w-[160px]">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {SUPPORT_STATUS_OPTIONS.map((o) => (
+                        <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </td>
               </tr>
             ))}

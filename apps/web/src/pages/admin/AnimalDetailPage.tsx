@@ -4,11 +4,19 @@ import { Link, useParams } from "react-router-dom";
 import { adminApi } from "../../lib/adminApi";
 import { useAsync } from "../../lib/useAsync";
 import { Card } from "../../components/ui/Card";
-import { Field } from "../../components/ui/Field";
 import { Button } from "../../components/ui/Button";
 import { Badge } from "../../components/ui/Badge";
+import { Input } from "@/components/shadcn/input";
+import { Label } from "@/components/shadcn/label";
+import { Button as ShadcnButton } from "@/components/shadcn/button";
 import { animalStatusLabel, animalStatusTone } from "../../lib/labels";
 import styles from "./admin.module.css";
+
+/** Mesma altura de uma <Label>, pra alinhar o botão com o fundo dos campos ao lado
+ * mesmo sem ter um rótulo próprio em cima. */
+function LabelSpacer() {
+  return <span aria-hidden="true" className="invisible text-sm font-medium">.</span>;
+}
 
 type Tab = "vacinas" | "medicacoes" | "prontuario";
 
@@ -79,10 +87,22 @@ function VaccinationsTab({ animalId }: { animalId: string }) {
     <div>
       <Card style={{ marginBottom: "var(--space-4)" }}>
         <form onSubmit={add} className={styles.formRow}>
-          <Field label="Vacina" value={name} onChange={(e) => setName(e.target.value)} required />
-          <Field label="Aplicada em" type="date" value={appliedAt} onChange={(e) => setAppliedAt(e.target.value)} />
-          <Field label="Vence em" type="date" value={dueAt} onChange={(e) => setDueAt(e.target.value)} />
-          <Button type="submit">Adicionar</Button>
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="vac-nome">Vacina</Label>
+            <Input id="vac-nome" value={name} onChange={(e) => setName(e.target.value)} required />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="vac-aplicada">Aplicada em</Label>
+            <Input id="vac-aplicada" type="date" value={appliedAt} onChange={(e) => setAppliedAt(e.target.value)} />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="vac-vence">Vence em</Label>
+            <Input id="vac-vence" type="date" value={dueAt} onChange={(e) => setDueAt(e.target.value)} />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <LabelSpacer />
+            <ShadcnButton type="submit">Adicionar</ShadcnButton>
+          </div>
         </form>
       </Card>
       {data && data.length === 0 && <p className={styles.muted}>Nenhuma vacina registrada.</p>}
@@ -131,10 +151,22 @@ function MedicationsTab({ animalId }: { animalId: string }) {
     <div>
       <Card style={{ marginBottom: "var(--space-4)" }}>
         <form onSubmit={add} className={styles.formRow}>
-          <Field label="Medicação" value={name} onChange={(e) => setName(e.target.value)} required />
-          <Field label="Dosagem" value={dosage} onChange={(e) => setDosage(e.target.value)} />
-          <Field label="Próxima dose" type="date" value={nextDose} onChange={(e) => setNextDose(e.target.value)} />
-          <Button type="submit">Adicionar</Button>
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="med-nome">Medicação</Label>
+            <Input id="med-nome" value={name} onChange={(e) => setName(e.target.value)} required />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="med-dosagem">Dosagem</Label>
+            <Input id="med-dosagem" value={dosage} onChange={(e) => setDosage(e.target.value)} />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="med-proxima">Próxima dose</Label>
+            <Input id="med-proxima" type="date" value={nextDose} onChange={(e) => setNextDose(e.target.value)} />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <LabelSpacer />
+            <ShadcnButton type="submit">Adicionar</ShadcnButton>
+          </div>
         </form>
       </Card>
       {data && data.length === 0 && <p className={styles.muted}>Nenhuma medicação registrada.</p>}
@@ -184,10 +216,22 @@ function RecordsTab({ animalId }: { animalId: string }) {
     <div>
       <Card style={{ marginBottom: "var(--space-4)" }}>
         <form onSubmit={add} className={styles.formRow}>
-          <Field label="Título" value={title} onChange={(e) => setTitle(e.target.value)} required />
-          <Field label="Descrição" value={description} onChange={(e) => setDescription(e.target.value)} />
-          <Field label="Data" type="date" value={recordedAt} onChange={(e) => setRecordedAt(e.target.value)} />
-          <Button type="submit">Adicionar</Button>
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="rec-titulo">Título</Label>
+            <Input id="rec-titulo" value={title} onChange={(e) => setTitle(e.target.value)} required />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="rec-descricao">Descrição</Label>
+            <Input id="rec-descricao" value={description} onChange={(e) => setDescription(e.target.value)} />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="rec-data">Data</Label>
+            <Input id="rec-data" type="date" value={recordedAt} onChange={(e) => setRecordedAt(e.target.value)} />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <LabelSpacer />
+            <ShadcnButton type="submit">Adicionar</ShadcnButton>
+          </div>
         </form>
       </Card>
       {data && data.length === 0 && <p className={styles.muted}>Nenhum registro no prontuário.</p>}
