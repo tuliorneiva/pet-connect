@@ -23,6 +23,7 @@ const EMPTY: OrganizationProfileInput = {
   whatsapp: "",
   instagram: "",
   facebook: "",
+  pix_key: "",
 };
 
 function toForm(org: OrganizationProfile): OrganizationProfileInput {
@@ -38,6 +39,7 @@ function toForm(org: OrganizationProfile): OrganizationProfileInput {
     whatsapp: org.whatsapp ?? "",
     instagram: org.instagram ?? "",
     facebook: org.facebook ?? "",
+    pix_key: org.pix_key ?? "",
   };
 }
 
@@ -54,6 +56,7 @@ function toPayload(f: OrganizationProfileInput): OrganizationProfileInput {
     whatsapp: f.whatsapp || null,
     instagram: f.instagram || null,
     facebook: f.facebook || null,
+    pix_key: f.pix_key || null,
   };
 }
 
@@ -244,6 +247,22 @@ export function OrgProfilePage() {
                   placeholder="suaong"
                 />
               </div>
+            </div>
+
+            <div className="my-6 h-px bg-border" />
+
+            <p className="mb-1 text-sm font-bold">Doações</p>
+            <p className="mb-4 text-xs text-muted-foreground">
+              Opcional. Preenchida, aparece junto com o contato na sua página pública.
+            </p>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="pix">Chave Pix</Label>
+              <Input
+                id="pix"
+                value={form.pix_key ?? ""}
+                onChange={(e) => set("pix_key", e.target.value)}
+                placeholder="CPF, CNPJ, e-mail, telefone ou chave aleatória"
+              />
             </div>
           </form>
 

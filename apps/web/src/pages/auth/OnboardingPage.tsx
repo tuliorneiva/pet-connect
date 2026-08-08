@@ -66,6 +66,7 @@ export function OnboardingPage() {
     whatsapp: "",
     instagram: "",
     facebook: "",
+    pix_key: "",
   });
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [orgName, setOrgName] = useState("");
@@ -107,6 +108,7 @@ export function OnboardingPage() {
         whatsapp: profile.whatsapp || null,
         instagram: profile.instagram || null,
         facebook: profile.facebook || null,
+        pix_key: profile.pix_key || null,
       });
       if (logoFile) await adminApi.uploadLogo(logoFile);
       setOrgSlug(org.slug);
@@ -266,6 +268,12 @@ export function OnboardingPage() {
                     <Input id="facebook" value={profile.facebook} onChange={updateProfile("facebook")} placeholder="suaong" />
                   </div>
                 </div>
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="pix">Chave Pix (opcional)</Label>
+                <Input id="pix" value={profile.pix_key} onChange={updateProfile("pix_key")}
+                       placeholder="CPF, CNPJ, e-mail, telefone ou chave aleatória" />
               </div>
             </div>
 

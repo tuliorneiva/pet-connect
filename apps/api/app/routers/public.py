@@ -102,6 +102,7 @@ def get_public_organization(slug: str, db: Session = Depends(get_db)) -> PublicO
         whatsapp=org.whatsapp,
         instagram=org.instagram,
         facebook=org.facebook,
+        pix_key=org.pix_key,
         created_at=org.created_at,
         available_count=available or 0,
         adopted_count=adopted or 0,

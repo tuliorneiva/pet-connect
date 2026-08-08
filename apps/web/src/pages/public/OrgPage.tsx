@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { CalendarDays, Check, Globe, Home, Mail, MapPin, PawPrint, Phone } from "lucide-react";
+import { CalendarDays, Check, Copy, Globe, Home, Mail, MapPin, PawPrint, Phone, QrCode } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { publicApi } from "../../lib/publicApi";
 import { useAsync } from "../../lib/useAsync";
@@ -24,6 +25,46 @@ function ContactRow({ icon: Icon, label, value }: {
         <div className="text-xs text-muted-foreground">{label}</div>
         <div className="font-semibold">{value}</div>
       </div>
+    </div>
+  );
+}
+
+function PixRow({ value }: { value: string | null }) {
+  const [copied, setCopied] = useState(false);
+  if (!value) return null;
+
+  async function copy() {
+    try {
+      await navigator.clipboard.writeText(value!);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Sem permissão de clipboard — sem fallback melhor que deixar selecionar o texto.
+    }
+  }
+
+  return (
+    <div className="flex items-center gap-3 border-t border-border py-2.5 first:border-t-0 first:pt-0">
+      <span className="grid h-9 w-9 flex-none place-items-center rounded-[10px] bg-accent">
+        <QrCode className="h-4 w-4" aria-hidden="true" />
+      </span>
+      <div className="min-w-0 flex-1 text-sm">
+        <div className="text-xs text-muted-foreground">Chave Pix</div>
+        <div className="truncate font-semibold">{value}</div>
+      </div>
+      <button
+        type="button"
+        onClick={copy}
+        aria-label="Copiar chave Pix"
+        title="Copiar chave Pix"
+        className="grid h-8 w-8 flex-none place-items-center rounded-md text-muted-foreground transition hover:bg-secondary hover:text-foreground"
+      >
+        {copied ? (
+          <Check className="h-4 w-4 text-primary" aria-hidden="true" />
+        ) : (
+          <Copy className="h-4 w-4" aria-hidden="true" />
+        )}
+      </button>
     </div>
   );
 }
@@ -119,6 +160,7 @@ export function OrgPage() {
             <ContactRow icon={Mail} label="E-mail" value={org.email} />
             <ContactRow icon={Globe} label="Site" value={org.website} />
             <ContactRow icon={MapPin} label="Endereço" value={org.address} />
+            <PixRow value={org.pix_key} />
             <SocialLinks
               whatsapp={org.whatsapp}
               instagram={org.instagram}

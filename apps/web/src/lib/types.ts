@@ -60,6 +60,7 @@ export type PublicOrganization = {
   whatsapp: string | null;
   instagram: string | null;
   facebook: string | null;
+  pix_key: string | null;
   created_at: string;
   available_count: number;
   adopted_count: number;
@@ -81,6 +82,7 @@ export type OrganizationProfile = {
   whatsapp: string | null;
   instagram: string | null;
   facebook: string | null;
+  pix_key: string | null;
   created_at: string;
 };
 
@@ -96,6 +98,7 @@ export type OrganizationProfileInput = {
   whatsapp?: string | null;
   instagram?: string | null;
   facebook?: string | null;
+  pix_key?: string | null;
 };
 
 export type AnimalInput = {

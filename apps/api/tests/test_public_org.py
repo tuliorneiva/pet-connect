@@ -34,6 +34,7 @@ def test_public_org_returns_profile_and_counts(client):
     assert body["whatsapp"] is None
     assert body["instagram"] is None
     assert body["facebook"] is None
+    assert body["pix_key"] is None
 
 
 def test_public_org_returns_the_social_links_when_set(client):
@@ -49,6 +50,15 @@ def test_public_org_returns_the_social_links_when_set(client):
     assert body["whatsapp"] == "5583900000000"
     assert body["instagram"] == "abrigobeta"
     assert body["facebook"] == "abrigobeta"
+
+
+def test_public_org_returns_the_pix_key_when_set(client):
+    token = _register(client)
+    slug = _slug_of(client, token)
+    client.patch("/api/admin/organization", headers=_auth(token), json={"pix_key": "83999990000"})
+
+    body = client.get(f"/api/public/organizations/{slug}").json()
+    assert body["pix_key"] == "83999990000"
 
 
 def test_public_org_404_for_unknown_slug(client):

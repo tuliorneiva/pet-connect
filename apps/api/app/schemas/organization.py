@@ -23,6 +23,7 @@ class OrganizationAdminResponse(BaseModel):
     whatsapp: str | None
     instagram: str | None
     facebook: str | None
+    pix_key: str | None
     created_at: datetime
 
 
@@ -42,6 +43,9 @@ class OrganizationUpdate(BaseModel):
     whatsapp: str | None = Field(default=None, max_length=40)
     instagram: str | None = Field(default=None, max_length=255)
     facebook: str | None = Field(default=None, max_length=255)
+    # CPF, CNPJ, e-mail, telefone ou chave aleatória — formatos bem diferentes
+    # entre si, então fica como texto livre em vez de validar um formato específico.
+    pix_key: str | None = Field(default=None, max_length=255)
 
 
 class PublicOrganizationResponse(BaseModel):
@@ -62,6 +66,7 @@ class PublicOrganizationResponse(BaseModel):
     whatsapp: str | None
     instagram: str | None
     facebook: str | None
+    pix_key: str | None
     created_at: datetime
     available_count: int
     adopted_count: int
