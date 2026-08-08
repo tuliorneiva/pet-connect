@@ -82,7 +82,7 @@ export function AnimalPublicPage() {
 
           <ShareButtons
             url={window.location.href}
-            text={`Conheça ${data.name}, disponível para adoção no PetConnect!`}
+            text={`Conheça ${data.name}, disponível para adoção no PetConnecta!`}
           />
 
           <div className="h-px bg-border" />

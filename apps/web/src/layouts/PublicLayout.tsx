@@ -11,7 +11,7 @@ export function PublicLayout() {
             <span className="grid h-8 w-8 flex-none place-items-center rounded-[10px] bg-gradient-to-br from-primary to-[#0891B2] text-white">
               <PawPrint className="h-4 w-4" aria-hidden="true" />
             </span>
-            <span>Pet<span className="text-primary">Connect</span></span>
+            <span>Pet<span className="text-primary">Connecta</span></span>
           </Link>
           <nav className="ml-auto flex items-center gap-3">
             <Button asChild variant="ghost" size="sm"><Link to="/animais">Animais</Link></Button>

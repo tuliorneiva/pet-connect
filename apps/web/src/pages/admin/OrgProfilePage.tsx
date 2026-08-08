@@ -271,7 +271,7 @@ export function OrgProfilePage() {
           <div className="flex flex-wrap items-center gap-2.5 text-sm">
             <span className="font-semibold">Endereço público:</span>
             <code className="rounded bg-secondary px-2 py-0.5 text-xs">
-              petconnect.app/ongs/{org.slug}
+              petconnecta.app/ongs/{org.slug}
             </code>
             {org.verified && (
               <span className="inline-flex items-center gap-1 rounded-full border border-border bg-secondary px-2.5 py-0.5 text-xs font-semibold text-muted-foreground">
@@ -284,7 +284,7 @@ export function OrgProfilePage() {
             <span>
               O endereço da página e o selo de verificação não são editáveis aqui — mudar o
               endereço quebraria links já compartilhados, e o selo é atribuído pela equipe do
-              PetConnect.
+              PetConnecta.
             </span>
           </div>
         </CardContent>

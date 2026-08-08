@@ -31,7 +31,7 @@ export function SocialLinks({ whatsapp, instagram, facebook, orgName }: SocialLi
     <div className="mt-4 flex gap-2 border-t border-border pt-4">
       {whatsapp && (
         <SocialLink
-          href={buildWhatsAppUrl(whatsapp, `Olá! Vi a página da ${orgName} no PetConnect.`)}
+          href={buildWhatsAppUrl(whatsapp, `Olá! Vi a página da ${orgName} no PetConnecta.`)}
           label="Conversar no WhatsApp"
         >
           <WhatsAppIcon className="h-4 w-4" />

@@ -13,7 +13,7 @@ from app.routers import (
     support_requests,
 )
 
-app = FastAPI(title="PetConnect API")
+app = FastAPI(title="PetConnecta API")
 
 origins = [
     origin.strip()

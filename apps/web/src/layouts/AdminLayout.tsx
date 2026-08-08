@@ -19,7 +19,7 @@ export function AdminLayout() {
   return (
     <div className={styles.shell}>
       <aside className={styles.sidebar}>
-        <span className={styles.brand}>PetConnect</span>
+        <span className={styles.brand}>PetConnecta</span>
         <nav className={styles.nav}>
           <NavLink to="/admin" end className={navClass}>Painel</NavLink>
           <NavLink to="/admin/animais" className={navClass}>Animais</NavLink>
