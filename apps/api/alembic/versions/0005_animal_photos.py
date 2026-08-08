@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from alembic import op
 
 revision = "0004_animal_photos"
-down_revision = "0003_organization_public_profile"
+down_revision = "0004_fix_legacy_ids"
 branch_labels = None
 depends_on = None
 
