@@ -12,7 +12,12 @@ export function setAuthToken(token: string | null): void {
 
 export async function apiFetch<T>(path: string, init: RequestInit = {}): Promise<T> {
   const token = getAuthToken();
-  const headers = new Headers({ "Content-Type": "application/json", ...init.headers });
+  const headers = new Headers(init.headers);
+  // Em multipart o Content-Type carrega o boundary que só o navegador sabe gerar;
+  // fixá-lo em JSON faria o servidor recusar o corpo.
+  if (!(init.body instanceof FormData) && !headers.has("Content-Type")) {
+    headers.set("Content-Type", "application/json");
+  }
   if (token) headers.set("Authorization", `Bearer ${token}`);
 
   const resp = await fetch(`${API_BASE}${path}`, { ...init, headers });
@@ -26,6 +31,8 @@ export async function apiFetch<T>(path: string, init: RequestInit = {}): Promise
     }
     throw new Error(detail);
   }
+  // 204 não tem corpo; chamar .json() aqui estouraria.
+  if (resp.status === 204) return undefined as T;
   return resp.json() as Promise<T>;
 }
 

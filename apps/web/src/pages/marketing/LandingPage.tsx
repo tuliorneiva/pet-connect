@@ -1,16 +1,21 @@
 import { Link } from "react-router-dom";
+import { Dog, Heart, MessageCircle, PawPrint, Search, ShieldCheck, Stethoscope } from "lucide-react";
 import { publicApi } from "../../lib/publicApi";
 import { useAsync } from "../../lib/useAsync";
 import { AnimalCard } from "../../components/AnimalCard";
 import { Button } from "@/components/shadcn/button";
+import { sexLabel, sizeLabel } from "../../lib/labels";
+import type { PublicAnimal } from "../../lib/types";
 
 function Nav() {
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-card/80 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center gap-8 px-6" style={{ height: 68 }}>
-        <Link to="/lp" className="flex items-center gap-2.5 text-lg font-bold tracking-tight">
-          <span className="grid h-8 w-8 place-items-center rounded-[10px] bg-gradient-to-br from-primary to-[#0891B2] text-white">🐾</span>
-          Pet<span className="text-primary">Connect</span>
+        <Link to="/lp" className="flex items-center gap-2.5 text-lg font-bold tracking-tight no-underline hover:no-underline">
+          <span className="grid h-8 w-8 flex-none place-items-center rounded-[10px] bg-gradient-to-br from-primary to-[#0891B2] text-white">
+            <PawPrint className="h-4 w-4" aria-hidden="true" />
+          </span>
+          <span>Pet<span className="text-primary">Connect</span></span>
         </Link>
         <nav className="ml-2 hidden gap-7 md:flex">
           <a href="#como" className="text-sm font-medium text-muted-foreground hover:text-foreground">Como funciona</a>
@@ -23,6 +28,52 @@ function Nav() {
         </div>
       </div>
     </header>
+  );
+}
+
+/** Pega o primeiro animal disponível com raça, sexo, porte e foto — senão a seção
+ * fica com o card de exemplo abaixo, que também tem todos esses dados preenchidos. */
+function pickHeroAnimal(animals: PublicAnimal[] | null | undefined): PublicAnimal | null {
+  return (animals ?? []).find((a) => a.breed && a.sex && a.size && a.photo_url) ?? null;
+}
+
+function HeroCard() {
+  const { data } = useAsync(() => publicApi.listAnimals(), []);
+  const animal = pickHeroAnimal(data);
+
+  if (animal) {
+    return (
+      <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-xl">
+        <img
+          src={animal.photo_url ?? undefined}
+          alt={animal.name}
+          className="aspect-[4/3.4] w-full object-cover"
+        />
+        <div className="flex items-center justify-between p-4">
+          <div>
+            <div className="font-bold">{animal.name}</div>
+            <div className="text-sm text-muted-foreground">
+              {[animal.breed, sexLabel(animal.sex!), animal.size && `Porte ${sizeLabel(animal.size)}`]
+                .filter(Boolean)
+                .join(" · ")}
+            </div>
+          </div>
+          <span className="rounded-full border border-[#cffafe] bg-accent px-2.5 py-0.5 text-xs font-semibold text-primary">Disponível</span>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-xl">
+      <div className="grid aspect-[4/3.4] place-items-center bg-[radial-gradient(120%_120%_at_70%_20%,#67E8F9,#22D3EE_30%,#0E7490)] text-white">
+        <Dog className="h-24 w-24" aria-hidden="true" />
+      </div>
+      <div className="flex items-center justify-between p-4">
+        <div><div className="font-bold">Thor</div><div className="text-sm text-muted-foreground">SRD · Macho · Porte médio</div></div>
+        <span className="rounded-full border border-[#cffafe] bg-accent px-2.5 py-0.5 text-xs font-semibold text-primary">Disponível</span>
+      </div>
+    </div>
   );
 }
 
@@ -56,10 +107,10 @@ const STEPS = [
 ];
 
 const FEATURES = [
-  { i: "🔎", t: "Busca com filtros reais", d: "Espécie, porte, sexo e cidade. Encontre rápido os animais compatíveis com a sua rotina." },
-  { i: "🩺", t: "Histórico de saúde completo", d: "Vacinas, castração, vermifugação e observações clínicas registradas pela ONG." },
-  { i: "💬", t: "Contato direto com a ONG", d: "Envie sua solicitação de adoção e converse com quem realmente conhece o animal." },
-  { i: "🛡️", t: "ONGs verificadas", d: "Trabalhamos apenas com abrigos e protetores cadastrados e acompanhados pela plataforma." },
+  { i: Search, t: "Busca com filtros reais", d: "Espécie, porte, sexo e cidade. Encontre rápido os animais compatíveis com a sua rotina." },
+  { i: Stethoscope, t: "Histórico de saúde completo", d: "Vacinas, castração, vermifugação e observações clínicas registradas pela ONG." },
+  { i: MessageCircle, t: "Contato direto com a ONG", d: "Envie sua solicitação de adoção e converse com quem realmente conhece o animal." },
+  { i: ShieldCheck, t: "ONGs verificadas", d: "Trabalhamos apenas com abrigos e protetores cadastrados e acompanhados pela plataforma." },
 ];
 
 export function LandingPage() {
@@ -91,13 +142,7 @@ export function LandingPage() {
             </div>
           </div>
           <div className="relative mx-auto max-w-md">
-            <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-xl">
-              <div className="grid aspect-[4/3.4] place-items-center bg-[radial-gradient(120%_120%_at_70%_20%,#67E8F9,#22D3EE_30%,#0E7490)] text-8xl text-white">🐶</div>
-              <div className="flex items-center justify-between p-4">
-                <div><div className="font-bold">Thor</div><div className="text-sm text-muted-foreground">SRD · Macho · Porte médio</div></div>
-                <span className="rounded-full border border-[#cffafe] bg-accent px-2.5 py-0.5 text-xs font-semibold text-primary">Disponível</span>
-              </div>
-            </div>
+            <HeroCard />
           </div>
         </div>
       </section>
@@ -133,7 +178,9 @@ export function LandingPage() {
           <div className="grid gap-5 sm:grid-cols-2">
             {FEATURES.map((f) => (
               <div key={f.t} className="flex gap-4 rounded-xl border border-border bg-card p-6">
-                <div className="grid h-12 w-12 flex-none place-items-center rounded-xl bg-accent text-2xl">{f.i}</div>
+                <div className="grid h-12 w-12 flex-none place-items-center rounded-xl bg-accent text-primary">
+                  <f.i className="h-6 w-6" aria-hidden="true" />
+                </div>
                 <div><h3 className="text-lg font-bold">{f.t}</h3><p className="mt-1.5 text-muted-foreground">{f.d}</p></div>
               </div>
             ))}
@@ -165,8 +212,13 @@ export function LandingPage() {
 
       <footer className="bg-[#0F172A] py-10 text-slate-400">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-6 text-sm">
-          <div className="text-base font-bold text-white">🐾 Pet<span className="text-[#67E8F9]">Connect</span></div>
-          <span>© 2026 PetConnect · Feito com 🤍 para os animais.</span>
+          <div className="flex items-center gap-1.5 text-base font-bold text-white">
+            <PawPrint className="h-4 w-4 flex-none" aria-hidden="true" />
+            <span>Pet<span className="text-[#67E8F9]">Connect</span></span>
+          </div>
+          <span className="flex items-center gap-1">
+            © 2026 PetConnect · Feito com <Heart className="h-3.5 w-3.5 fill-current" aria-hidden="true" /> para os animais.
+          </span>
         </div>
       </footer>
     </div>

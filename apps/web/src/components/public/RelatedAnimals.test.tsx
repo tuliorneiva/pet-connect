@@ -20,6 +20,7 @@ function animal(id: string, name: string): PublicAnimal {
     birth_estimate: null,
     description: null,
     photo_url: null,
+    photos: [],
     org_id: "22222222-2222-4222-8222-222222222222",
     org_name: ORG_NAME,
     org_city: "João Pessoa",

@@ -1,3 +1,5 @@
+import { Check } from "lucide-react";
+
 const base = "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-semibold";
 
 export function HealthBadges({ upToDate, underTreatment }: {
@@ -9,7 +11,7 @@ export function HealthBadges({ upToDate, underTreatment }: {
     <div className="flex flex-wrap gap-1.5">
       {upToDate === true && (
         <span className={`${base} border-emerald-200 bg-emerald-50 text-emerald-700`}>
-          <span aria-hidden="true">✓</span> Vacinação em dia
+          <Check className="h-3.5 w-3.5" aria-hidden="true" /> Vacinação em dia
         </span>
       )}
       {upToDate === false && (

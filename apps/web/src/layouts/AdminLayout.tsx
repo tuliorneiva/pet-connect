@@ -24,6 +24,7 @@ export function AdminLayout() {
           <NavLink to="/admin" end className={navClass}>Painel</NavLink>
           <NavLink to="/admin/animais" className={navClass}>Animais</NavLink>
           <NavLink to="/admin/solicitacoes" className={navClass}>Solicitações</NavLink>
+          <NavLink to="/admin/perfil" className={navClass}>Perfil da ONG</NavLink>
         </nav>
         <div className={styles.footer}>
           {user && <span className={styles.user}>{user.name}</span>}

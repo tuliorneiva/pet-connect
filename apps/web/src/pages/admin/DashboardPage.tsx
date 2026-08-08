@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { PartyPopper } from "lucide-react";
 import { useAuth } from "../../auth/AuthContext";
 import { adminApi } from "../../lib/adminApi";
 import { useAsync } from "../../lib/useAsync";
@@ -44,7 +45,11 @@ export function DashboardPage() {
       {alerts.loading && <p className={styles.muted}>Carregando alertas…</p>}
       {alerts.error && <Alert variant="error">{alerts.error}</Alert>}
       {alerts.data && alerts.data.length === 0 && (
-        <Card><p className={styles.muted}>Nenhum alerta pendente. Tudo em dia! 🎉</p></Card>
+        <Card>
+          <p className={styles.muted} style={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
+            <PartyPopper size={16} aria-hidden="true" /> Nenhum alerta pendente. Tudo em dia!
+          </p>
+        </Card>
       )}
       {alerts.data && alerts.data.length > 0 && (
         <table className={styles.table}>

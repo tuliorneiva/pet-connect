@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
 import { Link, useParams } from "react-router-dom";
+import { Home } from "lucide-react";
 import { publicApi } from "../../lib/publicApi";
 import { useAsync } from "../../lib/useAsync";
 import type { SupportType } from "../../lib/types";
@@ -49,7 +50,7 @@ export function AnimalPublicPage() {
       </p>
 
       <div className="grid items-start gap-7 md:grid-cols-[1.15fr_.85fr]">
-        <AnimalGallery photos={data.photo_url ? [data.photo_url] : []} name={data.name} />
+        <AnimalGallery photos={data.photos} name={data.name} />
 
         <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5 shadow-sm md:sticky md:top-24">
           <div>
@@ -70,7 +71,7 @@ export function AnimalPublicPage() {
 
           <div className="flex items-center gap-3 rounded-md border border-border bg-background p-3">
             <span className="grid h-9 w-9 flex-none place-items-center rounded-lg bg-gradient-to-br from-primary to-[#0891B2] text-white">
-              <span aria-hidden="true">🏠</span>
+              <Home className="h-4 w-4" aria-hidden="true" />
             </span>
             <span className="text-sm">
               <Link to={`/ongs/${data.org_slug}`} className="font-semibold">{data.org_name}</Link>
@@ -90,7 +91,7 @@ export function AnimalPublicPage() {
       {data.description && (
         <div className="mt-7 rounded-xl border border-border bg-card p-5">
           <h2 className="mb-2 text-base font-semibold">Sobre {data.name}</h2>
-          <p className="max-w-[70ch] text-sm leading-relaxed text-muted-foreground">{data.description}</p>
+          <p className="max-w-[70ch] whitespace-pre-wrap text-sm leading-relaxed text-muted-foreground">{data.description}</p>
         </div>
       )}
 

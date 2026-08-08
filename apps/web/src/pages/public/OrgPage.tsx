@@ -1,4 +1,6 @@
 import { useParams, Link } from "react-router-dom";
+import { CalendarDays, Check, Globe, Home, Mail, MapPin, PawPrint, Phone } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { publicApi } from "../../lib/publicApi";
 import { useAsync } from "../../lib/useAsync";
 import { AnimalCard } from "../../components/AnimalCard";
@@ -6,11 +8,17 @@ import { Card } from "@/components/shadcn/card";
 import { Badge } from "@/components/shadcn/badge";
 import { Button } from "@/components/shadcn/button";
 
-function ContactRow({ icon, label, value }: { icon: string; label: string; value: string | null }) {
+function ContactRow({ icon: Icon, label, value }: {
+  icon: LucideIcon;
+  label: string;
+  value: string | null;
+}) {
   if (!value) return null;
   return (
     <div className="flex items-center gap-3 border-t border-border py-2.5 first:border-t-0 first:pt-0">
-      <span className="grid h-9 w-9 flex-none place-items-center rounded-[10px] bg-accent text-base">{icon}</span>
+      <span className="grid h-9 w-9 flex-none place-items-center rounded-[10px] bg-accent">
+        <Icon className="h-4 w-4" aria-hidden="true" />
+      </span>
       <div className="text-sm">
         <div className="text-xs text-muted-foreground">{label}</div>
         <div className="font-semibold">{value}</div>
@@ -33,18 +41,34 @@ export function OrgPage() {
     <div>
       <div className="-mx-6 -mt-10 h-40 bg-gradient-to-br from-primary to-[#155E75]" />
       <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-end" style={{ marginTop: -56 }}>
-        <div className="grid h-28 w-28 flex-none place-items-center rounded-3xl border-4 border-card bg-gradient-to-br from-[#22D3EE] to-primary text-5xl shadow-md">
-          {org.logo_url ? <img src={org.logo_url} alt="" className="h-full w-full rounded-3xl object-cover" /> : "🏠"}
+        <div className="grid h-28 w-28 flex-none place-items-center rounded-3xl border-4 border-card bg-gradient-to-br from-[#22D3EE] to-primary text-white shadow-md">
+          {org.logo_url ? (
+            <img src={org.logo_url} alt="" className="h-full w-full rounded-3xl object-cover" />
+          ) : (
+            <Home className="h-11 w-11" aria-hidden="true" />
+          )}
         </div>
         <div className="flex-1 pb-1">
           <div className="flex flex-wrap items-center gap-3">
             <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">{org.name}</h1>
-            {org.verified && <Badge>✓ ONG verificada</Badge>}
+            {org.verified && (
+              <Badge className="gap-1">
+                <Check className="h-3 w-3" aria-hidden="true" /> ONG verificada
+              </Badge>
+            )}
           </div>
           <div className="mt-2.5 flex flex-wrap gap-4 text-sm text-muted-foreground">
-            {org.city && <span>📍 {org.city}</span>}
-            <span>🗓️ Parceira desde {since}</span>
-            <span>🐾 {org.available_count} para adoção</span>
+            {org.city && (
+              <span className="flex items-center gap-1">
+                <MapPin className="h-3.5 w-3.5" aria-hidden="true" /> {org.city}
+              </span>
+            )}
+            <span className="flex items-center gap-1">
+              <CalendarDays className="h-3.5 w-3.5" aria-hidden="true" /> Parceira desde {since}
+            </span>
+            <span className="flex items-center gap-1">
+              <PawPrint className="h-3.5 w-3.5" aria-hidden="true" /> {org.available_count} para adoção
+            </span>
           </div>
         </div>
       </div>
@@ -54,7 +78,7 @@ export function OrgPage() {
           {org.description && (
             <Card className="mb-8 p-6">
               <h2 className="mb-3 text-xl font-bold">Sobre a ONG</h2>
-              <p className="leading-relaxed text-slate-700">{org.description}</p>
+              <p className="whitespace-pre-wrap leading-relaxed text-slate-700">{org.description}</p>
             </Card>
           )}
 
@@ -89,10 +113,10 @@ export function OrgPage() {
           </Card>
           <Card className="p-6">
             <h3 className="mb-4 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Contato</h3>
-            <ContactRow icon="📞" label="Telefone" value={org.phone} />
-            <ContactRow icon="✉️" label="E-mail" value={org.email} />
-            <ContactRow icon="🌐" label="Site" value={org.website} />
-            <ContactRow icon="📍" label="Endereço" value={org.address} />
+            <ContactRow icon={Phone} label="Telefone" value={org.phone} />
+            <ContactRow icon={Mail} label="E-mail" value={org.email} />
+            <ContactRow icon={Globe} label="Site" value={org.website} />
+            <ContactRow icon={MapPin} label="Endereço" value={org.address} />
           </Card>
         </aside>
       </div>

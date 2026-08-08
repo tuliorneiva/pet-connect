@@ -35,7 +35,7 @@ export function AnimalDetailPage() {
               {animal.data.size ? ` · porte ${animal.data.size}` : ""}
               {animal.data.birth_estimate ? ` · ${animal.data.birth_estimate}` : ""}
             </p>
-            {animal.data.description && <p>{animal.data.description}</p>}
+            {animal.data.description && <p style={{ whiteSpace: "pre-wrap" }}>{animal.data.description}</p>}
           </Card>
 
           <div className={styles.tabs}>

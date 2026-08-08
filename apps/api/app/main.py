@@ -3,10 +3,12 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
 from app.routers import (
+    animal_photos,
     animals,
     auth,
     dashboard,
     health,
+    organization,
     public,
     support_requests,
 )
@@ -34,7 +36,9 @@ def healthcheck() -> dict[str, str]:
 
 app.include_router(auth.router)
 app.include_router(animals.router)
+app.include_router(animal_photos.router)
 app.include_router(health.router)
 app.include_router(dashboard.router)
 app.include_router(support_requests.router)
+app.include_router(organization.router)
 app.include_router(public.router)

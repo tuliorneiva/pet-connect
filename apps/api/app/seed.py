@@ -11,7 +11,7 @@ from sqlalchemy import select
 
 from app.core.security import hash_password
 from app.db.session import SessionLocal
-from app.models import Animal, Medication, Organization, SupportRequest, User, Vaccination
+from app.models import Animal, AnimalPhoto, Medication, Organization, SupportRequest, User, Vaccination
 
 DEMO_EMAIL = "demo@petconnect.org"
 DEMO_PASSWORD = "demo123"
@@ -56,27 +56,38 @@ def seed() -> None:
         animals = [
             Animal(org_id=org.id, name="Thor", species="cão", breed="SRD", sex="macho", size="G",
                    birth_estimate="3 anos", status="disponível",
-                   description="Dócil, brincalhão e ótimo com crianças.",
-                   photo_url="https://placedog.net/500/375?id=1"),
+                   description="Dócil, brincalhão e ótimo com crianças."),
             Animal(org_id=org.id, name="Mel", species="cão", breed="Labrador", sex="fêmea", size="M",
                    birth_estimate="1 ano", status="disponível",
-                   description="Cheia de energia, adora passear.",
-                   photo_url="https://placedog.net/500/375?id=2"),
+                   description="Cheia de energia, adora passear."),
             Animal(org_id=org.id, name="Frajola", species="gato", breed="SRD", sex="macho", size="P",
                    birth_estimate="2 anos", status="disponível",
-                   description="Calmo e carinhoso, gosta de colo.",
-                   photo_url="https://placekitten.com/500/375"),
+                   description="Calmo e carinhoso, gosta de colo."),
             Animal(org_id=org.id, name="Nina", species="gato", breed="SRD", sex="fêmea", size="P",
                    birth_estimate="6 meses", status="em_processo",
-                   description="Filhote curiosa e afetuosa.",
-                   photo_url="https://placekitten.com/501/375"),
+                   description="Filhote curiosa e afetuosa."),
             Animal(org_id=org.id, name="Bob", species="cão", breed="Poodle", sex="macho", size="P",
                    birth_estimate="5 anos", status="adotado",
-                   description="Já encontrou um lar!",
-                   photo_url="https://placedog.net/500/375?id=3"),
+                   description="Já encontrou um lar!"),
         ]
         db.add_all(animals)
         db.flush()
+
+        # O seed roda offline: as fotos de demonstração entram como links externos,
+        # sem download e sem tocar no bucket.
+        demo_photos = [
+            "https://placedog.net/500/375?id=1",
+            "https://placedog.net/500/375?id=2",
+            "https://placekitten.com/500/375",
+            "https://placekitten.com/501/375",
+            "https://placedog.net/500/375?id=3",
+        ]
+        for animal, url in zip(animals, demo_photos):
+            db.add(
+                AnimalPhoto(
+                    animal_id=animal.id, storage_key=url, is_external=True, sort_order=0
+                )
+            )
 
         thor, mel, frajola = animals[0], animals[1], animals[2]
 

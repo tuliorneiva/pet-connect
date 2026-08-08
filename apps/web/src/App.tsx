@@ -6,12 +6,13 @@ import { HomePage } from "./pages/public/HomePage";
 import { AnimalPublicPage } from "./pages/public/AnimalPublicPage";
 import { OrgPage } from "./pages/public/OrgPage";
 import { LoginPage } from "./pages/auth/LoginPage";
-import { RegisterPage } from "./pages/auth/RegisterPage";
+import { OnboardingPage } from "./pages/auth/OnboardingPage";
 import { DashboardPage } from "./pages/admin/DashboardPage";
 import { AnimalsListPage } from "./pages/admin/AnimalsListPage";
 import { AnimalFormPage } from "./pages/admin/AnimalFormPage";
 import { AnimalDetailPage } from "./pages/admin/AnimalDetailPage";
 import { RequestsPage } from "./pages/admin/RequestsPage";
+import { OrgProfilePage } from "./pages/admin/OrgProfilePage";
 import { LandingPage } from "./pages/marketing/LandingPage";
 
 export default function App() {
@@ -24,7 +25,7 @@ export default function App() {
         <Route path="/animais/:id" element={<AnimalPublicPage />} />
         <Route path="/ongs/:slug" element={<OrgPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/registrar" element={<RegisterPage />} />
+        <Route path="/registrar" element={<OnboardingPage />} />
       </Route>
       <Route element={<ProtectedRoute />}>
         <Route element={<AdminLayout />}>
@@ -34,6 +35,7 @@ export default function App() {
           <Route path="/admin/animais/:id" element={<AnimalDetailPage />} />
           <Route path="/admin/animais/:id/editar" element={<AnimalFormPage />} />
           <Route path="/admin/solicitacoes" element={<RequestsPage />} />
+          <Route path="/admin/perfil" element={<OrgProfilePage />} />
         </Route>
       </Route>
     </Routes>
