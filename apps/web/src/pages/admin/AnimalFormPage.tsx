@@ -129,6 +129,15 @@ export function AnimalFormPage() {
     setPending((prev) => prev.filter((_, i) => i !== index));
   }
 
+  function handleSetPendingCover(index: number) {
+    setPending((prev) => {
+      const copy = [...prev];
+      const [chosen] = copy.splice(index, 1);
+      copy.unshift(chosen);
+      return copy;
+    });
+  }
+
   /** Sem animal ainda, os arquivos ficam retidos; com animal, sobem na hora. */
   async function handlePick(files: File[]) {
     if (!animalId) {
@@ -308,6 +317,7 @@ export function AnimalFormPage() {
                   onRemovePhoto={handleRemovePhoto}
                   onRemovePending={handleRemovePending}
                   onSetCover={handleSetCover}
+                  onSetPendingCover={handleSetPendingCover}
                   onBusyChange={setPhotoBusy}
                   disabled={submitting}
                 />
