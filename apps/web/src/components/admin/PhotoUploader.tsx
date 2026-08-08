@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { ChangeEvent } from "react";
-import { Loader2, Plus, Star, X } from "lucide-react";
+import { Loader2, Plus, X } from "lucide-react";
 import { resizeImage } from "@/lib/resizeImage";
 import { cn } from "@/lib/utils";
 
@@ -18,6 +18,9 @@ export type PhotoUploaderProps = {
   onRemovePhoto: (photoId: string) => void;
   onRemovePending: (index: number) => void;
   onSetCover: (photoId: string) => void;
+  /** Fotos ainda não enviadas (criação do animal) não têm id — trocar a capa
+   * entre elas é só reordenar a lista local, sem chamada à API. */
+  onSetPendingCover: (index: number) => void;
   disabled?: boolean;
   /** Redimensionar + subir a foto leva alguns segundos; o formulário usa isto para
    * bloquear o Salvar enquanto isso, já que salvar antes deixaria o animal sem a foto. */
@@ -31,6 +34,7 @@ export function PhotoUploader({
   onRemovePhoto,
   onRemovePending,
   onSetCover,
+  onSetPendingCover,
   disabled,
   onBusyChange,
 }: PhotoUploaderProps) {
@@ -88,7 +92,7 @@ export function PhotoUploader({
       src: previews[i],
       cover: photos.length === 0 && i === 0,
       onRemove: () => onRemovePending(i),
-      onCover: undefined,
+      onCover: photos.length === 0 && i > 0 ? () => onSetPendingCover(i) : undefined,
     })),
   ];
 
@@ -128,13 +132,11 @@ export function PhotoUploader({
             {slot.onCover && (
               <button
                 type="button"
-                aria-label="Definir como capa"
-                title="Definir como capa"
                 disabled={disabled}
                 onClick={slot.onCover}
-                className="absolute bottom-1.5 left-1.5 grid h-6 w-6 place-items-center rounded-full bg-slate-900/60 text-white transition hover:bg-slate-900/80"
+                className="absolute inset-x-0 bottom-0 bg-slate-900/70 py-1 text-[10px] font-semibold text-white transition hover:bg-slate-900/85"
               >
-                <Star aria-hidden="true" className="h-3.5 w-3.5" />
+                Definir como capa
               </button>
             )}
           </div>

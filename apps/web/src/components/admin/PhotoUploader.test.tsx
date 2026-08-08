@@ -41,6 +41,7 @@ function setup(overrides = {}) {
     onRemovePhoto: vi.fn(),
     onRemovePending: vi.fn(),
     onSetCover: vi.fn(),
+    onSetPendingCover: vi.fn(),
     ...overrides,
   };
   render(<PhotoUploader {...props} />);
@@ -129,4 +130,21 @@ test("arquivos pendentes aparecem junto com os persistidos e podem ser removidos
   expect(screen.getAllByTestId("photo-slot")).toHaveLength(2);
   await userEvent.click(screen.getAllByRole("button", { name: /remover foto/i })[1]);
   expect(props.onRemovePending).toHaveBeenCalledWith(0);
+});
+
+test("sem animal ainda (só pendentes), a segunda foto pendente oferece 'definir como capa'", async () => {
+  const pending = [
+    new File(["a"], "um.jpg", { type: "image/jpeg" }),
+    new File(["b"], "dois.jpg", { type: "image/jpeg" }),
+  ];
+  const props = setup({ photos: [], pending });
+
+  const slots = screen.getAllByTestId("photo-slot");
+  expect(slots[0]).toHaveTextContent("CAPA");
+
+  const buttons = screen.getAllByRole("button", { name: /definir como capa/i });
+  expect(buttons).toHaveLength(1);
+
+  await userEvent.click(buttons[0]);
+  expect(props.onSetPendingCover).toHaveBeenCalledWith(1);
 });
