@@ -36,6 +36,12 @@ def test_two_keys_never_collide():
     assert build_storage_key("image/jpeg") != build_storage_key("image/jpeg")
 
 
+def test_key_uses_the_given_folder():
+    # A logo da ONG mora em outra pasta do mesmo bucket, não em "animals/".
+    key = build_storage_key("image/jpeg", folder="orgs")
+    assert key.startswith("orgs/")
+
+
 def test_key_for_unknown_content_type_is_a_programming_error():
     # O router valida antes; chegar aqui com tipo inválido é bug nosso, não do usuário.
     with pytest.raises(KeyError):

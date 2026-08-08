@@ -62,6 +62,33 @@ export type PublicOrganization = {
   adopted_count: number;
 };
 
+export type OrganizationProfile = {
+  id: string;
+  name: string;
+  slug: string;
+  city: string | null;
+  description: string | null;
+  email: string | null;
+  phone: string | null;
+  website: string | null;
+  address: string | null;
+  founded_year: number | null;
+  verified: boolean;
+  logo_url: string | null;
+  created_at: string;
+};
+
+export type OrganizationProfileInput = {
+  name?: string;
+  city?: string | null;
+  description?: string | null;
+  email?: string | null;
+  phone?: string | null;
+  website?: string | null;
+  address?: string | null;
+  founded_year?: number | null;
+};
+
 export type AnimalInput = {
   name: string;
   species: string;

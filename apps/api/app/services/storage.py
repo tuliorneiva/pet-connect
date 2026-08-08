@@ -25,13 +25,14 @@ MAX_PHOTO_BYTES = 1_048_576
 MAX_PHOTOS_PER_ANIMAL = 4
 
 
-def build_storage_key(content_type: str) -> str:
+def build_storage_key(content_type: str, folder: str = "animals") -> str:
     """Nome do objeto no bucket, sempre gerado aqui.
 
     O nome enviado pelo cliente nunca é usado: é vetor de path traversal e não
-    acrescenta nada, já que a foto é identificada pela linha no banco.
+    acrescenta nada, já que a foto é identificada pela linha no banco (ou, no caso
+    da logo da ONG, pela própria URL salva em ``organization.logo_url``).
     """
-    return f"animals/{uuid.uuid4()}.{EXTENSION_BY_CONTENT_TYPE[content_type]}"
+    return f"{folder}/{uuid.uuid4()}.{EXTENSION_BY_CONTENT_TYPE[content_type]}"
 
 
 def resolve_photo_url(storage_key: str, is_external: bool) -> str:
@@ -46,7 +47,7 @@ def resolve_photo_url(storage_key: str, is_external: bool) -> str:
 
 
 class Storage(Protocol):
-    def save(self, data: bytes, content_type: str) -> str: ...
+    def save(self, data: bytes, content_type: str, folder: str = "animals") -> str: ...
     def delete(self, key: str) -> None: ...
     def url(self, key: str) -> str: ...
 
@@ -74,8 +75,8 @@ class S3Storage:
             config=Config(s3={"addressing_style": "path"}),
         )
 
-    def save(self, data: bytes, content_type: str) -> str:
-        key = build_storage_key(content_type)
+    def save(self, data: bytes, content_type: str, folder: str = "animals") -> str:
+        key = build_storage_key(content_type, folder=folder)
         self._client.put_object(
             Bucket=self._bucket, Key=key, Body=data, ContentType=content_type
         )

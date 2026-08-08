@@ -8,6 +8,7 @@ from app.routers import (
     auth,
     dashboard,
     health,
+    organization,
     public,
     support_requests,
 )
@@ -39,4 +40,5 @@ app.include_router(animal_photos.router)
 app.include_router(health.router)
 app.include_router(dashboard.router)
 app.include_router(support_requests.router)
+app.include_router(organization.router)
 app.include_router(public.router)

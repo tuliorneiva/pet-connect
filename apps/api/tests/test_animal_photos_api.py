@@ -13,10 +13,10 @@ class FakeStorage:
         self.objects: dict[str, bytes] = {}
         self.deleted: list[str] = []
 
-    def save(self, data: bytes, content_type: str) -> str:
+    def save(self, data: bytes, content_type: str, folder: str = "animals") -> str:
         from app.services.storage import build_storage_key
 
-        key = build_storage_key(content_type)
+        key = build_storage_key(content_type, folder=folder)
         self.objects[key] = data
         return key
 
