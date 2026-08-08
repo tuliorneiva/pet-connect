@@ -46,7 +46,7 @@ def seed() -> None:
         db.add(
             User(
                 org_id=org.id,
-                name="Maria (demo)",
+                name="Caio",
                 email=DEMO_EMAIL,
                 password_hash=hash_password(DEMO_PASSWORD),
             )
