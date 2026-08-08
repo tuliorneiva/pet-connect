@@ -57,6 +57,10 @@ export type PublicOrganization = {
   founded_year: number | null;
   verified: boolean;
   logo_url: string | null;
+  whatsapp: string | null;
+  instagram: string | null;
+  facebook: string | null;
+  pix_key: string | null;
   created_at: string;
   available_count: number;
   adopted_count: number;
@@ -75,6 +79,10 @@ export type OrganizationProfile = {
   founded_year: number | null;
   verified: boolean;
   logo_url: string | null;
+  whatsapp: string | null;
+  instagram: string | null;
+  facebook: string | null;
+  pix_key: string | null;
   created_at: string;
 };
 
@@ -87,6 +95,10 @@ export type OrganizationProfileInput = {
   website?: string | null;
   address?: string | null;
   founded_year?: number | null;
+  whatsapp?: string | null;
+  instagram?: string | null;
+  facebook?: string | null;
+  pix_key?: string | null;
 };
 
 export type AnimalInput = {

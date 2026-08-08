@@ -14,6 +14,7 @@ import { Label } from "@/components/shadcn/label";
 import { AnimalGallery } from "@/components/public/AnimalGallery";
 import { HealthBadges } from "@/components/public/HealthBadges";
 import { RelatedAnimals } from "@/components/public/RelatedAnimals";
+import { ShareButtons } from "@/components/public/ShareButtons";
 
 const TYPE_OPTIONS = Object.entries(SUPPORT_TYPE_LABELS).map(([value, label]) => ({ value, label }));
 
@@ -78,6 +79,11 @@ export function AnimalPublicPage() {
               {data.org_city && <span className="block text-xs text-muted-foreground">{data.org_city}</span>}
             </span>
           </div>
+
+          <ShareButtons
+            url={window.location.href}
+            text={`Conheça ${data.name}, disponível para adoção no PetConnect!`}
+          />
 
           <div className="h-px bg-border" />
 

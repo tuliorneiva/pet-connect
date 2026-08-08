@@ -127,6 +127,33 @@ def test_patch_rejects_a_founding_year_in_the_future(client):
     assert resp.status_code == 422
 
 
+def test_patch_updates_the_social_links(client):
+    token = _register(client)
+
+    resp = client.patch(
+        "/api/admin/organization",
+        headers=_auth(token),
+        json={"whatsapp": "(83) 90000-0000", "instagram": "@abrigoamigo", "facebook": "abrigoamigo"},
+    )
+
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["whatsapp"] == "(83) 90000-0000"
+    assert body["instagram"] == "@abrigoamigo"
+    assert body["facebook"] == "abrigoamigo"
+
+
+def test_patch_updates_the_pix_key(client):
+    token = _register(client)
+
+    resp = client.patch(
+        "/api/admin/organization", headers=_auth(token), json={"pix_key": "contato@amigofiel.org"}
+    )
+
+    assert resp.status_code == 200
+    assert resp.json()["pix_key"] == "contato@amigofiel.org"
+
+
 def test_each_org_only_edits_its_own_profile(client):
     token_a = _register(client, email="a@x.org", org_name="A")
     token_b = _register(client, email="b@x.org", org_name="B")
